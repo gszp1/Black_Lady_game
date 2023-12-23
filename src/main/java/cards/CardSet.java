@@ -1,4 +1,4 @@
-package Cards;
+package cards;
 
 /**
  * Enumerate for sets to which a card may belong.

@@ -1,4 +1,4 @@
-package Exceptions;
+package exceptions;
 
 public class registrationFailureException extends Exception{
     private final String exceptionReason;

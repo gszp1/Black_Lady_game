@@ -1,4 +1,4 @@
-package Cards;
+package cards;
 
 /**
  * Class representing a game card.

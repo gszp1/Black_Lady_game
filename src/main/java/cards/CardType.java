@@ -1,4 +1,4 @@
-package Cards;
+package cards;
 
 /**
  * Enumerate for each type of cards in classic card deck.

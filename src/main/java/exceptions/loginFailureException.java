@@ -1,4 +1,4 @@
-package Exceptions;
+package exceptions;
 
 public class loginFailureException extends Exception {
     private final String exceptionReason;

@@ -1,8 +1,8 @@
-package Client;
+package client;
 
-import Exceptions.loginFailureException;
-import Exceptions.registrationFailureException;
-import Server.GameServer;
+import exceptions.loginFailureException;
+import exceptions.registrationFailureException;
+import server.GameServer;
 
 import java.util.Optional;
 import java.util.regex.Matcher;
