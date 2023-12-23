@@ -27,16 +27,17 @@ public class GameClient {
 
     private Optional<String> validateRegistrationCredentials(String email, String username,
                                                              String password, String passwordConfirmation) {
+        if(username.isEmpty() || email.isEmpty() || password.isEmpty() || passwordConfirmation.isEmpty()) {
+            return Optional.of("Not all registration data provided.");
+        }
         if(!passwordConfirmation.equals(password)) {
             return Optional.of("Provided passwords are not equal.");
-        }
-        if(!username.isEmpty()) {
-            return Optional.of("Username not provided.");
         }
         Matcher matcher = GameServer.pattern.matcher(email);
         if(!matcher.matches()) {
             return Optional.of("Provided Email is incorrect.");
         }
+
         return Optional.empty();
     }
 
