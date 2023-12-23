@@ -2,7 +2,7 @@ package client;
 
 import exceptions.loginFailureException;
 import exceptions.registrationFailureException;
-import server.GameServer;
+import utils.utils;
 
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -33,7 +33,7 @@ public class GameClient {
         if(email.isEmpty() || password.isEmpty()) {
             return Optional.of("Not all login data provided.");
         }
-        Matcher matcher = GameServer.pattern.matcher(email);
+        Matcher matcher = utils.pattern.matcher(email);
         if(!matcher.matches()) {
             return Optional.of("Provided Email is incorrect.");
         }
@@ -48,7 +48,7 @@ public class GameClient {
         if(!passwordConfirmation.equals(password)) {
             return Optional.of("Provided passwords are not equal.");
         }
-        Matcher matcher = GameServer.pattern.matcher(email);
+        Matcher matcher = utils.pattern.matcher(email);
         if(!matcher.matches()) {
             return Optional.of("Provided Email is incorrect.");
         }
