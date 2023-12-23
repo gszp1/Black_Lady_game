@@ -1,5 +1,6 @@
 package Client;
 
+import Exceptions.loginFailureException;
 import Exceptions.registrationFailureException;
 import Server.GameServer;
 
@@ -21,8 +22,22 @@ public class GameClient {
         }
     }
 
-    private void loginUser(String email, String password) {
+    private void loginUser(String email, String password) throws loginFailureException {
+        Optional<String> validationResult = validateLoginCredentials(email, password);
+        if(validationResult.isPresent()) {
+            throw(new loginFailureException(validationResult.get()));
+        }
+    }
 
+    private Optional<String> validateLoginCredentials(String email, String password) {
+        if(email.isEmpty() || password.isEmpty()) {
+            return Optional.of("Not all login data provided.");
+        }
+        Matcher matcher = GameServer.pattern.matcher(email);
+        if(!matcher.matches()) {
+            return Optional.of("Provided Email is incorrect.");
+        }
+        return Optional.empty();
     }
 
     private Optional<String> validateRegistrationCredentials(String email, String username,
