@@ -1,5 +1,8 @@
 package Cards;
 
+/**
+ * Enumerate for each type of cards in classic card deck.
+ */
 public enum CardType {
     TwoCard(1, "TwoCard"),
 
@@ -27,9 +30,14 @@ public enum CardType {
 
     AceCard(13, "AceCard");
 
-
+    /**
+     * Provides information about card's rank.
+     */
     private final int rank;
 
+    /**
+     * Provides name of given card type.
+     */
     private final String cardTypeName;
 
     CardType(int rank, String cardTypeName) {
