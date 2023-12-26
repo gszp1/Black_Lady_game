@@ -14,12 +14,18 @@ public class GameClient {
     }
 
     private void registerUser(String email, String username, String password, String passwordConfirmation)
-            throws registrationFailureException {
+            throws registrationFailureException{
         Optional<String> validationResult = validateRegistrationCredentials(email, username,
                 password, passwordConfirmation);
         if(validationResult.isPresent()) {
             throw(new registrationFailureException(validationResult.get()));
         }
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            throw new registrationFailureException("Failed to connect with service.");
+        }
+
     }
 
     private void loginUser(String email, String password) throws loginFailureException {
