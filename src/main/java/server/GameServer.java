@@ -32,28 +32,28 @@ public class GameServer {
         }
     }
 
-    private Optional<String> validateLoginCredentials(String email, String password) {
+    public Optional<String> validateLoginCredentials(String email, String password) {
         if(email.isEmpty() || password.isEmpty()) {
-            return Optional.of("Not all login data provided.");
+            return Optional.of(loginFailureException.EMPTY_FIELDS);
         }
         Matcher matcher = Utils.pattern.matcher(email);
         if(!matcher.matches()) {
-            return Optional.of("Provided Email is incorrect.");
+            return Optional.of(loginFailureException.INCORRECT_EMAIL);
         }
         return Optional.empty();
     }
 
-    private Optional<String> validateRegistrationCredentials(String email, String username,
+    public Optional<String> validateRegistrationCredentials(String email, String username,
                                                              String password, String passwordConfirmation) {
         if(username.isEmpty() || email.isEmpty() || password.isEmpty() || passwordConfirmation.isEmpty()) {
-            return Optional.of("Not all registration data provided.");
+            return Optional.of(registrationFailureException.EMPTY_FIELDS);
         }
         if(!passwordConfirmation.equals(password)) {
-            return Optional.of("Provided passwords are not equal.");
+            return Optional.of(registrationFailureException.PASSWORDS_NOT_EQUAL);
         }
         Matcher matcher = Utils.pattern.matcher(email);
         if(!matcher.matches()) {
-            return Optional.of("Provided Email is incorrect.");
+            return Optional.of(registrationFailureException.INCORRECT_EMAIL);
         }
 
         return Optional.empty();
