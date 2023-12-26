@@ -5,9 +5,9 @@ import java.util.ArrayList;
 
 public class DatabaseConnector {
 
-    private final String DB_USERNAME = "db_user";
+    private final String DB_USERNAME = "root";
 
-    private final String DB_PASSWORD = "password";
+    private final String DB_PASSWORD = "root";
 
     private Connection connection;
 
@@ -24,10 +24,10 @@ public class DatabaseConnector {
         if (!connection.isValid(5)) {
             throw new Exception();
         }
-        selectStatement = connection.prepareStatement("SELECT * FROM Users WHERE email = ?");
-        insertStatement = connection.prepareStatement("INSERT INTO Users (email, username, password) VALUES (?, ?, ?) ");
+        selectStatement = connection.prepareStatement("SELECT * FROM users WHERE email = ?");
+        insertStatement = connection.prepareStatement("INSERT INTO users (email, username, password) VALUES (?, ?, ?) ");
 
-    }
+    }g
 
     public ArrayList<String> getUserFromDatabase(String email) throws SQLException {
         ArrayList<String> fields = new ArrayList<>();

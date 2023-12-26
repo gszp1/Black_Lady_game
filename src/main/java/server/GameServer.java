@@ -7,13 +7,35 @@ import utils.Utils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.SQLDataException;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.regex.Matcher;
 
 public class GameServer {
 
+    private final DatabaseConnector databaseConnector;
+
+    GameServer() throws Exception{
+        databaseConnector = new DatabaseConnector();
+    }
+
     public static void main(String [] args) {
-        System.out.println("Hello world");
+        GameServer gameServer = null;
+        try {
+            gameServer = new GameServer();
+//            gameServer.databaseConnector.insertUserIntoDatabase("test@test.com", "test", "test");
+            ArrayList<String> result = gameServer.databaseConnector.getUserFromDatabase("test@test.com");
+            for(String i: result) {
+                System.out.println(i);
+            }
+        } catch (SQLException s) {
+            s.printStackTrace();
+            System.out.println("Failed to transmit data to database.");
+        } catch (Exception e) {
+            System.out.println("Failed to establish connection with database. Terminating.");
+        }
     }
 
     private void registerUser(String email, String username, String password, String passwordConfirmation)
