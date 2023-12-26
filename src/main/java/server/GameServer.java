@@ -5,9 +5,6 @@ import exceptions.registrationFailureException;
 import org.apache.commons.codec.digest.DigestUtils;
 import utils.Utils;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.sql.SQLDataException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Optional;
