@@ -19,20 +19,7 @@ public class GameServer {
     }
 
     public static void main(String [] args) {
-        GameServer gameServer = null;
-        try {
-            gameServer = new GameServer();
-//            gameServer.databaseConnector.insertUserIntoDatabase("test@test.com", "test", "test");
-            ArrayList<String> result = gameServer.databaseConnector.getUserFromDatabase("test@test.com");
-            for(String i: result) {
-                System.out.println(i);
-            }
-        } catch (SQLException s) {
-            s.printStackTrace();
-            System.out.println("Failed to transmit data to database.");
-        } catch (Exception e) {
-            System.out.println("Failed to establish connection with database. Terminating.");
-        }
+
     }
 
     private void registerUser(String email, String username, String password, String passwordConfirmation)
@@ -51,6 +38,7 @@ public class GameServer {
             throw(new loginFailureException(validationResult.get()));
         }
         String hashPassword = DigestUtils.md5Hex(password).toUpperCase();
+
     }
 
     public Optional<String> validateLoginCredentials(String email, String password) {
