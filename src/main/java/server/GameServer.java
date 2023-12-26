@@ -2,12 +2,19 @@ package server;
 
 import exceptions.loginFailureException;
 import exceptions.registrationFailureException;
+import org.apache.commons.codec.digest.DigestUtils;
 import utils.Utils;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 import java.util.regex.Matcher;
 
 public class GameServer {
+
+    public static void main(String [] args) {
+        System.out.println("Hello world");
+    }
 
     private void registerUser(String email, String username, String password, String passwordConfirmation)
             throws registrationFailureException {
@@ -16,12 +23,7 @@ public class GameServer {
         if(validationResult.isPresent()) {
             throw(new registrationFailureException(validationResult.get()));
         }
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new registrationFailureException("Failed to connect with service.");
-        }
-
+        String hashPassword = DigestUtils.md5Hex(password).toUpperCase();
     }
 
     private void loginUser(String email, String password) throws loginFailureException {
@@ -29,6 +31,7 @@ public class GameServer {
         if(validationResult.isPresent()) {
             throw(new loginFailureException(validationResult.get()));
         }
+        String hashPassword = DigestUtils.md5Hex(password).toUpperCase();
     }
 
     public Optional<String> validateLoginCredentials(String email, String password) {

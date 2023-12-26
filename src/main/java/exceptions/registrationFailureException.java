@@ -2,6 +2,8 @@ package exceptions;
 
 public class registrationFailureException extends Exception{
 
+    public static String SERVER_FAILURE = "Unexpected server failure.";
+
     public static String INCORRECT_EMAIL = "Provided Email is incorrect";
 
     public static String PASSWORDS_NOT_EQUAL = "Provided passwords are not equal.";
