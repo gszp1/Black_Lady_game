@@ -139,4 +139,13 @@ public class ServerTests {
         assertTrue(result.isPresent());
         assertEquals(result.get(), loginFailureException.INCORRECT_EMAIL);
     }
+
+
+    @Test
+    public void userAddingTest() {
+         GameServer gameServer = new GameServer();
+         try {
+            gameServer.
+         } catch()
+    }
 }

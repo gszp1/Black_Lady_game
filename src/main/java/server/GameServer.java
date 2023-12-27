@@ -21,7 +21,7 @@ public class GameServer {
      * Establishes connection with database.
      * Creates DatabaseConnector object.
      */
-    private void establishDatabaseConnection() throws Exception {
+    public void establishDatabaseConnection() throws Exception {
         databaseConnector = new DatabaseConnector();
     }
 
