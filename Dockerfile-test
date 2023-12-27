@@ -1,0 +1,16 @@
+# Dockerfile for creating server testing image
+FROM ubuntu:latest
+LABEL authors="gszp1"
+
+RUN apt-get update -y && \
+    apt-get install -y openjdk-8-jdk && \
+    apt-get install -y maven
+
+RUN mkdir -p server_tests
+COPY pom.xml ./server_tests
+COPY src ./server_tests/src
+WORKDIR /server_tests
+
+EXPOSE 8080
+
+CMD ["mvn", "test"]

@@ -2,6 +2,7 @@ package server;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Optional;
 
 /**
  * Class which provides interface for connection between server and MySQL database.
@@ -15,7 +16,7 @@ public class DatabaseConnector {
 
     private Connection connection;
 
-    private final String DB_SERVICE_NAME = "database_service";
+    private final String dbServiceUrl;
 
     private final PreparedStatement selectStatement;
 
@@ -28,18 +29,54 @@ public class DatabaseConnector {
      * Creates prepared statements.
      * @throws Exception - Cumulative exception, all exceptions are handled as connection error.
      */
-    DatabaseConnector() throws Exception {
+    DatabaseConnector(String dbServiceUrl) throws Exception {
+        this.dbServiceUrl = dbServiceUrl;
         Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
-        connection = DriverManager.getConnection(String.format("jdbc:mysql://%s:3306/Users_database", DB_SERVICE_NAME),
-                DB_USERNAME,
-                DB_PASSWORD
-        );
-        if (!connection.isValid(5)) {
+
+        connection = connectToDatabase();
+        if (!connection.isValid(30)) {
             throw new Exception();
         }
         selectStatement = connection.prepareStatement("SELECT * FROM users WHERE email = ?");
         insertStatement = connection.prepareStatement("INSERT INTO users (email, username, password) VALUES (?, ?, ?) ");
         deleteStatement = connection.prepareStatement("DELETE FROM users WHERE email = ?");
+    }
+
+    private Connection connectToDatabase() {
+        int[] backoffs = {1, 2, 4, 8};
+        Optional<Connection> connection = Optional.empty();
+        for (Integer backoff: backoffs) {
+            connection = tryConnectToDatabase(false, backoff);
+            if (connection.isPresent()){
+                return connection.get();
+            }
+        }
+        return tryConnectToDatabase(true, -1).get();
+    }
+
+
+
+    private Optional<Connection> tryConnectToDatabase(boolean failOnError, int backoff) {
+        try {
+            return Optional.of(DriverManager.getConnection(
+                    dbServiceUrl,
+                    DB_USERNAME,
+                    DB_PASSWORD
+            ));
+        } catch (SQLException e) {
+            if (failOnError) {
+                throw new RuntimeException(e);
+            }
+            System.out.println("Failed to connect to database");
+        }
+        try {
+            System.out.printf("Current connection wait time: %s%n", backoff);
+            Thread.sleep(backoff * 1000L);
+        } catch (InterruptedException e) {
+            System.out.println("Failed to connect.");
+            throw new RuntimeException(e);
+        }
+        return Optional.empty();
     }
 
     /**

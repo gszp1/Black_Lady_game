@@ -21,8 +21,8 @@ public class GameServer {
      * Establishes connection with database.
      * Creates DatabaseConnector object.
      */
-    public void establishDatabaseConnection() throws Exception {
-        databaseConnector = new DatabaseConnector();
+    public void establishDatabaseConnection(String databaseURL) throws Exception {
+        databaseConnector = new DatabaseConnector(databaseURL);
     }
 
     /**
@@ -30,6 +30,10 @@ public class GameServer {
      * @param args - command line arguments.
      */
     public static void main(String [] args) {
+        if (args.length < 1) {
+            System.out.println("No database url given.");
+            return;
+        }
 
     }
 
