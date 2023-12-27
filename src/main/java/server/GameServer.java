@@ -10,18 +10,39 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.regex.Matcher;
 
+/**
+ * Class for game server, communicates with users and database.
+ */
 public class GameServer {
 
     private final DatabaseConnector databaseConnector;
 
+    /**
+     * Constructor
+     * Establishes connection with database
+     * @throws Exception - Connection exception, thrown by databaseConnector upon creation failure, passed to main function.
+     */
     GameServer() throws Exception{
         databaseConnector = new DatabaseConnector();
     }
 
+    /**
+     * Start point for server.
+     * @param args - command line arguments.
+     */
     public static void main(String [] args) {
 
     }
 
+    /**
+     * Method for user registration. Sends query to database with new user credentials.
+     * @param email - New user's email - must be unique for all records.
+     * @param username - New user's username, must be unique for all records;
+     * @param password - New user's raw password, hashed with md5 before being sent.
+     * @param passwordConfirmation - password confirmation. Must be equal to password.
+     * @return - boolean representing registration result.
+     * @throws registrationFailureException - Exception with reason of registration failure.
+     */
     private boolean registerUser(String email, String username, String password, String passwordConfirmation)
             throws registrationFailureException {
         Optional<String> validationResult = validateRegistrationCredentials(email, username,
@@ -39,6 +60,14 @@ public class GameServer {
         return insertedRecords == 1;
     }
 
+    /**
+     * Method for user login. Checks if such user exists in database and if given credentials are valid.
+     * @param email - User's email.
+     * @param password - User's email. Hashed with md5 encryption for comparison.
+     * @return - boolean representing login result.
+     * @throws loginFailureException - Exception representing login failure.
+     * @throws SQLException - Exception for error during query lifetime.
+     */
     private boolean loginUser(String email, String password) throws loginFailureException, SQLException {
         Optional<String> validationResult = validateLoginCredentials(email, password);
         if(validationResult.isPresent()) {
@@ -55,6 +84,12 @@ public class GameServer {
         return true;
     }
 
+    /**
+     * Validates provided login credentials.
+     * @param email - User's email.
+     * @param password - User's password.
+     * @return - Returns empty Optional if credentials are valid, otherwise Optional contains information why credentials are not valid.
+     */
     public Optional<String> validateLoginCredentials(String email, String password) {
         if(email.isEmpty() || password.isEmpty()) {
             return Optional.of(loginFailureException.EMPTY_FIELDS);
@@ -66,6 +101,14 @@ public class GameServer {
         return Optional.empty();
     }
 
+    /**
+     * Validates provided registration credentials.
+     * @param email - New user's email - must be unique for all records.
+     * @param username - New user's username, must be unique for all records;
+     * @param password - New user's password.
+     * @param passwordConfirmation - password confirmation. Must be equal to password.
+     * @return - Returns empty Optional if credentials are valid, otherwise Optional contains information why credentials are not valid.
+     */
     public Optional<String> validateRegistrationCredentials(String email, String username,
                                                              String password, String passwordConfirmation) {
         if(username.isEmpty() || email.isEmpty() || password.isEmpty() || passwordConfirmation.isEmpty()) {
