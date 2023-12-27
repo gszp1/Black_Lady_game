@@ -2,6 +2,8 @@ package exceptions;
 
 public class loginFailureException extends Exception {
 
+    public static String INVALID_CREDENTIALS = "Users with given credentials doesn't exist.";
+
     public static String INCORRECT_EMAIL = "Provided Email is incorrect.";
 
     public static String EMPTY_FIELDS = "Not all login data provided.";
