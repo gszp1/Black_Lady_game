@@ -84,6 +84,12 @@ public class GameServer {
         return true;
     }
 
+
+    public boolean removeUser(String email) throws SQLException {
+        return databaseConnector.removeUserFromDatabase(email) == 1;
+    }
+
+
     /**
      * Validates provided login credentials.
      * @param email - User's email.

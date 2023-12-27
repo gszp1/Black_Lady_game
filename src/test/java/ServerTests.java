@@ -145,10 +145,16 @@ public class ServerTests {
     public void userAddingTest() {
          GameServer gameServer = new GameServer();
          try {
-            gameServer.establishDatabaseConnection();
+             gameServer.establishDatabaseConnection();
+             assertTrue(gameServer.registerUser("userAddingTest@test.com",
+                     "userAddingTest",
+                     "password",
+                     "password"
+             ));
+             assertTrue(gameServer.loginUser("userAddingTest@test.com", "password"));
+             assertTrue(gameServer.removeUser("userAddingTest@test.com"));
          } catch(Exception e) {
              fail();
          }
-         
     }
 }
