@@ -77,6 +77,12 @@ public class DatabaseConnector {
         return insertStatement.executeUpdate();
     }
 
+    /**
+     * Sends DELETE query to database in order to remove user with given email.
+     * @param email - Email of user to be removed.
+     * @return - number of affected records
+     * @throws SQLException - Thrown when error happens during query lifetime.
+     */
     public int removeUserFromDatabase(String email) throws SQLException {
         deleteStatement.setString(1, email);
         return deleteStatement.executeUpdate();
