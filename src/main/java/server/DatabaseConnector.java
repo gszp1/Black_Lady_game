@@ -21,6 +21,8 @@ public class DatabaseConnector {
 
     private final PreparedStatement insertStatement;
 
+    private final PreparedStatement deleteStatement;
+
     /**
      * Constructor, establishes connection with MySQL database with ip: 127.0.0.1 and port 3306, called Users_database.
      * Creates prepared statements.
@@ -37,6 +39,7 @@ public class DatabaseConnector {
         }
         selectStatement = connection.prepareStatement("SELECT * FROM users WHERE email = ?");
         insertStatement = connection.prepareStatement("INSERT INTO users (email, username, password) VALUES (?, ?, ?) ");
+        deleteStatement = connection.prepareStatement("DELETE FROM users WHERE email = ?");
     }
 
     /**
@@ -72,5 +75,10 @@ public class DatabaseConnector {
         insertStatement.setString(2, username);
         insertStatement.setString(3, password);
         return insertStatement.executeUpdate();
+    }
+
+    public int removeUserFromDatabase(String email) throws SQLException {
+        deleteStatement.setString(1, email);
+        return deleteStatement.executeUpdate();
     }
 }
