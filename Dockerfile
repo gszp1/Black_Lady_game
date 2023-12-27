@@ -1,3 +1,17 @@
+# STAGE 1: SERVER TESTS STAGE
+FROM maven:3.8.4-jdk-8 AS builder
+
+RUN mkdir -p test_stage
+WORKDIR /test_stage
+
+COPY pom.xml .
+COPY src ./src
+
+RUN mvn clean test
+
+
+
+# STAGE 2: SERVER BUILD AND RUN STAGE
 FROM ubuntu:latest
 LABEL authors="gszp1"
 
