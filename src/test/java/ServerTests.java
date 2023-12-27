@@ -140,7 +140,9 @@ public class ServerTests {
         assertEquals(result.get(), loginFailureException.INCORRECT_EMAIL);
     }
 
-
+    /**
+     * Test for registration, login and removal of user.
+     */
     @Test
     public void userAddingTest() {
          GameServer gameServer = new GameServer();
