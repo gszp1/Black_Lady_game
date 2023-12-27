@@ -11,6 +11,8 @@ COPY pom.xml ./server_tests
 COPY src ./server_tests/src
 WORKDIR /server_tests
 
+RUN find ./src/main/java -type d -name "client" -exec rm -r {} +
+
 EXPOSE 8080
 
 CMD ["mvn", "test"]
