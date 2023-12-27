@@ -15,6 +15,8 @@ public class DatabaseConnector {
 
     private Connection connection;
 
+    private final String DB_SERVICE_NAME = "database_service";
+
     private final PreparedStatement selectStatement;
 
     private final PreparedStatement insertStatement;
@@ -26,7 +28,7 @@ public class DatabaseConnector {
      */
     DatabaseConnector() throws Exception {
         Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
-        connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/Users_database",
+        connection = DriverManager.getConnection(String.format("jdbc:mysql://%s:3306/Users_database", DB_SERVICE_NAME),
                 DB_USERNAME,
                 DB_PASSWORD
         );
