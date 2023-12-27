@@ -84,7 +84,12 @@ public class GameServer {
         return true;
     }
 
-
+    /**
+     * Method for user removal.
+     * @param email - Email of user to be removed.
+     * @return - true if user was successfully removed, otherwise false
+     * @throws SQLException - Exception for error during query lifetime.
+     */
     public boolean removeUser(String email) throws SQLException {
         return databaseConnector.removeUserFromDatabase(email) == 1;
     }
