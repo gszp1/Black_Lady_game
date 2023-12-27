@@ -15,14 +15,13 @@ import java.util.regex.Matcher;
  */
 public class GameServer {
 
-    private final DatabaseConnector databaseConnector;
+    private DatabaseConnector databaseConnector;
 
     /**
-     * Constructor
-     * Establishes connection with database
-     * @throws Exception - Connection exception, thrown by databaseConnector upon creation failure, passed to main function.
+     * Establishes connection with database.
+     * Creates DatabaseConnector object.
      */
-    public GameServer() throws Exception{
+    private void establishDatabaseConnection() throws Exception {
         databaseConnector = new DatabaseConnector();
     }
 
@@ -33,6 +32,7 @@ public class GameServer {
     public static void main(String [] args) {
 
     }
+
 
     /**
      * Method for user registration. Sends query to database with new user credentials.
