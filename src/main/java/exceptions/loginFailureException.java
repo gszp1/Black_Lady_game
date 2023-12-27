@@ -1,5 +1,9 @@
 package exceptions;
 
+/**
+ * Exception for handling failed login procedure.
+ * Provides information about the reason of failure in form of String.
+ */
 public class loginFailureException extends Exception {
 
     public static String INVALID_CREDENTIALS = "Users with given credentials doesn't exist.";
