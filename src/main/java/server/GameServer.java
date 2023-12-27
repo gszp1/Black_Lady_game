@@ -43,7 +43,7 @@ public class GameServer {
      * @return - boolean representing registration result.
      * @throws registrationFailureException - Exception with reason of registration failure.
      */
-    private boolean registerUser(String email, String username, String password, String passwordConfirmation)
+    public boolean registerUser(String email, String username, String password, String passwordConfirmation)
             throws registrationFailureException {
         Optional<String> validationResult = validateRegistrationCredentials(email, username,
                 password, passwordConfirmation);
@@ -68,7 +68,7 @@ public class GameServer {
      * @throws loginFailureException - Exception representing login failure.
      * @throws SQLException - Exception for error during query lifetime.
      */
-    private boolean loginUser(String email, String password) throws loginFailureException, SQLException {
+    public boolean loginUser(String email, String password) throws loginFailureException, SQLException {
         Optional<String> validationResult = validateLoginCredentials(email, password);
         if(validationResult.isPresent()) {
             throw(new loginFailureException(validationResult.get()));

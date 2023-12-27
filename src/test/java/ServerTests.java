@@ -145,7 +145,10 @@ public class ServerTests {
     public void userAddingTest() {
          GameServer gameServer = new GameServer();
          try {
-            gameServer.
-         } catch()
+            gameServer.establishDatabaseConnection();
+         } catch(Exception e) {
+             fail();
+         }
+         
     }
 }
