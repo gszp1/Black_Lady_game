@@ -15,10 +15,9 @@ services:
     env_file:
       - .env
     volumes:
-      - mysql_data:/var/lib/mysql
       - ./Users.sql:/docker-entrypoint-initdb.d/Users.sql
     networks:
-      - backend_network
+      - backend_network_test
   server_service_test:
     build:
       context: .
@@ -28,12 +27,8 @@ services:
     depends_on:
       - database_service_test
     networks:
-      - backend_network
+      - backend_network_test
 
 networks:
-  backend_network:
+  backend_network_test:
     driver: bridge
-
-
-volumes:
-  mysql_data:
