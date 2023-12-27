@@ -2,6 +2,8 @@ package exceptions;
 
 public class registrationFailureException extends Exception{
 
+    public static String USER_EXISTS = "Users with such credentials already exists.";
+
     public static String SERVER_FAILURE = "Unexpected server failure.";
 
     public static String INCORRECT_EMAIL = "Provided Email is incorrect";

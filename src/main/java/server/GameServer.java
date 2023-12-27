@@ -6,7 +6,6 @@ import org.apache.commons.codec.digest.DigestUtils;
 import utils.Utils;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Optional;
 import java.util.regex.Matcher;
 
@@ -22,7 +21,7 @@ public class GameServer {
 
     }
 
-    private void registerUser(String email, String username, String password, String passwordConfirmation)
+    private boolean registerUser(String email, String username, String password, String passwordConfirmation)
             throws registrationFailureException {
         Optional<String> validationResult = validateRegistrationCredentials(email, username,
                 password, passwordConfirmation);
@@ -30,6 +29,13 @@ public class GameServer {
             throw(new registrationFailureException(validationResult.get()));
         }
         String hashPassword = DigestUtils.md5Hex(password).toUpperCase();
+        int insertedRecords = 0;
+        try {
+            insertedRecords = databaseConnector.insertUserIntoDatabase(email, username, hashPassword);
+        } catch (SQLException e) {
+            throw(new registrationFailureException(registrationFailureException.USER_EXISTS));
+        }
+        return insertedRecords == 1;
     }
 
     private void loginUser(String email, String password) throws loginFailureException {
@@ -38,7 +44,7 @@ public class GameServer {
             throw(new loginFailureException(validationResult.get()));
         }
         String hashPassword = DigestUtils.md5Hex(password).toUpperCase();
-
+        
     }
 
     public Optional<String> validateLoginCredentials(String email, String password) {
