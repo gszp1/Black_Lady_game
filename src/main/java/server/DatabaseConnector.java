@@ -26,8 +26,7 @@ public class DatabaseConnector {
         }
         selectStatement = connection.prepareStatement("SELECT * FROM users WHERE email = ?");
         insertStatement = connection.prepareStatement("INSERT INTO users (email, username, password) VALUES (?, ?, ?) ");
-
-    }g
+    }
 
     public ArrayList<String> getUserFromDatabase(String email) throws SQLException {
         ArrayList<String> fields = new ArrayList<>();
