@@ -14,7 +14,7 @@ public class ServerTests {
      *  Tests for registration credentials validation
      */
     @Test
-    public void testRegisterValidation() {
+    public void testRegisterValidation() throws Exception {
         GameServer gameServer = new GameServer();
         assertFalse(gameServer.validateRegistrationCredentials("test@gmail.com", "test",
                 "password", "password").isPresent());

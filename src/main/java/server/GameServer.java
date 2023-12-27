@@ -22,7 +22,7 @@ public class GameServer {
      * Establishes connection with database
      * @throws Exception - Connection exception, thrown by databaseConnector upon creation failure, passed to main function.
      */
-    GameServer() throws Exception{
+    public GameServer() throws Exception{
         databaseConnector = new DatabaseConnector();
     }
 
