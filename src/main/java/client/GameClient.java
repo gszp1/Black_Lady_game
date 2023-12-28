@@ -1,10 +1,14 @@
 package client;
 
 import javafx.application.Application;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
 
 public class GameClient extends Application{
@@ -32,8 +36,24 @@ public class GameClient extends Application{
         grid.add(emailTextField, 1, 0);
         grid.add(passwordLabel, 0, 1);
         grid.add(passwordField, 1, 1);
-        grid.add(loginButton, 0, 3);
-        grid.add(registerButton, 1, 3);
+        grid.add(loginButton, 0, 2);
+        grid.add(registerButton, 1, 2);
+
+        ColumnConstraints column1 = new ColumnConstraints();
+        ColumnConstraints column2 = new ColumnConstraints();
+        column2.setHgrow(Priority.ALWAYS);
+        grid.getColumnConstraints().addAll(column1, column2);
+
+        GridPane.setHalignment(loginButton, HPos.CENTER);
+        GridPane.setHalignment(registerButton, HPos.CENTER);
+
+        RowConstraints row1 = new RowConstraints();
+        RowConstraints row2 = new RowConstraints();
+        RowConstraints row3 = new RowConstraints();
+        row1.setVgrow(Priority.ALWAYS); // Allow row 4 to grow
+        row2.setVgrow(Priority.ALWAYS); // Allow row 4 to grow
+        row3.setVgrow(Priority.ALWAYS); // Allow row 4 to grow
+        grid.getRowConstraints().addAll(row1, row2, row3);
 
         // Create a Scene and set it on the Stage
         Scene scene = new Scene(grid, 400, 200);
