@@ -24,7 +24,6 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <addClasspath>true</addClasspath>
                             <mainClass>server.GameServer</mainClass>
                         </manifest>
                     </archive>
@@ -33,7 +32,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0</version> <!-- adjust version as needed -->
+                <version>3.0.0</version>
                 <configuration>
                     <testSourceDirectory>src/test/java</testSourceDirectory>
                 </configuration>

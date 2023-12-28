@@ -147,7 +147,7 @@ public class ServerTests {
     public void userAddingTest() {
          GameServer gameServer = new GameServer();
          try {
-             assertTrue(gameServer.establishDatabaseConnection("jdbc:mysql://database_service_test:3306/Users_database"));
+             assertTrue(gameServer.establishDatabaseConnection("jdbc:mysql://database_service_test:3306/Users_database_test"));
              assertTrue(gameServer.registerUser("userAddingTest@test.com",
                      "userAddingTest",
                      "password",

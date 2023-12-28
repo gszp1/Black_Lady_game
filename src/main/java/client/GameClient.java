@@ -11,6 +11,9 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.net.Socket;
+
 public class GameClient extends Application{
 
     @Override
@@ -63,7 +66,8 @@ public class GameClient extends Application{
         primaryStage.show();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        Socket socket = new Socket("0.0.0.0", 8080);
         launch(args);
     }
 }

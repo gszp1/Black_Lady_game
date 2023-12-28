@@ -14,6 +14,7 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 
 
+
 /**
  * Class for game server, communicates with users and database.
  */
@@ -60,7 +61,6 @@ public class GameServer {
                         +
                         "," + clientSocket.getPort()
                 );
-
             }
         } catch (IOException e) {
             System.out.println("S: Failed to run server. Terminating process.");
