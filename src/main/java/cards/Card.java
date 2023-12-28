@@ -3,7 +3,7 @@ package cards;
 /**
  * Class representing a game card.
  */
-public abstract class Card {
+public class Card {
     /**
      * To which set (Spades, Hearts, Diamonds, Clubs) does this card belong.
      */
