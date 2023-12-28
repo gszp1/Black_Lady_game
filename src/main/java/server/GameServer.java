@@ -5,16 +5,22 @@ import exceptions.registrationFailureException;
 import org.apache.commons.codec.digest.DigestUtils;
 import utils.Utils;
 
+import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.regex.Matcher;
 
+
 /**
  * Class for game server, communicates with users and database.
  */
 public class GameServer {
+
+    private final int PORT = 8080;
+
 
     private DatabaseConnector databaseConnector;
 
@@ -26,7 +32,7 @@ public class GameServer {
         try {
             databaseConnector = new DatabaseConnector(databaseURL);
         } catch (Exception e) {
-            System.out.println("Failed to establish connection with database. Terminating process.");
+            System.out.println("S: Failed to establish connection with database. Terminating process.");
             return false;
         }
         return true;
@@ -44,6 +50,20 @@ public class GameServer {
         GameServer gameServer = new GameServer();
         if (!gameServer.establishDatabaseConnection(args[0])) {
             return;
+        }
+        try (ServerSocket serverSocket = new ServerSocket(gameServer.PORT)) {
+            System.out.println("S: Server is running. Listening for new connections.");
+            while (true) {
+                Socket clientSocket = serverSocket.accept();
+                System.out.println("S: New connection established with client: "
+                        + clientSocket.getInetAddress()
+                        +
+                        "," + clientSocket.getPort()
+                );
+
+            }
+        } catch (IOException e) {
+            System.out.println("S: Failed to run server. Terminating process.");
         }
     }
 
