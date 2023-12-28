@@ -5,6 +5,7 @@ import exceptions.registrationFailureException;
 import org.apache.commons.codec.digest.DigestUtils;
 import utils.Utils;
 
+import java.net.ServerSocket;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -21,8 +22,14 @@ public class GameServer {
      * Establishes connection with database.
      * Creates DatabaseConnector object.
      */
-    public void establishDatabaseConnection(String databaseURL) throws Exception {
-        databaseConnector = new DatabaseConnector(databaseURL);
+    public boolean establishDatabaseConnection(String databaseURL) {
+        try {
+            databaseConnector = new DatabaseConnector(databaseURL);
+        } catch (Exception e) {
+            System.out.println("Failed to establish connection with database. Terminating process.");
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -35,13 +42,11 @@ public class GameServer {
             return;
         }
         GameServer gameServer = new GameServer();
-        try {
-            gameServer.establishDatabaseConnection(args[0]);
-        } catch (Exception e) {
-            System.out.println("Failed to establish connection with database. Terminating process.");
+        if (!gameServer.establishDatabaseConnection(args[0])) {
+            return;
         }
-
     }
+
 
 
     /**
