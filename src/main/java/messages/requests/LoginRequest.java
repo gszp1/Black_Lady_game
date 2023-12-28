@@ -35,6 +35,6 @@ public class LoginRequest extends Message {
      * @return - String array with email and password.
      */
     public String [] parseData() {
-        return getData().split("\\|");
+        return getData().trim().split("\\|");
     }
 }
