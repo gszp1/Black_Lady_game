@@ -45,6 +45,15 @@ public enum CardType {
         this.cardTypeName = cardTypeName;
     }
 
+    public CardType getCardTypeByRank(int rank) {
+        for (CardType cardType: values()) {
+            if (cardType.rank == rank) {
+                return cardType;
+            }
+        }
+        return null;
+    }
+
     public String getCardTypeName() {
         return cardTypeName;
     }
