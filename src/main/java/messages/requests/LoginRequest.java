@@ -21,7 +21,7 @@ public class LoginRequest extends Message {
     }
 
     /**
-     * Login Request handling procedure, behaviour defined by type of message.
+     * Login request handling procedure.
      * @return - Returns boolean describing result of message handling.
      * @throws IOException - Exception thrown if something went wrong with sending message.
      */
