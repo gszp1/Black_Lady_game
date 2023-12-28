@@ -42,6 +42,7 @@ public class GameServer {
 
     /**
      * Start point for server.
+     * Creates ServerSocket in order to listen to incoming client connections.
      * @param args - command line arguments.
      */
     public static void main(String [] args) {

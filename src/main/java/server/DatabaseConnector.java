@@ -43,6 +43,11 @@ public class DatabaseConnector {
         deleteStatement = connection.prepareStatement("DELETE FROM users WHERE email = ?");
     }
 
+    /**
+     * Method for establishing connection with database.
+     * Makes 5 connection attempts, each attempt with larger wait time.
+     * @return - Connection to database.
+     */
     private Connection connectToDatabase() {
         int[] backoffs = { 1, 2, 4, 8 };
         Optional<Connection> connection = Optional.empty();
@@ -55,6 +60,12 @@ public class DatabaseConnector {
         return tryConnectToDatabase(true, -1).get();
     }
 
+    /**
+     * Establishes connection with database. Called by connectToDatabase().
+     * @param failOnError - If connection can't be established, throw RuntimeException.
+     * @param backoff - Wait time in seconds.
+     * @return - Optional containing object describing connection to database.
+     */
     private Optional<Connection> tryConnectToDatabase(boolean failOnError, int backoff) {
         try {
             return Optional.of(DriverManager.getConnection(
