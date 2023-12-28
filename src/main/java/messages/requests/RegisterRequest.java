@@ -11,9 +11,9 @@ import java.io.IOException;
 public class RegisterRequest extends Message {
 
 
-    public RegisterRequest(MessageType messageType, String email, String username, String password,
+    public RegisterRequest(String email, String username, String password,
                            String passwordConfirmation, int clientID) {
-        super(messageType, String.format("%s|%s|%s|%s", email, username, password, passwordConfirmation), clientID);
+        super(MessageType.RegisterRequest, String.format("%s|%s|%s|%s", email, username, password, passwordConfirmation), clientID);
     }
 
     /**
