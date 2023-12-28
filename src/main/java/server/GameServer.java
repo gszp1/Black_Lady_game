@@ -34,6 +34,12 @@ public class GameServer {
             System.out.println("No database url given.");
             return;
         }
+        GameServer gameServer = new GameServer();
+        try {
+            gameServer.establishDatabaseConnection(args[0]);
+        } catch (Exception e) {
+            System.out.println("Failed to establish connection with database. Terminating process.");
+        }
 
     }
 
