@@ -3,6 +3,7 @@ package server;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Optional;
+import com.mysql.cj.jdbc.Driver;
 
 /**
  * Class which provides interface for connection between server and MySQL database.
@@ -43,7 +44,7 @@ public class DatabaseConnector {
     }
 
     private Connection connectToDatabase() {
-        int[] backoffs = {1, 2, 4, 8};
+        int[] backoffs = { 1, 2, 4, 8 };
         Optional<Connection> connection = Optional.empty();
         for (Integer backoff: backoffs) {
             connection = tryConnectToDatabase(false, backoff);
@@ -54,8 +55,6 @@ public class DatabaseConnector {
         return tryConnectToDatabase(true, -1).get();
     }
 
-
-
     private Optional<Connection> tryConnectToDatabase(boolean failOnError, int backoff) {
         try {
             return Optional.of(DriverManager.getConnection(
@@ -63,14 +62,14 @@ public class DatabaseConnector {
                     DB_USERNAME,
                     DB_PASSWORD
             ));
-        } catch (SQLException e) {
+        } catch (Exception e) {
             if (failOnError) {
                 throw new RuntimeException(e);
             }
             System.out.println("Failed to connect to database");
         }
         try {
-            System.out.printf("Current connection wait time: %s%n", backoff);
+            System.out.printf("Current connection retry wait time: %s%n", backoff);
             Thread.sleep(backoff * 1000L);
         } catch (InterruptedException e) {
             System.out.println("Failed to connect.");

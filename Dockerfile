@@ -7,9 +7,9 @@ RUN apt-get update -y && \
     apt-get install -y maven
 
 RUN mkdir -p game_server
+COPY pom.xml ./game_server
+COPY src ./game_server/src
 WORKDIR /game_server
-COPY pom.xml .
-COPY src ./src
 RUN find ./src/main/java -type d -name "client" -exec rm -r {} +
 
 RUN mvn clean install -DskipTests

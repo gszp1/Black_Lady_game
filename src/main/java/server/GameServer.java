@@ -34,6 +34,7 @@ public class GameServer {
             databaseConnector = new DatabaseConnector(databaseURL);
         } catch (Exception e) {
             System.out.println("S: Failed to establish connection with database. Terminating process.");
+            e.printStackTrace();
             return false;
         }
         return true;
