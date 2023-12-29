@@ -13,4 +13,8 @@ public class socketConnectionException {
     public socketConnectionException(String errorCause) {
         this.errorCause = errorCause;
     }
+
+    public String getErrorCause() {
+        return errorCause;
+    }
 }
