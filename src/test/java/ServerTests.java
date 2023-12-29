@@ -33,17 +33,17 @@ public class ServerTests {
         Optional<String> result = gameServer.validateRegistrationCredentials("testgmail.com", "test",
                 "password",  "password");
         assertTrue(result.isPresent());
-        assertEquals(result.get(), registrationFailureException.INCORRECT_EMAIL);
+        assertEquals(result.get(), RegistrationFailureException.INCORRECT_EMAIL);
 
         result = gameServer.validateRegistrationCredentials("test@gmail", "test",
                 "password", "password");
         assertTrue(result.isPresent());
-        assertEquals(result.get(), registrationFailureException.INCORRECT_EMAIL);
+        assertEquals(result.get(), RegistrationFailureException.INCORRECT_EMAIL);
 
         result = gameServer.validateRegistrationCredentials("@gmail.com", "test",
                 "password", "password");
         assertTrue(result.isPresent());
-        assertEquals(result.get(), registrationFailureException.INCORRECT_EMAIL);
+        assertEquals(result.get(), RegistrationFailureException.INCORRECT_EMAIL);
     }
 
     /**
@@ -54,12 +54,12 @@ public class ServerTests {
         Optional<String> result = gameServer.validateRegistrationCredentials("test@gmail.com", "test",
                 "password", "pass");
         assertTrue(result.isPresent());
-        assertEquals(result.get(), registrationFailureException.PASSWORDS_NOT_EQUAL);
+        assertEquals(result.get(), RegistrationFailureException.PASSWORDS_NOT_EQUAL);
 
         result = gameServer.validateRegistrationCredentials("test@gmail.com", "test",
                 "pass", "password");
         assertTrue(result.isPresent());
-        assertEquals(result.get(), registrationFailureException.PASSWORDS_NOT_EQUAL);
+        assertEquals(result.get(), RegistrationFailureException.PASSWORDS_NOT_EQUAL);
     }
 
     /**
@@ -70,27 +70,27 @@ public class ServerTests {
         Optional<String> result = gameServer.validateRegistrationCredentials("", "", "",
                 "");
         assertTrue(result.isPresent());
-        assertEquals(result.get(), registrationFailureException.EMPTY_FIELDS);
+        assertEquals(result.get(), RegistrationFailureException.EMPTY_FIELDS);
 
         result = gameServer.validateRegistrationCredentials("test@gmail.com", "test", "password",
                 "");
         assertTrue(result.isPresent());
-        assertEquals(result.get(), registrationFailureException.EMPTY_FIELDS);
+        assertEquals(result.get(), RegistrationFailureException.EMPTY_FIELDS);
 
         result = gameServer.validateRegistrationCredentials("test@gmail.com", "test", "",
                 "password");
         assertTrue(result.isPresent());
-        assertEquals(result.get(), registrationFailureException.EMPTY_FIELDS);
+        assertEquals(result.get(), RegistrationFailureException.EMPTY_FIELDS);
 
         result = gameServer.validateRegistrationCredentials("test@gmail.com", "", "password",
                 "password");
         assertTrue(result.isPresent());
-        assertEquals(result.get(), registrationFailureException.EMPTY_FIELDS);
+        assertEquals(result.get(), RegistrationFailureException.EMPTY_FIELDS);
 
         result = gameServer.validateRegistrationCredentials("", "test", "password",
                 "password");
         assertTrue(result.isPresent());
-        assertEquals(result.get(), registrationFailureException.EMPTY_FIELDS);
+        assertEquals(result.get(), RegistrationFailureException.EMPTY_FIELDS);
     }
 
     /**
@@ -111,15 +111,15 @@ public class ServerTests {
     public void testLoginValidationEmptyFields(GameServer gameServer) {
         Optional<String> result = gameServer.validateLoginCredentials("", "");
         assertTrue(result.isPresent());
-        assertEquals(result.get(), loginFailureException.EMPTY_FIELDS);
+        assertEquals(result.get(), LoginFailureException.EMPTY_FIELDS);
 
         result = gameServer.validateLoginCredentials("test@gmail.com", "");
         assertTrue(result.isPresent());
-        assertEquals(result.get(), loginFailureException.EMPTY_FIELDS);
+        assertEquals(result.get(), LoginFailureException.EMPTY_FIELDS);
 
         result = gameServer.validateLoginCredentials("", "password");
         assertTrue(result.isPresent());
-        assertEquals(result.get(), loginFailureException.EMPTY_FIELDS);
+        assertEquals(result.get(), LoginFailureException.EMPTY_FIELDS);
     }
 
     /**
@@ -129,15 +129,15 @@ public class ServerTests {
     public void testLoginValidationIncorrectEmail(GameServer gameServer) {
         Optional<String> result = gameServer.validateLoginCredentials("testgmail.com", "password");
         assertTrue(result.isPresent());
-        assertEquals(result.get(), loginFailureException.INCORRECT_EMAIL);
+        assertEquals(result.get(), LoginFailureException.INCORRECT_EMAIL);
 
         result = gameServer.validateLoginCredentials("test@gmail", "password");
         assertTrue(result.isPresent());
-        assertEquals(result.get(), loginFailureException.INCORRECT_EMAIL);
+        assertEquals(result.get(), LoginFailureException.INCORRECT_EMAIL);
 
         result = gameServer.validateLoginCredentials("@gmail.com", "password");
         assertTrue(result.isPresent());
-        assertEquals(result.get(), loginFailureException.INCORRECT_EMAIL);
+        assertEquals(result.get(), LoginFailureException.INCORRECT_EMAIL);
     }
 
     /**

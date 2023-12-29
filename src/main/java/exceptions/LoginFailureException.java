@@ -4,7 +4,7 @@ package exceptions;
  * Exception for handling failed login procedure.
  * Provides information about the reason of failure in form of String.
  */
-public class loginFailureException extends Exception {
+public class LoginFailureException extends Exception {
 
     public static String INVALID_CREDENTIALS = "Users with given credentials doesn't exist.";
 
@@ -14,7 +14,7 @@ public class loginFailureException extends Exception {
 
     private final String exceptionReason;
 
-    public loginFailureException(String exceptionReason) {
+    public LoginFailureException(String exceptionReason) {
         this.exceptionReason = exceptionReason;
     }
 

@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import exceptions.socketConnectionException;
+import exceptions.SocketConnectionException;
 
 public class ServerConnector {
 
@@ -18,22 +18,22 @@ public class ServerConnector {
 
     private final ObjectOutputStream outputStream;
 
-    public ServerConnector() throws socketConnectionException {
-        String possibleErrorCause = socketConnectionException.STREAM_OPENING_FAILURE;
+    public ServerConnector() throws SocketConnectionException {
+        String possibleErrorCause = SocketConnectionException.STREAM_OPENING_FAILURE;
         try {
             socket = new Socket(SERVER_IP, SERVER_PORT);
-            possibleErrorCause = socketConnectionException.STREAM_OPENING_FAILURE;
+            possibleErrorCause = SocketConnectionException.STREAM_OPENING_FAILURE;
             outputStream = new ObjectOutputStream(socket.getOutputStream());
         } catch (IOException e) {
-            throw new socketConnectionException(possibleErrorCause);
+            throw new SocketConnectionException(possibleErrorCause);
         }
     }
 
-    public void sendMessage(Message message) throws socketConnectionException {
+    public void sendMessage(Message message) throws SocketConnectionException {
         try {
             outputStream.writeObject(message);
         } catch (IOException e) {
-            throw new socketConnectionException(socketConnectionException.MESSAGE_SENDING_FAILURE);
+            throw new SocketConnectionException(SocketConnectionException.MESSAGE_SENDING_FAILURE);
         }
     }
 

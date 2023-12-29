@@ -4,7 +4,7 @@ package exceptions;
  * Exception for handling failed registration procedure.
  * Provides information about the reason of failure in form of String.
  */
-public class registrationFailureException extends Exception{
+public class RegistrationFailureException extends Exception{
 
     public static String USER_EXISTS = "Users with such credentials already exists.";
 
@@ -18,7 +18,7 @@ public class registrationFailureException extends Exception{
 
     private final String exceptionReason;
 
-    public registrationFailureException(String exceptionReason) {
+    public RegistrationFailureException(String exceptionReason) {
         this.exceptionReason = exceptionReason;
     }
 

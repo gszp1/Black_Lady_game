@@ -1,7 +1,7 @@
 package server;
 
-import exceptions.loginFailureException;
-import exceptions.registrationFailureException;
+import exceptions.LoginFailureException;
+import exceptions.RegistrationFailureException;
 import org.apache.commons.codec.digest.DigestUtils;
 import utils.Utils;
 
@@ -78,21 +78,21 @@ public class GameServer {
      * @param password - New user's raw password, hashed with md5 before being sent.
      * @param passwordConfirmation - password confirmation. Must be equal to password.
      * @return - boolean representing registration result.
-     * @throws registrationFailureException - Exception with reason of registration failure.
+     * @throws RegistrationFailureException - Exception with reason of registration failure.
      */
     public boolean registerUser(String email, String username, String password, String passwordConfirmation)
-            throws registrationFailureException {
+            throws RegistrationFailureException {
         Optional<String> validationResult = validateRegistrationCredentials(email, username,
                 password, passwordConfirmation);
         if(validationResult.isPresent()) {
-            throw(new registrationFailureException(validationResult.get()));
+            throw(new RegistrationFailureException(validationResult.get()));
         }
         String hashPassword = DigestUtils.md5Hex(password).toUpperCase();
         int insertedRecords = 0;
         try {
             insertedRecords = databaseConnector.insertUserIntoDatabase(email, username, hashPassword);
         } catch (SQLException e) {
-            throw(new registrationFailureException(registrationFailureException.USER_EXISTS));
+            throw(new RegistrationFailureException(RegistrationFailureException.USER_EXISTS));
         }
         return insertedRecords == 1;
     }
@@ -102,21 +102,21 @@ public class GameServer {
      * @param email - User's email.
      * @param password - User's email. Hashed with md5 encryption for comparison.
      * @return - boolean representing login result.
-     * @throws loginFailureException - Exception representing login failure.
+     * @throws LoginFailureException - Exception representing login failure.
      * @throws SQLException - Exception for error during query lifetime.
      */
-    public boolean loginUser(String email, String password) throws loginFailureException, SQLException {
+    public boolean loginUser(String email, String password) throws LoginFailureException, SQLException {
         Optional<String> validationResult = validateLoginCredentials(email, password);
         if(validationResult.isPresent()) {
-            throw(new loginFailureException(validationResult.get()));
+            throw(new LoginFailureException(validationResult.get()));
         }
         String hashPassword = DigestUtils.md5Hex(password).toUpperCase();
         ArrayList<String> queryResult = databaseConnector.getUserFromDatabase(email);
         if (queryResult.isEmpty()) {
-            throw (new loginFailureException(loginFailureException.INVALID_CREDENTIALS));
+            throw (new LoginFailureException(LoginFailureException.INVALID_CREDENTIALS));
         }
         if (!queryResult.get(3).equals(hashPassword)) {
-            throw (new loginFailureException(loginFailureException.INVALID_CREDENTIALS));
+            throw (new LoginFailureException(LoginFailureException.INVALID_CREDENTIALS));
         }
         return true;
     }
@@ -140,11 +140,11 @@ public class GameServer {
      */
     public Optional<String> validateLoginCredentials(String email, String password) {
         if(email.isEmpty() || password.isEmpty()) {
-            return Optional.of(loginFailureException.EMPTY_FIELDS);
+            return Optional.of(LoginFailureException.EMPTY_FIELDS);
         }
         Matcher matcher = Utils.pattern.matcher(email);
         if(!matcher.matches()) {
-            return Optional.of(loginFailureException.INCORRECT_EMAIL);
+            return Optional.of(LoginFailureException.INCORRECT_EMAIL);
         }
         return Optional.empty();
     }
@@ -160,14 +160,14 @@ public class GameServer {
     public Optional<String> validateRegistrationCredentials(String email, String username,
                                                              String password, String passwordConfirmation) {
         if(username.isEmpty() || email.isEmpty() || password.isEmpty() || passwordConfirmation.isEmpty()) {
-            return Optional.of(registrationFailureException.EMPTY_FIELDS);
+            return Optional.of(RegistrationFailureException.EMPTY_FIELDS);
         }
         if(!passwordConfirmation.equals(password)) {
-            return Optional.of(registrationFailureException.PASSWORDS_NOT_EQUAL);
+            return Optional.of(RegistrationFailureException.PASSWORDS_NOT_EQUAL);
         }
         Matcher matcher = Utils.pattern.matcher(email);
         if(!matcher.matches()) {
-            return Optional.of(registrationFailureException.INCORRECT_EMAIL);
+            return Optional.of(RegistrationFailureException.INCORRECT_EMAIL);
         }
 
         return Optional.empty();
