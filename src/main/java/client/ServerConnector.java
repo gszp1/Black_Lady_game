@@ -9,6 +9,9 @@ import java.net.Socket;
 
 import exceptions.ClientSocketConnectionException;
 
+/**
+ * Class for handling connection with server on client side.
+ */
 public class ServerConnector extends Thread{
 
     private final int SERVER_PORT = 8080;
@@ -21,6 +24,10 @@ public class ServerConnector extends Thread{
 
     private final ObjectInputStream inputStream;
 
+    /**
+     * Constructor for ServerConnector, opens connection with server, opens output and input streams.
+     * @throws ClientSocketConnectionException - Exception thrown upon connection error.
+     */
     public ServerConnector() throws ClientSocketConnectionException {
         String possibleErrorCause = ClientSocketConnectionException.SOCKET_CONNECTION_FAILURE;
         try {
@@ -34,6 +41,11 @@ public class ServerConnector extends Thread{
         }
     }
 
+    /**
+     * Method for sending message to server.
+     * @param message - Message to be sent to server.
+     * @throws ClientSocketConnectionException - Exception thrown upon connection error.
+     */
     public void sendMessage(Message message) throws ClientSocketConnectionException {
         try {
             outputStream.writeObject(message);
@@ -42,6 +54,11 @@ public class ServerConnector extends Thread{
         }
     }
 
+    /**
+     * Method for reading message from server.
+     * @return message - Message read from server output.
+     * @throws ClientSocketConnectionException - Exception thrown upon connection error.
+     */
     private Message readMessage() throws ClientSocketConnectionException {
         Message message = null;
         try {
