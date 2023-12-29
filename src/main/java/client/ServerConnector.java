@@ -7,7 +7,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import exceptions.SocketConnectionException;
+import exceptions.ClientSocketConnectionException;
 
 public class ServerConnector extends Thread{
 
@@ -21,35 +21,35 @@ public class ServerConnector extends Thread{
 
     private final ObjectInputStream inputStream;
 
-    public ServerConnector() throws SocketConnectionException {
-        String possibleErrorCause = SocketConnectionException.SOCKET_CONNECTION_FAILURE;
+    public ServerConnector() throws ClientSocketConnectionException {
+        String possibleErrorCause = ClientSocketConnectionException.SOCKET_CONNECTION_FAILURE;
         try {
             socket = new Socket(SERVER_IP, SERVER_PORT);
-            possibleErrorCause = SocketConnectionException.OUTPUT_STREAM_OPENING_FAILURE;
+            possibleErrorCause = ClientSocketConnectionException.OUTPUT_STREAM_OPENING_FAILURE;
             outputStream = new ObjectOutputStream(socket.getOutputStream());
-            possibleErrorCause = SocketConnectionException.INPUT_STREAM_OPENING_FAILURE;
+            possibleErrorCause = ClientSocketConnectionException.INPUT_STREAM_OPENING_FAILURE;
             inputStream = new ObjectInputStream(socket.getInputStream());
         } catch (IOException e) {
-            throw new SocketConnectionException(possibleErrorCause);
+            throw new ClientSocketConnectionException(possibleErrorCause);
         }
     }
 
-    public void sendMessage(Message message) throws SocketConnectionException {
+    public void sendMessage(Message message) throws ClientSocketConnectionException {
         try {
             outputStream.writeObject(message);
         } catch (IOException e) {
-            throw new SocketConnectionException(SocketConnectionException.MESSAGE_SENDING_FAILURE);
+            throw new ClientSocketConnectionException(ClientSocketConnectionException.MESSAGE_SENDING_FAILURE);
         }
     }
 
-    private Message readMessage() throws SocketConnectionException {
+    private Message readMessage() throws ClientSocketConnectionException {
         Message message = null;
         try {
             message= (Message) inputStream.readObject();
         } catch (IOException e) {
-            throw new SocketConnectionException(SocketConnectionException.MESSAGE_READING_FAILURE);
+            throw new ClientSocketConnectionException(ClientSocketConnectionException.MESSAGE_READING_FAILURE);
         } catch (ClassNotFoundException e) {
-            throw new SocketConnectionException(SocketConnectionException.UNKNOWN_MESSAGE_TYPE);
+            throw new ClientSocketConnectionException(ClientSocketConnectionException.UNKNOWN_MESSAGE_TYPE);
         }
         return message;
     }

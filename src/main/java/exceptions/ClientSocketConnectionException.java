@@ -1,6 +1,8 @@
 package exceptions;
 
-public class SocketConnectionException extends Throwable {
+
+
+public class ClientSocketConnectionException extends Throwable {
 
     public static String SOCKET_CONNECTION_FAILURE = "Failed to establish connection with server.";
 
@@ -16,7 +18,7 @@ public class SocketConnectionException extends Throwable {
 
     private final String errorCause;
 
-    public SocketConnectionException(String errorCause) {
+    public ClientSocketConnectionException(String errorCause) {
         this.errorCause = errorCause;
     }
 
