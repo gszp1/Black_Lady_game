@@ -1,6 +1,6 @@
 package exceptions;
 
-public class socketConnectionException {
+public class socketConnectionException extends Throwable {
 
     public static String SOCKET_CONNECTION_FAILURE = "Failed to establish connection with server.";
 
