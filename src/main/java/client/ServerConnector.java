@@ -59,10 +59,10 @@ public class ServerConnector extends Thread{
      * @return message - Message read from server output.
      * @throws ClientSocketConnectionException - Exception thrown upon connection error.
      */
-    private Message readMessage() throws ClientSocketConnectionException {
-        Message message = null;
+    private Object readMessage() throws ClientSocketConnectionException {
+        Object message = null;
         try {
-            message= (Message) inputStream.readObject();
+            message = inputStream.readObject();
         } catch (IOException e) {
             throw new ClientSocketConnectionException(ClientSocketConnectionException.MESSAGE_READING_FAILURE);
         } catch (ClassNotFoundException e) {
@@ -71,5 +71,12 @@ public class ServerConnector extends Thread{
         return message;
     }
 
+    @Override
+    public void run() {
+        try {
+            while(!interrupted()) {
 
+            }
+        }
+    }
 }
