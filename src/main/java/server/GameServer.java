@@ -4,6 +4,7 @@ import exceptions.LoginFailureException;
 import exceptions.RegistrationFailureException;
 import messages.Message;
 import org.apache.commons.codec.digest.DigestUtils;
+import utils.UserList;
 import utils.Utils;
 
 import java.io.IOException;
@@ -25,10 +26,13 @@ public class GameServer {
 
     private final ConcurrentLinkedQueue<Message> inputQueue;
 
+    private final UserList userList;
+
     private DatabaseConnector databaseConnector;
 
     public GameServer() {
         inputQueue = new ConcurrentLinkedQueue<>();
+        userList = new UserList();
     }
 
     /**
