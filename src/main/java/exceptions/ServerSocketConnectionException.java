@@ -10,6 +10,8 @@ public class ServerSocketConnectionException  extends Exception{
 
     public static final String MESSAGE_READING_FAILURE = "Failed to read message from client.";
 
+    public static final String MESSAGE_SENDING_FAILURE = "Failed to send message to client.";
+
     public static final String INPUT_STREAM_OPENING_FAILURE = "Failed to open input stream.";
 
     /**
