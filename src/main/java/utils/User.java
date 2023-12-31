@@ -13,17 +13,17 @@ public class User {
     /**
      * ID of a user - Taken from database, unique.
      */
-    private final String userID;
+    private String userID;
 
     /**
      * Email of a user - Taken from database, unique.
      */
-    private final String email;
+    private String email;
 
     /**
      * User's username - Taken from database, unique.
      */
-    private final String username;
+    private String username;
 
     /**
      * OutputStream used for sending messages to user's client app.
