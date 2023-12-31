@@ -2,6 +2,7 @@ package server;
 
 import exceptions.LoginFailureException;
 import exceptions.RegistrationFailureException;
+import javafx.scene.input.InputMethodTextRun;
 import messages.Message;
 import org.apache.commons.codec.digest.DigestUtils;
 import utils.User;
@@ -13,6 +14,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.regex.Matcher;
@@ -29,11 +32,14 @@ public class GameServer {
 
     private final UserList userList;
 
+    private final Map<String, InputHandler> inputHandlerMap;
+
     private DatabaseConnector databaseConnector;
 
     public GameServer() {
         inputQueue = new ConcurrentLinkedQueue<>();
         userList = new UserList();
+        inputHandlerMap = new HashMap<>();
     }
 
     /**
