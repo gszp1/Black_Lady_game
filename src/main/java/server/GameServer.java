@@ -4,6 +4,7 @@ import exceptions.LoginFailureException;
 import exceptions.RegistrationFailureException;
 import messages.Message;
 import org.apache.commons.codec.digest.DigestUtils;
+import utils.User;
 import utils.UserList;
 import utils.Utils;
 
@@ -72,6 +73,8 @@ public class GameServer {
                         +
                         "," + clientSocket.getPort()
                 );
+                String temporaryUserID = String.format("%s|%s", clientSocket.getInetAddress(), clientSocket.getPort());
+                User user = new User(temporaryUserID, null, null, clientSocket);
             }
         } catch (IOException e) {
             System.out.println("S: Failed to run server. Terminating process.");
