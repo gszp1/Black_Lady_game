@@ -67,6 +67,10 @@ public class User {
         return email;
     }
 
+    /**
+     * Getter for user's username.
+     * @return - user's username.
+     */
     public String getUsername() {
         return username;
     }
