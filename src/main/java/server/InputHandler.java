@@ -1,5 +1,6 @@
 package server;
 
+import exceptions.ServerSocketConnectionException;
 import messages.Message;
 
 import java.io.IOException;
@@ -29,9 +30,9 @@ public class InputHandler extends Thread{
                 inputQueue.add(message);
             }
         } catch (ClassNotFoundException e) {
-
+            System.out.println(ServerSocketConnectionException.UNKNOWN_MESSAGE_TYPE);
         } catch (IOException e) {
-
+            System.out.println(ServerSocketConnectionException.MESSAGE_READING_FAILURE);
         }
     }
 
