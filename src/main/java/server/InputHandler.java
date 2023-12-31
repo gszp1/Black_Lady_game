@@ -8,14 +8,32 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+/**
+ * Class for handling input from single user.
+ */
 public class InputHandler extends Thread{
 
+    /**
+     * Reference to user object containing data of user to whom this socket is connected to.
+     */
     private final User user;
 
+    /**
+     * Input Stream from which we read messages sent by user.
+     */
     private final ObjectInputStream inputStream;
 
+    /**
+     * Reference to linked queue for messages to be handled.
+     */
     private final ConcurrentLinkedQueue<Message> inputQueue;
 
+    /**
+     * Constructor, sets reference to user and linked list.
+     * @param user - Reference to user object.
+     * @param inputQueue - Reference to input queue.
+     * @throws ServerSocketConnectionException - Exception thrown upon connection error.
+     */
     public InputHandler(User user, ConcurrentLinkedQueue<Message> inputQueue) throws ServerSocketConnectionException {
         this.user = user;
         this.inputQueue = inputQueue;
@@ -26,6 +44,9 @@ public class InputHandler extends Thread{
         }
     }
 
+    /**
+     * Run thread method implementation.
+     */
     @Override
     public void run() {
         try {
