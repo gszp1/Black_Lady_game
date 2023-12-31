@@ -90,4 +90,16 @@ public class User {
     public ObjectOutputStream getOutputStream() {
         return outputStream;
     }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 }
