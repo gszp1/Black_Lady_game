@@ -91,14 +91,26 @@ public class User {
         return outputStream;
     }
 
+    /**
+     * Setter for userID.
+     * @param userID - New userID.
+     */
     public void setUserID(String userID) {
         this.userID = userID;
     }
 
+    /**
+     * Setter for email.
+     * @param email - New email.
+     */
     public void setEmail(String email) {
         this.email = email;
     }
 
+    /**
+     * Setter for username;
+     * @param username - New username;
+     */
     public void setUsername(String username) {
         this.username = username;
     }
