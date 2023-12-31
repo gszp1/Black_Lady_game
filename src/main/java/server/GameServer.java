@@ -2,6 +2,7 @@ package server;
 
 import exceptions.LoginFailureException;
 import exceptions.RegistrationFailureException;
+import messages.Message;
 import org.apache.commons.codec.digest.DigestUtils;
 import utils.Utils;
 
@@ -11,8 +12,8 @@ import java.net.Socket;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.regex.Matcher;
-
 
 
 /**
@@ -22,8 +23,13 @@ public class GameServer {
 
     private final int PORT = 8080;
 
+    private final ConcurrentLinkedQueue<Message> inputQueue;
 
     private DatabaseConnector databaseConnector;
+
+    public GameServer() {
+        inputQueue = new ConcurrentLinkedQueue<>();
+    }
 
     /**
      * Establishes connection with database.
