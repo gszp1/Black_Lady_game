@@ -67,6 +67,10 @@ public class User {
         return email;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
     /**
      * Getter for server side socket handling connection with client.
      * @return - socket to which client is connected.
