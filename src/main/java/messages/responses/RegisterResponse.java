@@ -17,7 +17,7 @@ public class RegisterResponse extends Message {
      * @param data - Information contained by message.
      * @param userID - ID of user to whom the message is addressed.
      */
-    public RegisterResponse(String data, int userID) {
+    public RegisterResponse(String data, String userID) {
         super(MessageType.RegisterResponse, data, userID);
     }
 

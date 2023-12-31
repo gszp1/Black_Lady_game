@@ -22,7 +22,7 @@ public abstract class Message implements Serializable {
     /**
      * ID of client who sent the message / to whom the message is being sent.
      */
-    private int clientID;
+    private String clientID;
 
     /**
      * Constructor for message.
@@ -30,7 +30,7 @@ public abstract class Message implements Serializable {
      * @param data - Information passed with message.
      * @param clientID - ID of client.
      */
-    public Message(MessageType messageType, String data, int clientID) {
+    public Message(MessageType messageType, String data, String clientID) {
         this.messageType = messageType;
         this.clientID = clientID;
         this.data = data;
@@ -63,7 +63,7 @@ public abstract class Message implements Serializable {
      * Getter for client's ID.
      * @return - ID of client.
      */
-    public int getClientID() {
+    public String getClientID() {
         return clientID;
     }
 
@@ -71,7 +71,7 @@ public abstract class Message implements Serializable {
      * Setter for client's ID
      * @param clientID - Client id to be set.
      */
-    public void setClientID(int clientID) {
+    public void setClientID(String clientID) {
         this.clientID = clientID;
     }
 }
