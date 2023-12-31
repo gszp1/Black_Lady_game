@@ -17,7 +17,7 @@ public class LoginResponse extends Message {
      * @param data - Information contained by message.
      * @param userID - ID of user to whom the message is addressed.
      */
-    public LoginResponse(String data, int userID) {
+    public LoginResponse(String data, String userID) {
         super(MessageType.LoginResponse, data, userID);
     }
 

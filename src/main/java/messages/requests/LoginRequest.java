@@ -16,8 +16,8 @@ public class LoginRequest extends Message {
      * @param password - User's password.
      * @param clientID - Client's ID.
      */
-    public LoginRequest(String email, String username, String password, int clientID) {
-        super(MessageType.LoginRequest, String.format("%s|%s|%S", email, username, password), clientID);
+    public LoginRequest(String email, String username, String password, String clientID) {
+        super(MessageType.LoginRequest, String.format("%s|%s|%s", email, username, password), clientID);
     }
 
     /**

@@ -12,7 +12,7 @@ public class RegisterRequest extends Message {
 
 
     public RegisterRequest(String email, String username, String password,
-                           String passwordConfirmation, int clientID) {
+                           String passwordConfirmation, String clientID) {
         super(MessageType.RegisterRequest, String.format("%s|%s|%s|%s", email, username, password, passwordConfirmation), clientID);
     }
 
