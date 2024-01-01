@@ -2,6 +2,8 @@ package messages.requests;
 
 import messages.Message;
 import messages.MessageType;
+import server.DatabaseConnector;
+import utils.UserList;
 
 import java.io.IOException;
 
@@ -26,8 +28,9 @@ public class LoginRequest extends Message {
      * @throws IOException - Exception thrown if something went wrong with sending message.
      */
     @Override
-    public boolean handleMessage() throws IOException {
-        return false;
+    public boolean handleMessage(UserList userList, DatabaseConnector databaseConnector) throws IOException {
+
+        return true;
     }
 
     /**

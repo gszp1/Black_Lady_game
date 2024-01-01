@@ -1,5 +1,8 @@
 package messages;
 
+import server.DatabaseConnector;
+import utils.UserList;
+
 import java.io.IOException;
 import java.io.Serializable;
 
@@ -41,7 +44,7 @@ public abstract class Message implements Serializable {
      * @return - Returns boolean describing result of message handling.
      * @throws IOException - Exception thrown if something went wrong with sending message.
      */
-    public abstract boolean handleMessage() throws IOException;
+    public abstract boolean handleMessage(UserList userList, DatabaseConnector databaseConnector) throws IOException;
 
     /**
      * Getter for message type.
