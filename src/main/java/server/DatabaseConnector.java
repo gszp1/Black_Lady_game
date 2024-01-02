@@ -3,7 +3,6 @@ package server;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Optional;
-import com.mysql.cj.jdbc.Driver;
 
 /**
  * Class which provides interface for connection between server and MySQL database.

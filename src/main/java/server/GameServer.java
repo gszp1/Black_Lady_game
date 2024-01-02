@@ -2,7 +2,6 @@ package server;
 
 import exceptions.LoginFailureException;
 import exceptions.RegistrationFailureException;
-import javafx.scene.input.InputMethodTextRun;
 import messages.Message;
 import org.apache.commons.codec.digest.DigestUtils;
 import utils.User;
