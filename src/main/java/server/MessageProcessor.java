@@ -23,12 +23,16 @@ public class MessageProcessor extends Thread{
      */
     private final UserList userList;
 
+    /**
+     * DatabaseConnector for retrieving user data from database.
+     */
     private final DatabaseConnector databaseConnector;
 
     /**
      * Constructor, sets inputQueue and userList with given reference.
      * @param inputQueue - Reference to inputQueue.
      * @param userList - Reference to userList.
+     * @param databaseConnector - Reference to DatabaseConnector.
      */
     public MessageProcessor(ConcurrentLinkedQueue<Message> inputQueue, UserList userList, DatabaseConnector databaseConnector) {
         this.inputQueue = inputQueue;
