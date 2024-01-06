@@ -52,6 +52,10 @@ public class LoginRequest extends Message {
             if (user.isPresent()) {
                 throw new LoginFailureException(LoginFailureException.USER_ALREADY_LOGGED_IN);
             }
+            if (!updateUserID(userDatabaseData.get(0), userList)) {
+                return false;
+            }
+
             // Set ClientID on server side to the ClientID stored on server
         } catch (SQLException e) {
 
