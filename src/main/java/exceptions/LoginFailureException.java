@@ -12,6 +12,8 @@ public class LoginFailureException extends Exception {
 
     public static String EMPTY_FIELDS = "Not all login data provided.";
 
+    public static String USER_ALREADY_LOGGED_IN = "User is already logged in.";
+
     private final String exceptionReason;
 
     public LoginFailureException(String exceptionReason) {
