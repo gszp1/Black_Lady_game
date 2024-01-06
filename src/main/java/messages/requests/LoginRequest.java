@@ -1,5 +1,6 @@
 package messages.requests;
 
+import exceptions.LoginFailureException;
 import messages.Message;
 import messages.MessageType;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -34,18 +35,21 @@ public class LoginRequest extends Message {
     @Override
     public boolean handleMessage(UserList userList, DatabaseConnector databaseConnector) throws IOException {
         String [] messageContents = parseData();
-        String hashPassword = DigestUtils.md5Hex(messageContents[1]).toUpperCase();
         try {
             ArrayList<String> userDatabaseData = databaseConnector.getUserFromDatabase(messageContents[0]);
             // User not found in database.
-            if (userDatabaseData == null) {
+            if (userDatabaseData.isEmpty()) {
                 //todo;
             }
-            // Password is incorrect.
-            if (!hashPassword.equals(userDatabaseData.get(1))) {
+            checkPassword(messageContents[1], userDatabaseData.get(2));
+            if (userList.getUser(userDatabaseData.get(0)).isPresent()) {
 
             }
+
+            // Set ClientID on server side to the ClientID stored on server
         } catch (SQLException e) {
+
+        } catch (LoginFailureException l) {
 
         }
         //Given credentials are correct.
@@ -58,5 +62,10 @@ public class LoginRequest extends Message {
      */
     public String [] parseData() {
         return getData().trim().split("\\|");
+    }
+
+    private boolean checkPassword(String password, String dbPassword) throws LoginFailureException {
+        String hashPassword = DigestUtils.md5Hex(password).toUpperCase();
+        return !hashPassword.equals(dbPassword);
     }
 }
