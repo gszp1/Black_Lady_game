@@ -29,7 +29,8 @@ The goal of this project is to implement black lady game as a client-server serv
    3.4 Login procedure:
        After establishing connection with server, client can login in order to be able to connect with game rooms. When clients wants to login, he sends request to server
        containing user's email and password. Server checks if record of such user exists in database, and if does, validates given credentials. After that, server
-       sends response which states if user has successfuly logged in or not.
+       sends response which states if user has successfuly logged in or not. When user connects without login, he is given ID consisting of his IP address and port number.
+       After successful login request, server changes that ID to actual ID from database.
    3.5 Registration procedure:
        If application user decides to create new account, he must send a request to server containing email, username, password, and confirmation of that password. Server
        checks if such user already exists and validates credentials. After that sends response with information about registration result.
