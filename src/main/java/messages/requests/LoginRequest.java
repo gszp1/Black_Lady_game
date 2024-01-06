@@ -6,6 +6,8 @@ import server.DatabaseConnector;
 import utils.UserList;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  * Class for login request message.
@@ -14,12 +16,11 @@ public class LoginRequest extends Message {
     /**
      * Constructor for login request message.
      * @param email - User's email
-     * @param username - User's username.
      * @param password - User's password.
      * @param clientID - Client's ID.
      */
-    public LoginRequest(String email, String username, String password, String clientID) {
-        super(MessageType.LoginRequest, String.format("%s|%s|%s", email, username, password), clientID);
+    public LoginRequest(String email, String password, String clientID) {
+        super(MessageType.LoginRequest, String.format("%s|%s", email, password), clientID);
     }
 
     /**
@@ -29,7 +30,16 @@ public class LoginRequest extends Message {
      */
     @Override
     public boolean handleMessage(UserList userList, DatabaseConnector databaseConnector) throws IOException {
+        String [] messageContents = parseData();
+        try {
+            ArrayList<String> userDatabaseData = databaseConnector.getUserFromDatabase(messageContents[0]);
+            if (userDatabaseData == null) {
 
+            }
+
+        } catch (SQLException e) {
+
+        }
         return true;
     }
 
