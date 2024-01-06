@@ -5,12 +5,14 @@ import messages.Message;
 import messages.MessageType;
 import org.apache.commons.codec.digest.DigestUtils;
 import server.DatabaseConnector;
+import utils.User;
 import utils.UserList;
 import utils.Utils;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.regex.Matcher;
 
 /**
@@ -37,15 +39,19 @@ public class LoginRequest extends Message {
         String [] messageContents = parseData();
         try {
             ArrayList<String> userDatabaseData = databaseConnector.getUserFromDatabase(messageContents[0]);
-            // User not found in database.
-            if (userDatabaseData.isEmpty()) {
-                //todo;
+            // Check if user exists.
+            if (userDatabaseData == null) {
+                throw new LoginFailureException(LoginFailureException.INVALID_CREDENTIALS);
             }
-            checkPassword(messageContents[1], userDatabaseData.get(2));
-            if (userList.getUser(userDatabaseData.get(0)).isPresent()) {
-
+            // Check password.
+            if (!checkPassword(messageContents[1], userDatabaseData.get(2))) {
+                throw new LoginFailureException(LoginFailureException.INVALID_CREDENTIALS);
             }
-
+            // Check if such user is already logged in.
+            Optional<User> user = userList.getUser(userDatabaseData.get(1));
+            if (user.isPresent()) {
+                throw new LoginFailureException(LoginFailureException.USER_ALREADY_LOGGED_IN);
+            }
             // Set ClientID on server side to the ClientID stored on server
         } catch (SQLException e) {
 
@@ -68,4 +74,15 @@ public class LoginRequest extends Message {
         String hashPassword = DigestUtils.md5Hex(password).toUpperCase();
         return !hashPassword.equals(dbPassword);
     }
+
+    private boolean updateUserID(String newID, UserList userList) {
+        Optional<User> user = userList.getUser(this.getClientID());
+        if(!user.isPresent()) {
+            return false;
+        }
+        user.get().setUserID(newID);
+        return true;
+    }
+
+
 }
