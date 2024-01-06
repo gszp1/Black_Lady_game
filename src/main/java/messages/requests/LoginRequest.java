@@ -3,6 +3,7 @@ package messages.requests;
 import exceptions.LoginFailureException;
 import messages.Message;
 import messages.MessageType;
+import messages.responses.LoginResponse;
 import org.apache.commons.codec.digest.DigestUtils;
 import server.DatabaseConnector;
 import utils.User;
@@ -55,12 +56,13 @@ public class LoginRequest extends Message {
             if (!updateUserID(userDatabaseData.get(0), userList)) {
                 return false;
             }
-
             // Set ClientID on server side to the ClientID stored on server
         } catch (SQLException e) {
 
         } catch (LoginFailureException l) {
-
+            String messageContent = "Failure|".concat(l.getExceptionReason());
+            Optional<User> user = userList.getUser(this.getClientID());
+            Message message = new LoginResponse()
         }
         //Given credentials are correct.
         return true;
@@ -86,6 +88,12 @@ public class LoginRequest extends Message {
         }
         user.get().setUserID(newID);
         return true;
+    }
+
+    private void sendResponse(String result, String response, User user) throws IOException{
+        String messageContents = result.concat("|").concat(response);
+        Message message = new LoginResponse(messageContents, user.getUserID());
+        user.getOutputStream().writeObject(message);
     }
 
 
