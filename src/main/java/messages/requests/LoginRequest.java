@@ -2,12 +2,15 @@ package messages.requests;
 
 import messages.Message;
 import messages.MessageType;
+import org.apache.commons.codec.digest.DigestUtils;
 import server.DatabaseConnector;
 import utils.UserList;
+import utils.Utils;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
 
 /**
  * Class for login request message.
@@ -31,15 +34,21 @@ public class LoginRequest extends Message {
     @Override
     public boolean handleMessage(UserList userList, DatabaseConnector databaseConnector) throws IOException {
         String [] messageContents = parseData();
+        String hashPassword = DigestUtils.md5Hex(messageContents[1]).toUpperCase();
         try {
             ArrayList<String> userDatabaseData = databaseConnector.getUserFromDatabase(messageContents[0]);
+            // User not found in database.
             if (userDatabaseData == null) {
+                //todo;
+            }
+            // Password is incorrect.
+            if (!hashPassword.equals(userDatabaseData.get(1))) {
 
             }
-
         } catch (SQLException e) {
 
         }
+        //Given credentials are correct.
         return true;
     }
 
