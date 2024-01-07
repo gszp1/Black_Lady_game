@@ -13,6 +13,7 @@ import utils.Utils;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.regex.Matcher;
 
 import utils.User;
@@ -22,6 +23,11 @@ import utils.User;
  */
 public class RegisterRequest extends Message {
 
+    public static String REGISTRATION_SUCCESS = "Success";
+
+    public static String REGISTRATION_FAILURE = "Failure";
+
+    public static String REGISTRATION_SUCCESS_RESPONSE = "Registration successful.";
 
     public RegisterRequest(String email, String username, String password,
                            String passwordConfirmation, String clientID) {
@@ -46,7 +52,11 @@ public class RegisterRequest extends Message {
             if (databaseConnector.insertUserIntoDatabase(credentials[0], credentials[1], hashPassword) == 0) {
                 throw new RegistrationFailureException(RegistrationFailureException.REGISTRATION_FAIL);
             }
+            Optional<User> user = userList.getUser(this.getClientID());
+            if(!user.isPresent()) {
 
+            }
+            sendResponse("Success", "");
 
         } catch (RegistrationFailureException e) {
 
