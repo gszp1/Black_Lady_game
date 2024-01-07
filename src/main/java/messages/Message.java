@@ -5,6 +5,7 @@ import utils.UserList;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.sql.SQLException;
 
 
 /**
@@ -44,7 +45,7 @@ public abstract class Message implements Serializable {
      * @return - Returns boolean describing result of message handling.
      * @throws IOException - Exception thrown if something went wrong with sending message.
      */
-    public abstract boolean handleMessage(UserList userList, DatabaseConnector databaseConnector) throws IOException;
+    public abstract boolean handleMessage(UserList userList, DatabaseConnector databaseConnector) throws IOException, SQLException;
 
     /**
      * Getter for message type.

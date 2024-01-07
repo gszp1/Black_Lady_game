@@ -36,7 +36,7 @@ public class LoginRequest extends Message {
      * @throws IOException - Exception thrown if something went wrong with sending message.
      */
     @Override
-    public boolean handleMessage(UserList userList, DatabaseConnector databaseConnector) throws IOException {
+    public boolean handleMessage(UserList userList, DatabaseConnector databaseConnector) throws IOException, SQLException{
         String [] messageContents = parseData();
         try {
             ArrayList<String> userDatabaseData = databaseConnector.getUserFromDatabase(messageContents[0]);
@@ -61,8 +61,6 @@ public class LoginRequest extends Message {
                 sendResponse("Success", "Login successful.", user.get());
             }
             // Set ClientID on server side to the ClientID stored on server
-        } catch (SQLException e) {
-
         } catch (LoginFailureException l) {
             Optional<User> user = userList.getUser(this.getClientID());
             if (user.isPresent()) {
