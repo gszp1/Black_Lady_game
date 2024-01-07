@@ -4,8 +4,10 @@ import messages.Message;
 import messages.MessageType;
 import server.DatabaseConnector;
 import utils.UserList;
+import utils.Utils;
 
 import java.io.IOException;
+import java.util.regex.Matcher;
 
 /**
  * Class for register request message.
@@ -25,6 +27,7 @@ public class RegisterRequest extends Message {
      */
     @Override
     public boolean handleMessage(UserList userList, DatabaseConnector databaseConnector) throws IOException {
+
         return true;
     }
 
@@ -35,4 +38,10 @@ public class RegisterRequest extends Message {
     public String [] parseData() {
         return getData().trim().split("\\|");
     }
+
+    private boolean validateEmail(String email) {
+        Matcher matcher = Utils.pattern.matcher(email);
+        return matcher.matches();
+    }
+
 }
