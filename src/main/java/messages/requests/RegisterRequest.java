@@ -4,6 +4,7 @@ import exceptions.LoginFailureException;
 import exceptions.RegistrationFailureException;
 import messages.Message;
 import messages.MessageType;
+import messages.responses.RegisterResponse;
 import org.apache.commons.codec.digest.DigestUtils;
 import server.DatabaseConnector;
 import utils.UserList;
@@ -13,6 +14,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
+
+import utils.User;
 
 /**
  * Class for register request message.
@@ -74,6 +77,11 @@ public class RegisterRequest extends Message {
         if (!credentials[2].equals(credentials[3])) {
             throw new RegistrationFailureException(RegistrationFailureException.PASSWORDS_NOT_EQUAL);
         }
+    }
+
+    private void sendResponse(String result, String responseContent, User user) throws IOException {
+        String responseMessage = result.concat("|").concat(responseContent);
+        user.getOutputStream().writeObject(new RegisterResponse(responseMessage, this.getClientID()));
     }
 
 }
