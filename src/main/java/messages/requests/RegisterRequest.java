@@ -30,7 +30,11 @@ public class RegisterRequest extends Message {
      */
     @Override
     public boolean handleMessage(UserList userList, DatabaseConnector databaseConnector) throws IOException {
+        try {
+            validateCredentials();
+        } catch (RegistrationFailureException e) {
 
+        }
         return true;
     }
 
