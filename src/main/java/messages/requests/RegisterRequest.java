@@ -4,6 +4,7 @@ import exceptions.LoginFailureException;
 import exceptions.RegistrationFailureException;
 import messages.Message;
 import messages.MessageType;
+import org.apache.commons.codec.digest.DigestUtils;
 import server.DatabaseConnector;
 import utils.UserList;
 import utils.Utils;
@@ -38,6 +39,8 @@ public class RegisterRequest extends Message {
             if (dbData != null) {
                 throw new RegistrationFailureException(RegistrationFailureException.USER_EXISTS);
             }
+            String hashPassword = DigestUtils.md5Hex(credentials[2]).toUpperCase();
+
 
         } catch (RegistrationFailureException e) {
 
