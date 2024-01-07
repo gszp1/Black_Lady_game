@@ -31,8 +31,8 @@ public class RegisterRequest extends Message {
     @Override
     public boolean handleMessage(UserList userList, DatabaseConnector databaseConnector) throws IOException {
         try {
-            validateCredentials();
-
+            String [] credentials = this.parseData();
+            validateCredentials(credentials);
         } catch (RegistrationFailureException e) {
 
         }
@@ -52,8 +52,7 @@ public class RegisterRequest extends Message {
         return matcher.matches();
     }
 
-    private void validateCredentials() throws RegistrationFailureException {
-        String [] credentials = this.parseData();
+    private void validateCredentials(String [] credentials) throws RegistrationFailureException {
         if (credentials[0].isEmpty() || credentials[1].isEmpty() || credentials[2].isEmpty() || credentials[3].isEmpty()) {
             throw new RegistrationFailureException(RegistrationFailureException.EMPTY_FIELDS);
         }
