@@ -40,6 +40,9 @@ public class RegisterRequest extends Message {
                 throw new RegistrationFailureException(RegistrationFailureException.USER_EXISTS);
             }
             String hashPassword = DigestUtils.md5Hex(credentials[2]).toUpperCase();
+            if (databaseConnector.insertUserIntoDatabase(credentials[0], credentials[1], hashPassword) == 0) {
+                throw new RegistrationFailureException(RegistrationFailureException.REGISTRATION_FAIL);
+            }
 
 
         } catch (RegistrationFailureException e) {
