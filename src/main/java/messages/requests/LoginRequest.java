@@ -53,16 +53,21 @@ public class LoginRequest extends Message {
             if (user.isPresent()) {
                 throw new LoginFailureException(LoginFailureException.USER_ALREADY_LOGGED_IN);
             }
+            user = userList.getUser(this.getClientID());
             if (!updateUserID(userDatabaseData.get(0), userList)) {
                 return false;
+            }
+            if(user.isPresent()) {
+                sendResponse("Success", "Login successful.", user.get());
             }
             // Set ClientID on server side to the ClientID stored on server
         } catch (SQLException e) {
 
         } catch (LoginFailureException l) {
-            String messageContent = "Failure|".concat(l.getExceptionReason());
             Optional<User> user = userList.getUser(this.getClientID());
-            Message message = new LoginResponse()
+            if (user.isPresent()) {
+                sendResponse("Fail", l.getExceptionReason(), user.get());
+            }
         }
         //Given credentials are correct.
         return true;
