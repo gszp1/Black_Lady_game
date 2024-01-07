@@ -1,5 +1,7 @@
 package messages.requests;
 
+import exceptions.LoginFailureException;
+import exceptions.RegistrationFailureException;
 import messages.Message;
 import messages.MessageType;
 import server.DatabaseConnector;
@@ -7,6 +9,7 @@ import utils.UserList;
 import utils.Utils;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 
 /**
@@ -42,6 +45,20 @@ public class RegisterRequest extends Message {
     private boolean validateEmail(String email) {
         Matcher matcher = Utils.pattern.matcher(email);
         return matcher.matches();
+    }
+
+    private boolean validateCredentials() throws RegistrationFailureException {
+        String [] credentials = this.parseData();
+        if (credentials[0].isEmpty() || credentials[1].isEmpty() || credentials[2].isEmpty() || credentials[3].isEmpty()) {
+            throw new RegistrationFailureException(RegistrationFailureException.EMPTY_FIELDS);
+        }
+        if (!validateEmail(credentials[0])) {
+            throw new RegistrationFailureException(RegistrationFailureException.INCORRECT_EMAIL);
+        }
+        if (!credentials[2].equals(credentials[3])) {
+            throw new RegistrationFailureException(RegistrationFailureException.PASSWORDS_NOT_EQUAL);
+        }
+        return true;
     }
 
 }
