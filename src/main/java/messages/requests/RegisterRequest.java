@@ -9,6 +9,7 @@ import utils.UserList;
 import utils.Utils;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 
@@ -29,10 +30,15 @@ public class RegisterRequest extends Message {
      * @throws IOException - Exception thrown if something went wrong with sending message.
      */
     @Override
-    public boolean handleMessage(UserList userList, DatabaseConnector databaseConnector) throws IOException {
+    public boolean handleMessage(UserList userList, DatabaseConnector databaseConnector) throws IOException, SQLException {
         try {
             String [] credentials = this.parseData();
             validateCredentials(credentials);
+            ArrayList<String> dbData = databaseConnector.getUserFromDatabase(credentials[0]);
+            if (dbData != null) {
+                throw new RegistrationFailureException(RegistrationFailureException.USER_EXISTS);
+            }
+
         } catch (RegistrationFailureException e) {
 
         }
