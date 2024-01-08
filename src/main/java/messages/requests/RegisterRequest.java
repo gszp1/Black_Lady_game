@@ -53,13 +53,14 @@ public class RegisterRequest extends Message {
                 throw new RegistrationFailureException(RegistrationFailureException.REGISTRATION_FAIL);
             }
             Optional<User> user = userList.getUser(this.getClientID());
-            if(!user.isPresent()) {
-
+            if(user.isPresent()) {
+                sendResponse(REGISTRATION_SUCCESS, REGISTRATION_SUCCESS_RESPONSE, user.get());
             }
-            sendResponse("Success", "");
-
         } catch (RegistrationFailureException e) {
-
+            Optional<User> user = userList.getUser(this.getClientID());
+            if(user.isPresent()) {
+                sendResponse(REGISTRATION_FAILURE, e, user.get());
+            }
         }
         return true;
     }
@@ -89,9 +90,12 @@ public class RegisterRequest extends Message {
         }
     }
 
-    private void sendResponse(String result, String responseContent, User user) throws IOException {
-        String responseMessage = result.concat("|").concat(responseContent);
-        user.getOutputStream().writeObject(new RegisterResponse(responseMessage, this.getClientID()));
+    private void sendResponse(String result, String responseContent, UserList userList) throws IOException {
+        Optional<User> user = userList.getUser(this.getClientID());
+        if (user.isPresent()) {
+            String responseMessage = result.concat("|").concat(responseContent);
+            user.get().getOutputStream().writeObject(new RegisterResponse(responseMessage, this.getClientID()));
+        }
     }
 
 }
