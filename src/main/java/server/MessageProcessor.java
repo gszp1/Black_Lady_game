@@ -5,6 +5,7 @@ import messages.Message;
 import utils.UserList;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -53,6 +54,8 @@ public class MessageProcessor extends Thread{
             }
         } catch (IOException e) {
             System.out.println(ServerSocketConnectionException.MESSAGE_SENDING_FAILURE);
+        } catch (SQLException e) {
+            System.out.println("Database connection lost.");
         }
     }
 

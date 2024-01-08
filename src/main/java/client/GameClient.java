@@ -67,7 +67,7 @@ public class GameClient extends Application{
     }
 
     public static void main(String[] args) throws IOException {
-        Socket socket = new Socket("0.0.0.0", 8080);
+//        Socket socket = new Socket("0.0.0.0", 8080);
         launch(args);
     }
 }
