@@ -52,15 +52,9 @@ public class RegisterRequest extends Message {
             if (databaseConnector.insertUserIntoDatabase(credentials[0], credentials[1], hashPassword) == 0) {
                 throw new RegistrationFailureException(RegistrationFailureException.REGISTRATION_FAIL);
             }
-            Optional<User> user = userList.getUser(this.getClientID());
-            if(user.isPresent()) {
-                sendResponse(REGISTRATION_SUCCESS, REGISTRATION_SUCCESS_RESPONSE, user.get());
-            }
+            sendResponse(REGISTRATION_SUCCESS, REGISTRATION_SUCCESS_RESPONSE, userList);
         } catch (RegistrationFailureException e) {
-            Optional<User> user = userList.getUser(this.getClientID());
-            if(user.isPresent()) {
-                sendResponse(REGISTRATION_FAILURE, e, user.get());
-            }
+            sendResponse(REGISTRATION_FAILURE, e.getExceptionReason(), userList);
         }
         return true;
     }
