@@ -8,13 +8,11 @@ import org.apache.commons.codec.digest.DigestUtils;
 import server.DatabaseConnector;
 import utils.User;
 import utils.UserList;
-import utils.Utils;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.regex.Matcher;
 
 /**
  * Class for login request message.

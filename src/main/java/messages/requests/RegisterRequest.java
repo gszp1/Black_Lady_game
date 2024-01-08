@@ -1,6 +1,5 @@
 package messages.requests;
 
-import exceptions.LoginFailureException;
 import exceptions.RegistrationFailureException;
 import messages.Message;
 import messages.MessageType;
