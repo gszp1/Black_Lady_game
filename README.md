@@ -34,6 +34,4 @@ The goal of this project is to implement black lady game as a client-server serv
    3.5 Registration procedure:
        If application user decides to create new account, he must send a request to server containing email, username, password, and confirmation of that password. Server
        checks if such user already exists and validates credentials. After that sends response with information about registration result.
-   
-![image](https://github.com/gszp1/Black_Lady_game/assets/117859917/9b8829a1-7070-48b9-ab37-f6bed4ff9de2)
 
