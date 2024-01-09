@@ -6,6 +6,7 @@ import server.DatabaseConnector;
 import utils.UserList;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 //todo: adapt to needs when implementing register
 
@@ -24,9 +25,12 @@ public class RegisterResponse extends Message {
     }
 
     /**
-     * Register response handling procedure.
-     * @return - Boolean telling if operation was successful.
-     * @throws IOException - Exception thrown if something went wrong with sending the message.
+     * Register response message handling procedure.
+     * @param userList List of users.
+     * @param databaseConnector Connection to database.
+     * @return result of message handling: true or false.
+     * @throws IOException Thrown if something went wrong with server-user connection.
+     * @throws SQLException Thrown if something went wrong with database connection.
      */
     @Override
     public boolean handleMessage(UserList userList, DatabaseConnector databaseConnector) throws IOException {
