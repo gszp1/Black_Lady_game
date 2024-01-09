@@ -25,6 +25,6 @@ public class LogoutRequest extends Message {
 
     @Override
     public boolean handleMessage(UserList userList, DatabaseConnector databaseConnector) throws IOException, SQLException {
-        return false;
+        return true;
     }
 }
