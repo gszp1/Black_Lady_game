@@ -101,16 +101,18 @@ public class GameClient extends Application{
         // Create UI components for the new window
         TextField emailField = new TextField();
         TextField usernameField = new TextField();
-        TextField passwordField = new TextField();
-        TextField passwordConfirmationField = new TextField();
+        PasswordField passwordField = new PasswordField();
+        PasswordField passwordConfirmationField = new PasswordField();
         Button submitButton = new Button("Submit");
+
+
 
         // Add components to the new GridPane
         newGrid.add(emailField, 0, 0);
-        newGrid.add(usernameField, 1, 0);
-        newGrid.add(passwordField, 0, 1);
-        newGrid.add(passwordConfirmationField, 1, 1);
-        newGrid.add(submitButton, 0, 2, 2, 1); // span button across two columns
+        newGrid.add(usernameField, 0, 1);
+        newGrid.add(passwordField, 0, 2);
+        newGrid.add(passwordConfirmationField, 0, 3);
+        newGrid.add(submitButton, 0, 4, 2, 1); // span button across two columns
 
         // Configure layout constraints for the new window
         ColumnConstraints column1 = new ColumnConstraints();
@@ -133,5 +135,6 @@ public class GameClient extends Application{
         // Show the new Stage
         newStage.show();
     }
+
 }
 
