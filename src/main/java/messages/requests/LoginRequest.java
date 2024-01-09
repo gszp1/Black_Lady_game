@@ -63,13 +63,13 @@ public class LoginRequest extends Message {
                 return false;
             }
             if(user.isPresent()) {
-                sendResponse("Success", "Login successful.", user.get());
+                sendResponse(SUCCESS, SUCCESS_RESPONSE, user.get());
             }
             // Set ClientID on server side to the ClientID stored on server
         } catch (LoginFailureException l) {
             Optional<User> user = userList.getUser(this.getClientID());
             if (user.isPresent()) {
-                sendResponse("Fail", l.getExceptionReason(), user.get());
+                sendResponse(FAILURE, l.getExceptionReason(), user.get());
             }
         }
         //Given credentials are correct.
