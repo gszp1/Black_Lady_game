@@ -92,7 +92,7 @@ public class GameClient extends Application{
         }
 
         Stage newStage = new Stage();
-        newStage.setTitle("New Window");
+        newStage.setTitle("Registration Form");
         GridPane newGrid = new GridPane();
         newGrid.setHgap(10);
         newGrid.setVgap(10);
@@ -103,7 +103,7 @@ public class GameClient extends Application{
         TextField usernameField = new TextField();
         PasswordField passwordField = new PasswordField();
         PasswordField passwordConfirmationField = new PasswordField();
-        Button submitButton = new Button("Submit");
+        Button registerButton = new Button("Register");
 
         Label emailLabel = new Label("Email:");
         Label usernameLabel = new Label("Username:");
@@ -120,7 +120,7 @@ public class GameClient extends Application{
         newGrid.add(passwordField, 1, 2);
         newGrid.add(passwordConfirmationLabel, 0, 3);
         newGrid.add(passwordConfirmationField, 1, 3);
-        newGrid.add(submitButton, 0, 4, 2, 1); // span button across two columns
+        newGrid.add(registerButton, 0, 4, 2, 1); // span button across two columns
 
         // Configure layout constraints for the new window
         ColumnConstraints column1 = new ColumnConstraints();
@@ -135,6 +135,8 @@ public class GameClient extends Application{
         row2.setVgrow(Priority.ALWAYS);
         row3.setVgrow(Priority.ALWAYS);
         newGrid.getRowConstraints().addAll(row1, row2, row3);
+
+        GridPane.setHalignment(registerButton, HPos.CENTER);
 
         // Set the new GridPane as the content of the new Stage
         Scene newScene = new Scene(newGrid, 400, 200);
