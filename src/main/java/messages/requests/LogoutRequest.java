@@ -6,16 +6,17 @@ import server.DatabaseConnector;
 import utils.User;
 import utils.UserList;
 
-import javax.swing.text.html.Option;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Optional;
 
+/**
+ * Class for logout request.
+ */
 public class LogoutRequest extends Message {
 
     /**
      * Constructor LogoutRequest.
-     *
      * @param messageType - Type of message.
      * @param data        - Information passed with message.
      * @param clientID    - ID of client.
@@ -24,6 +25,11 @@ public class LogoutRequest extends Message {
         super(messageType, data, clientID);
     }
 
+    /**
+     * Logout request handling procedure.
+     * @return - Returns boolean describing result of message handling.
+     * @throws IOException - Exception thrown if something went wrong with sending message.
+     */
     @Override
     public boolean handleMessage(UserList userList, DatabaseConnector databaseConnector) throws IOException, SQLException {
         Optional<User> userWrapper = userList.getUser(this.getClientID());
@@ -33,7 +39,6 @@ public class LogoutRequest extends Message {
             user.close();
             userList.removeUser(user);
         }
-
         return true;
     }
 
