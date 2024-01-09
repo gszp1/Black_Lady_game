@@ -76,12 +76,23 @@ public class LoginRequest extends Message {
         return true;
     }
 
-    
+    /**
+     * Checks if given password is equal to password stored in database.
+     * @param password Password given for validation.
+     * @param dbPassword Password retrieved from database.
+     * @return true if password is correct, false otherwise.
+     */
     private boolean checkPassword(String password, String dbPassword) {
         String hashPassword = DigestUtils.md5Hex(password).toUpperCase();
         return !hashPassword.equals(dbPassword);
     }
 
+    /**
+     * Updates userID of user to whom this message was sent.
+     * @param newID UserID to be set.
+     * @param userList List of users from which will user be taken.
+     * @return true if update was successful, false if not.
+     */
     private boolean updateUserID(String newID, UserList userList) {
         Optional<User> user = userList.getUser(this.getClientID());
         if(!user.isPresent()) {
@@ -91,6 +102,13 @@ public class LoginRequest extends Message {
         return true;
     }
 
+    /**
+     * Sends response to user who sent this message.
+     * @param result String stating result of operation: Success or Failure.
+     * @param response Message to be sent together with result.
+     * @param user User to whom we send this response.
+     * @throws IOException - Exception thrown if failed to send the message.
+     */
     private void sendResponse(String result, String response, User user) throws IOException{
         String messageContents = result.concat("|").concat(response);
         Message message = new LoginResponse(messageContents, user.getUserID());
