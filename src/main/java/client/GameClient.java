@@ -105,13 +105,21 @@ public class GameClient extends Application{
         PasswordField passwordConfirmationField = new PasswordField();
         Button submitButton = new Button("Submit");
 
+        Label emailLabel = new Label("Email:");
+        Label usernameLabel = new Label("Username:");
+        Label passwordLabel = new Label("Password:");
+        Label passwordConfirmationLabel = new Label("Confirm password:");
 
 
         // Add components to the new GridPane
-        newGrid.add(emailField, 0, 0);
-        newGrid.add(usernameField, 0, 1);
-        newGrid.add(passwordField, 0, 2);
-        newGrid.add(passwordConfirmationField, 0, 3);
+        newGrid.add(emailLabel, 0, 0);
+        newGrid.add(emailField, 1, 0);
+        newGrid.add(usernameLabel, 0, 1);
+        newGrid.add(usernameField, 1, 1);
+        newGrid.add(passwordLabel, 0, 2);
+        newGrid.add(passwordField, 1, 2);
+        newGrid.add(passwordConfirmationLabel, 0, 3);
+        newGrid.add(passwordConfirmationField, 1, 3);
         newGrid.add(submitButton, 0, 4, 2, 1); // span button across two columns
 
         // Configure layout constraints for the new window
