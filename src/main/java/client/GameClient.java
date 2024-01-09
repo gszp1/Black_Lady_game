@@ -33,6 +33,7 @@ public class GameClient extends Application{
         PasswordField passwordField = new PasswordField();
         Button loginButton = new Button("Login");
         Button registerButton = new Button("Register");
+        Label notificationLabel = new Label("");
 
         // Add components to the GridPane
         grid.add(emailLabel, 0, 0);
@@ -41,7 +42,7 @@ public class GameClient extends Application{
         grid.add(passwordField, 1, 1);
         grid.add(loginButton, 0, 2);
         grid.add(registerButton, 1, 2);
-
+        grid.add(notificationLabel, 0, 0, 2, 1);
         ColumnConstraints column1 = new ColumnConstraints();
         ColumnConstraints column2 = new ColumnConstraints();
         column2.setHgrow(Priority.ALWAYS);
@@ -64,6 +65,11 @@ public class GameClient extends Application{
 
         // Show the Stage
         primaryStage.show();
+    }
+
+    private void setErrorLabel(String message, Label label) {
+        label.setText(message);
+        label.setStyle("-fx-text-fill: red;");
     }
 
     public static void main(String[] args) throws IOException {
