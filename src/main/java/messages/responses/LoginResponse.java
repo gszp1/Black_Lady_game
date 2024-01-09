@@ -6,6 +6,7 @@ import server.DatabaseConnector;
 import utils.UserList;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 //todo: adapt to needs when implementing login
 
@@ -25,11 +26,14 @@ public class LoginResponse extends Message {
 
     /**
      * Login response handling procedure.
+     * @param userList List of users.
+     * @param databaseConnector Connection to database.
      * @return - Boolean telling if operation was successful.
      * @throws IOException - Exception thrown if something went wrong with sending the message.
+     * @throws SQLException Thrown if something went wrong with database connection.
      */
     @Override
-    public boolean handleMessage(UserList userList, DatabaseConnector databaseConnector) throws IOException {
-        return false;
+    public boolean handleMessage(UserList userList, DatabaseConnector databaseConnector) throws IOException, SQLException {
+        return true;
     }
 }

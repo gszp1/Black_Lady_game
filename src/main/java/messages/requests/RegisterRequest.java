@@ -43,8 +43,11 @@ public class RegisterRequest extends Message {
 
     /**
      * Register request handling procedure.
-     * @return - Returns boolean describing result of message handling.
-     * @throws IOException - Exception thrown if something went wrong with sending message.
+     * @param userList List of users.
+     * @param databaseConnector Connection to database.
+     * @return - Boolean telling if operation was successful.
+     * @throws IOException - Exception thrown if something went wrong with sending the message.
+     * @throws SQLException Thrown if something went wrong with database connection.
      */
     @Override
     public boolean handleMessage(UserList userList, DatabaseConnector databaseConnector) throws IOException, SQLException {
