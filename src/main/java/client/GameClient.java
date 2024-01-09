@@ -16,6 +16,8 @@ import java.net.Socket;
 
 public class GameClient extends Application{
 
+    private boolean registrationWindowOpened = false;
+
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Login page");
@@ -80,6 +82,12 @@ public class GameClient extends Application{
     public static void main(String[] args) throws IOException {
 //        Socket socket = new Socket("0.0.0.0", 8080);
         launch(args);
+    }
+
+    private void openRegistrationWindow() {
+        if (registrationWindowOpened) {
+            return;
+        }
     }
 }
 
