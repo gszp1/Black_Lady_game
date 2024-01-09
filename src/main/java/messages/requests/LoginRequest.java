@@ -18,6 +18,13 @@ import java.util.Optional;
  * Class for login request message.
  */
 public class LoginRequest extends Message {
+
+    public static String SUCCESS = "Success";
+
+    public static String FAILURE = "Failure";
+
+    public static String SUCCESS_RESPONSE = "Login successful.";
+
     /**
      * Constructor for login request message.
      * @param email - User's email
