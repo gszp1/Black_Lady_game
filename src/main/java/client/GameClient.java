@@ -61,6 +61,8 @@ public class GameClient extends Application{
         row3.setVgrow(Priority.ALWAYS); // Allow row 4 to grow
         grid.getRowConstraints().addAll(row1, row2, row3);
 
+        registerButton.setOnAction(e ->openRegistrationWindow());
+
         // Create a Scene and set it on the Stage
         Scene scene = new Scene(grid, 400, 200);
         primaryStage.setScene(scene);
@@ -88,6 +90,48 @@ public class GameClient extends Application{
         if (registrationWindowOpened) {
             return;
         }
+
+        Stage newStage = new Stage();
+        newStage.setTitle("New Window");
+        GridPane newGrid = new GridPane();
+        newGrid.setHgap(10);
+        newGrid.setVgap(10);
+        newGrid.setPadding(new Insets(20, 20, 20, 20));
+
+        // Create UI components for the new window
+        TextField textField1 = new TextField();
+        TextField textField2 = new TextField();
+        TextField textField3 = new TextField();
+        TextField textField4 = new TextField();
+        Button submitButton = new Button("Submit");
+
+        // Add components to the new GridPane
+        newGrid.add(textField1, 0, 0);
+        newGrid.add(textField2, 1, 0);
+        newGrid.add(textField3, 0, 1);
+        newGrid.add(textField4, 1, 1);
+        newGrid.add(submitButton, 0, 2, 2, 1); // span button across two columns
+
+        // Configure layout constraints for the new window
+        ColumnConstraints column1 = new ColumnConstraints();
+        ColumnConstraints column2 = new ColumnConstraints();
+        column2.setHgrow(Priority.ALWAYS);
+        newGrid.getColumnConstraints().addAll(column1, column2);
+
+        RowConstraints row1 = new RowConstraints();
+        RowConstraints row2 = new RowConstraints();
+        RowConstraints row3 = new RowConstraints();
+        row1.setVgrow(Priority.ALWAYS);
+        row2.setVgrow(Priority.ALWAYS);
+        row3.setVgrow(Priority.ALWAYS);
+        newGrid.getRowConstraints().addAll(row1, row2, row3);
+
+        // Set the new GridPane as the content of the new Stage
+        Scene newScene = new Scene(newGrid, 400, 200);
+        newStage.setScene(newScene);
+
+        // Show the new Stage
+        newStage.show();
     }
 }
 
