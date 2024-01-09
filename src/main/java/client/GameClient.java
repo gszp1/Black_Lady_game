@@ -39,6 +39,24 @@ public class GameClient extends Application{
         grid.setVgap(10);
         grid.setPadding(new Insets(20, 20, 20, 20));
 
+        addLoginGridComponents(grid);
+        ColumnConstraints column1 = new ColumnConstraints();
+        ColumnConstraints column2 = new ColumnConstraints();
+        column2.setHgrow(Priority.ALWAYS);
+        grid.getColumnConstraints().addAll(new ColumnConstraints(), new ColumnConstraints());
+
+        RowConstraints row1 = new RowConstraints();
+        RowConstraints row2 = new RowConstraints();
+        RowConstraints row3 = new RowConstraints();
+        row1.setVgrow(Priority.ALWAYS); // Allow row 4 to grow
+        row2.setVgrow(Priority.ALWAYS); // Allow row 4 to grow
+        row3.setVgrow(Priority.ALWAYS); // Allow row 4 to grow
+        grid.getRowConstraints().addAll(row1, row2, row3);
+
+        return grid;
+    }
+
+    public void addLoginGridComponents(GridPane grid) {
         // Create UI components
         Label emailLabel = new Label("Email:");
         TextField emailTextField = new TextField();
@@ -56,24 +74,11 @@ public class GameClient extends Application{
         grid.add(loginButton, 0, 2);
         grid.add(registerButton, 1, 2);
         grid.add(notificationLabel, 0, 0, 2, 1);
-        ColumnConstraints column1 = new ColumnConstraints();
-        ColumnConstraints column2 = new ColumnConstraints();
-        column2.setHgrow(Priority.ALWAYS);
-        grid.getColumnConstraints().addAll(column1, column2);
 
         GridPane.setHalignment(loginButton, HPos.CENTER);
         GridPane.setHalignment(registerButton, HPos.CENTER);
 
-        RowConstraints row1 = new RowConstraints();
-        RowConstraints row2 = new RowConstraints();
-        RowConstraints row3 = new RowConstraints();
-        row1.setVgrow(Priority.ALWAYS); // Allow row 4 to grow
-        row2.setVgrow(Priority.ALWAYS); // Allow row 4 to grow
-        row3.setVgrow(Priority.ALWAYS); // Allow row 4 to grow
-        grid.getRowConstraints().addAll(row1, row2, row3);
-
         registerButton.setOnAction(e ->openRegistrationWindow());
-        return grid;
     }
 
     private void setErrorLabel(String message, Label label) {
