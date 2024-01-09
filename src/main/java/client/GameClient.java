@@ -99,17 +99,17 @@ public class GameClient extends Application{
         newGrid.setPadding(new Insets(20, 20, 20, 20));
 
         // Create UI components for the new window
-        TextField textField1 = new TextField();
-        TextField textField2 = new TextField();
-        TextField textField3 = new TextField();
-        TextField textField4 = new TextField();
+        TextField emailField = new TextField();
+        TextField usernameField = new TextField();
+        TextField passwordField = new TextField();
+        TextField passwordConfirmationField = new TextField();
         Button submitButton = new Button("Submit");
 
         // Add components to the new GridPane
-        newGrid.add(textField1, 0, 0);
-        newGrid.add(textField2, 1, 0);
-        newGrid.add(textField3, 0, 1);
-        newGrid.add(textField4, 1, 1);
+        newGrid.add(emailField, 0, 0);
+        newGrid.add(usernameField, 1, 0);
+        newGrid.add(passwordField, 0, 1);
+        newGrid.add(passwordConfirmationField, 1, 1);
         newGrid.add(submitButton, 0, 2, 2, 1); // span button across two columns
 
         // Configure layout constraints for the new window
