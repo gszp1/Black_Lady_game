@@ -40,18 +40,7 @@ public class GameClient extends Application{
         grid.setPadding(new Insets(20, 20, 20, 20));
 
         addLoginGridComponents(grid);
-        ColumnConstraints column1 = new ColumnConstraints();
-        ColumnConstraints column2 = new ColumnConstraints();
-        column2.setHgrow(Priority.ALWAYS);
-        grid.getColumnConstraints().addAll(new ColumnConstraints(), new ColumnConstraints());
-
-        RowConstraints row1 = new RowConstraints();
-        RowConstraints row2 = new RowConstraints();
-        RowConstraints row3 = new RowConstraints();
-        row1.setVgrow(Priority.ALWAYS); // Allow row 4 to grow
-        row2.setVgrow(Priority.ALWAYS); // Allow row 4 to grow
-        row3.setVgrow(Priority.ALWAYS); // Allow row 4 to grow
-        grid.getRowConstraints().addAll(row1, row2, row3);
+        addGridConstraints(grid);
 
         return grid;
     }
@@ -79,6 +68,21 @@ public class GameClient extends Application{
         GridPane.setHalignment(registerButton, HPos.CENTER);
 
         registerButton.setOnAction(e ->openRegistrationWindow());
+    }
+
+    public void addGridConstraints(GridPane grid) {
+        ColumnConstraints column1 = new ColumnConstraints();
+        ColumnConstraints column2 = new ColumnConstraints();
+        column2.setHgrow(Priority.ALWAYS);
+        grid.getColumnConstraints().addAll(column1, column2);
+
+        RowConstraints row1 = new RowConstraints();
+        RowConstraints row2 = new RowConstraints();
+        RowConstraints row3 = new RowConstraints();
+        row1.setVgrow(Priority.ALWAYS); // Allow row 4 to grow
+        row2.setVgrow(Priority.ALWAYS); // Allow row 4 to grow
+        row3.setVgrow(Priority.ALWAYS); // Allow row 4 to grow
+        grid.getRowConstraints().addAll(row1, row2, row3);
     }
 
     private void setErrorLabel(String message, Label label) {
@@ -110,44 +114,10 @@ public class GameClient extends Application{
         newGrid.setPadding(new Insets(20, 20, 20, 20));
 
         // Create UI components for the new window
-        TextField emailField = new TextField();
-        TextField usernameField = new TextField();
-        PasswordField passwordField = new PasswordField();
-        PasswordField passwordConfirmationField = new PasswordField();
-        Button registerButton = new Button("Register");
-
-        Label emailLabel = new Label("Email:");
-        Label usernameLabel = new Label("Username:");
-        Label passwordLabel = new Label("Password:");
-        Label passwordConfirmationLabel = new Label("Confirm password:");
-
-
-        // Add components to the new GridPane
-        newGrid.add(emailLabel, 0, 0);
-        newGrid.add(emailField, 1, 0);
-        newGrid.add(usernameLabel, 0, 1);
-        newGrid.add(usernameField, 1, 1);
-        newGrid.add(passwordLabel, 0, 2);
-        newGrid.add(passwordField, 1, 2);
-        newGrid.add(passwordConfirmationLabel, 0, 3);
-        newGrid.add(passwordConfirmationField, 1, 3);
-        newGrid.add(registerButton, 0, 4, 2, 1); // span button across two columns
+        addRegistrationGridComponents(newGrid);
 
         // Configure layout constraints for the new window
-        ColumnConstraints column1 = new ColumnConstraints();
-        ColumnConstraints column2 = new ColumnConstraints();
-        column2.setHgrow(Priority.ALWAYS);
-        newGrid.getColumnConstraints().addAll(column1, column2);
-
-        RowConstraints row1 = new RowConstraints();
-        RowConstraints row2 = new RowConstraints();
-        RowConstraints row3 = new RowConstraints();
-        row1.setVgrow(Priority.ALWAYS);
-        row2.setVgrow(Priority.ALWAYS);
-        row3.setVgrow(Priority.ALWAYS);
-        newGrid.getRowConstraints().addAll(row1, row2, row3);
-
-        GridPane.setHalignment(registerButton, HPos.CENTER);
+        addGridConstraints(newGrid);
 
         // Set the new GridPane as the content of the new Stage
         Scene newScene = new Scene(newGrid, 400, 200);
@@ -155,6 +125,33 @@ public class GameClient extends Application{
 
         // Show the new Stage
         newStage.show();
+    }
+
+    public void addRegistrationGridComponents(GridPane grid) {
+        // Create UI components for the new window
+        TextField usernameField = new TextField();
+        PasswordField passwordField = new PasswordField();
+        PasswordField passwordConfirmationField = new PasswordField();
+        TextField emailField = new TextField();
+
+        Label emailLabel = new Label("Email:");
+        Label usernameLabel = new Label("Username:");
+        Label passwordLabel = new Label("Password:");
+        Label passwordConfirmationLabel = new Label("Confirm password:");
+
+        Button registerButton = new Button("Register");
+
+        // Add components to the new GridPane
+        grid.add(emailLabel, 0, 0);
+        grid.add(emailField, 1, 0);
+        grid.add(usernameLabel, 0, 1);
+        grid.add(usernameField, 1, 1);
+        grid.add(passwordLabel, 0, 2);
+        grid.add(passwordField, 1, 2);
+        grid.add(passwordConfirmationLabel, 0, 3);
+        grid.add(passwordConfirmationField, 1, 3);
+        grid.add(registerButton, 0, 4, 2, 1); // span button across two columns
+        GridPane.setHalignment(registerButton, HPos.CENTER);
     }
 
 }
