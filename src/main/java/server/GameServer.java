@@ -33,6 +33,8 @@ public class GameServer {
 
     private final Map<String, InputHandler> inputHandlerMap;
 
+    private MessageProcessor messageProcessor;
+
     private DatabaseConnector databaseConnector;
 
     public GameServer() {
@@ -53,6 +55,15 @@ public class GameServer {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Sets up and runs message processor thread.
+     * Requires inputQueue, userList and databaseConnector being initialized.
+     */
+    public void startMessageProcessorThread() {
+        messageProcessor = new MessageProcessor(inputQueue, userList, databaseConnector);
+        messageProcessor.start();
     }
 
     /**
