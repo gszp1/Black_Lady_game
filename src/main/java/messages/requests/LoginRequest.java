@@ -76,7 +76,8 @@ public class LoginRequest extends Message {
         return true;
     }
 
-    private boolean checkPassword(String password, String dbPassword) throws LoginFailureException {
+    
+    private boolean checkPassword(String password, String dbPassword) {
         String hashPassword = DigestUtils.md5Hex(password).toUpperCase();
         return !hashPassword.equals(dbPassword);
     }
