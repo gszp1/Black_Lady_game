@@ -32,9 +32,4 @@ public class LoginResponse extends Message {
     public boolean handleMessage(UserList userList, DatabaseConnector databaseConnector) throws IOException {
         return false;
     }
-
-    private String [] parseData() {
-        return getData().trim().split("\\|");
-    }
-
 }
