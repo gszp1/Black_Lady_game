@@ -78,4 +78,8 @@ public abstract class Message implements Serializable {
     public void setClientID(String clientID) {
         this.clientID = clientID;
     }
+
+    public String [] parseData() {
+        return getData().trim().split("\\|");
+    }
 }
