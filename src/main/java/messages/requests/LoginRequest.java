@@ -76,14 +76,6 @@ public class LoginRequest extends Message {
         return true;
     }
 
-    /**
-     * Parses data field to String array with email and password.
-     * @return - String array with email and password.
-     */
-    public String [] parseData() {
-        return getData().trim().split("\\|");
-    }
-
     private boolean checkPassword(String password, String dbPassword) throws LoginFailureException {
         String hashPassword = DigestUtils.md5Hex(password).toUpperCase();
         return !hashPassword.equals(dbPassword);

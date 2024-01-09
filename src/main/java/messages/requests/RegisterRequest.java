@@ -41,7 +41,7 @@ public class RegisterRequest extends Message {
     @Override
     public boolean handleMessage(UserList userList, DatabaseConnector databaseConnector) throws IOException, SQLException {
         try {
-            String [] credentials = this.parseData();
+            String [] credentials = parseData();
             validateCredentials(credentials);
             ArrayList<String> dbData = databaseConnector.getUserFromDatabase(credentials[0]);
             if (dbData != null) {
@@ -56,14 +56,6 @@ public class RegisterRequest extends Message {
             sendResponse(REGISTRATION_FAILURE, e.getExceptionReason(), userList);
         }
         return true;
-    }
-
-    /**
-     * Method for parsing message data into: email, username, password, passwordConfirmation.
-     * @return - String array with registration data.
-     */
-    public String [] parseData() {
-        return getData().trim().split("\\|");
     }
 
     private boolean validateEmail(String email) {
