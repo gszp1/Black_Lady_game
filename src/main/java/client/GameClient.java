@@ -72,6 +72,11 @@ public class GameClient extends Application{
         label.setStyle("-fx-text-fill: red;");
     }
 
+    private void setSuccessLabel(String message, Label label) {
+        label.setText(message);
+        label.setStyle("-fx-text-fill: green;");
+    }
+
     public static void main(String[] args) throws IOException {
 //        Socket socket = new Socket("0.0.0.0", 8080);
         launch(args);
