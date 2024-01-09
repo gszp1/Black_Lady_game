@@ -23,6 +23,17 @@ public class GameClient extends Application{
         primaryStage.setTitle("Login page");
 
         // Create a GridPane layout
+        GridPane grid = getLoginGrid();
+
+        // Create a Scene and set it on the Stage
+        Scene scene = new Scene(grid, 400, 200);
+        primaryStage.setScene(scene);
+
+        // Show the Stage
+        primaryStage.show();
+    }
+
+    private GridPane getLoginGrid() {
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
@@ -62,13 +73,7 @@ public class GameClient extends Application{
         grid.getRowConstraints().addAll(row1, row2, row3);
 
         registerButton.setOnAction(e ->openRegistrationWindow());
-
-        // Create a Scene and set it on the Stage
-        Scene scene = new Scene(grid, 400, 200);
-        primaryStage.setScene(scene);
-
-        // Show the Stage
-        primaryStage.show();
+        return grid;
     }
 
     private void setErrorLabel(String message, Label label) {
@@ -90,6 +95,7 @@ public class GameClient extends Application{
         if (registrationWindowOpened) {
             return;
         }
+        registrationWindowOpened = true;
 
         Stage newStage = new Stage();
         newStage.setTitle("Registration Form");
