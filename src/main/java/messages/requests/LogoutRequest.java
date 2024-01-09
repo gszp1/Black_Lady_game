@@ -30,6 +30,7 @@ public class LogoutRequest extends Message {
         if (userWrapper.isPresent()) {
             User user = userWrapper.get();
             //todo remove user from all game rooms.
+            user.close();
             userList.removeUser(user);
         }
 
