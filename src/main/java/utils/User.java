@@ -114,4 +114,17 @@ public class User {
     public void setUsername(String username) {
         this.username = username;
     }
+
+    public void close() {
+        try {
+            if (outputStream != null) {
+                outputStream.close();
+            }
+            if (socket != null) {
+                socket.close();
+            }
+        } catch (IOException e) {
+            System.out.println("Error during socket closing.");
+        }
+    }
 }
