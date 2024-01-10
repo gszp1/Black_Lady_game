@@ -1,6 +1,9 @@
 package client;
 
+import exceptions.ClientSocketConnectionException;
+import javafx.animation.PauseTransition;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -10,16 +13,34 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.Socket;
 
 public class GameClient extends Application{
 
+    private ServerConnector serverConnector = null;
+
     private boolean registrationWindowOpened = false;
+
+    private boolean establishConnectionWithServer() {
+        try {
+            if (serverConnector == null) {
+                serverConnector = new ServerConnector();
+            }
+        } catch (ClientSocketConnectionException e) {
+            showAlert(e.getErrorCause());
+            return false;
+        }
+        return true;
+    }
 
     @Override
     public void start(Stage primaryStage) {
+        if (!establishConnectionWithServer()) {
+            return;
+        }
         primaryStage.setTitle("Login page");
 
         // Create a GridPane layout
@@ -96,7 +117,6 @@ public class GameClient extends Application{
     }
 
     public static void main(String[] args) throws IOException {
-//        Socket socket = new Socket("0.0.0.0", 8080);
         launch(args);
     }
 
@@ -153,6 +173,19 @@ public class GameClient extends Application{
         grid.add(registerButton, 0, 4, 2, 1); // span button across two columns
         GridPane.setHalignment(registerButton, HPos.CENTER);
     }
+
+    public static void showAlert(String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setContentText(content);
+        PauseTransition delay = new PauseTransition(Duration.seconds(3));
+        delay.setOnFinished(event -> {
+            Platform.runLater(alert::hide);
+        });
+        alert.show();
+        delay.play();
+    }
+
 
 }
 
