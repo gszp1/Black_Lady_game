@@ -7,7 +7,9 @@ public enum MessageType {
     LoginRequest("LoginRequest"),
     LoginResponse("LoginResponse"),
     RegisterRequest("RegisterRequest"),
-    RegisterResponse("RegisterResponse");
+    RegisterResponse("RegisterResponse"),
+    LogoutRequest("LogoutRequest"),
+    LogoutResponse("LogoutResponse");
 
     /**
      * String depicting message type.
