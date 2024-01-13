@@ -14,6 +14,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import messages.requests.LoginRequest;
 
 import java.io.IOException;
 
@@ -88,6 +89,17 @@ public class GameClient extends Application{
         GridPane.setHalignment(loginButton, HPos.CENTER);
         GridPane.setHalignment(registerButton, HPos.CENTER);
 
+        loginButton.setOnAction(event->{
+            String password = passwordField.getText().trim();
+            String email = emailTextField.getText().trim();
+            LoginRequest loginRequest = new LoginRequest(email, password, null);
+            try {
+                serverConnector.sendMessage(loginRequest);
+            } catch (ClientSocketConnectionException e) {
+                setErrorLabel(e.getErrorCause(), LoginNotificationLabel);
+            }
+        });
+        
         registerButton.setOnAction(e ->openRegistrationWindow());
     }
 
