@@ -14,12 +14,12 @@ import java.sql.SQLException;
 public class LogoutResponse extends Message {
     /**
      * Constructor for LogoutResponse.
-     * @param messageType Type of message.
-     * @param data Information passed with message.
+     *
+     * @param data     Information passed with message.
      * @param clientID ID of client.
      */
-    public LogoutResponse(MessageType messageType, String data, String clientID) {
-        super(messageType, data, clientID);
+    public LogoutResponse(String data, String clientID) {
+        super(MessageType.LogoutResponse, data, clientID);
     }
 
     /**
