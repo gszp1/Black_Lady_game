@@ -16,7 +16,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.IOException;
-import java.net.Socket;
 
 public class GameClient extends Application{
 

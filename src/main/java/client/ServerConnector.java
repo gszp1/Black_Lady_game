@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.sql.SQLException;
 
 import exceptions.ClientSocketConnectionException;
 
@@ -76,10 +77,14 @@ public class ServerConnector extends Thread{
         try {
             while (!interrupted()) {
                 Message message = readMessage();
-                //todo: message handling
+                message.handleMessage(null, null);
             }
         } catch (ClientSocketConnectionException e) {
             System.out.println(e.getErrorCause());
+        } catch (SQLException e) {
+            System.out.println("SQL exception occurred.");
+        } catch (IOException e) {
+            System.out.println("InputOutput exception occurred.");
         }
     }
 
