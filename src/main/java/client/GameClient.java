@@ -23,6 +23,7 @@ public class GameClient extends Application{
 
     private boolean registrationWindowOpened = false;
 
+
     private boolean establishConnectionWithServer() {
         try {
             if (serverConnector == null) {
@@ -73,7 +74,7 @@ public class GameClient extends Application{
         PasswordField passwordField = new PasswordField();
         Button loginButton = new Button("Login");
         Button registerButton = new Button("Register");
-        Label notificationLabel = new Label("");
+        Label LoginNotificationLabel = new Label("");
 
         // Add components to the GridPane
         grid.add(emailLabel, 0, 0);
@@ -82,7 +83,7 @@ public class GameClient extends Application{
         grid.add(passwordField, 1, 1);
         grid.add(loginButton, 0, 2);
         grid.add(registerButton, 1, 2);
-        grid.add(notificationLabel, 0, 0, 2, 1);
+        grid.add(LoginNotificationLabel, 0, 3, 2, 1);
 
         GridPane.setHalignment(loginButton, HPos.CENTER);
         GridPane.setHalignment(registerButton, HPos.CENTER);
@@ -159,6 +160,7 @@ public class GameClient extends Application{
         Label usernameLabel = new Label("Username:");
         Label passwordLabel = new Label("Password:");
         Label passwordConfirmationLabel = new Label("Confirm password:");
+        Label registerNotificationLabel = new Label("");
 
         Button registerButton = new Button("Register");
 
@@ -172,6 +174,7 @@ public class GameClient extends Application{
         grid.add(passwordConfirmationLabel, 0, 3);
         grid.add(passwordConfirmationField, 1, 3);
         grid.add(registerButton, 0, 4, 2, 1); // span button across two columns
+        grid.add(registerNotificationLabel, 1, 5, 2, 1);
         GridPane.setHalignment(registerButton, HPos.CENTER);
     }
 
