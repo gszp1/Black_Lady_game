@@ -141,7 +141,9 @@ public class GameClient extends Application{
         // Set the new GridPane as the content of the new Stage
         Scene newScene = new Scene(newGrid, 400, 200);
         newStage.setScene(newScene);
-
+        newStage.setOnCloseRequest(event -> {
+            registrationWindowOpened = false;
+        });
         // Show the new Stage
         newStage.show();
     }
