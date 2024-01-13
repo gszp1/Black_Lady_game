@@ -15,7 +15,9 @@ import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import messages.requests.LoginRequest;
+import messages.requests.LogoutRequest;
 import messages.requests.RegisterRequest;
+import messages.responses.LogoutResponse;
 
 import java.io.IOException;
 
@@ -29,10 +31,12 @@ public class GameClient extends Application{
 
     private Label registerNotificationLabel;
 
+    private boolean loggedIn = false;
+
     private boolean establishConnectionWithServer() {
         try {
             if (serverConnector == null) {
-                serverConnector = new ServerConnector();
+                serverConnector = new ServerConnector(this);
             }
         } catch (ClientSocketConnectionException e) {
             showAlert(e.getErrorCause());
@@ -46,6 +50,7 @@ public class GameClient extends Application{
         if (!establishConnectionWithServer()) {
             return;
         }
+        serverConnector.start();
         primaryStage.setTitle("Login page");
 
         // Create a GridPane layout
@@ -54,6 +59,17 @@ public class GameClient extends Application{
         // Create a Scene and set it on the Stage
         Scene scene = new Scene(grid, 400, 200);
         primaryStage.setScene(scene);
+
+        primaryStage.setOnCloseRequest(event -> {
+            if (loggedIn) {
+                LogoutRequest logoutRequest = new LogoutRequest("", "");
+                try {
+                    serverConnector.sendMessage(logoutRequest);
+                } catch (ClientSocketConnectionException e) {
+                    System.out.println("Failed to send logout request.");
+                }
+            }
+        });
 
         // Show the Stage
         primaryStage.show();
