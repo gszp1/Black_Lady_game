@@ -21,6 +21,8 @@ public class ServerConnector extends Thread{
 
     private final Socket socket;
 
+    private final GameClient gameClient;
+
     private final ObjectOutputStream outputStream;
 
     private final ObjectInputStream inputStream;
@@ -29,8 +31,9 @@ public class ServerConnector extends Thread{
      * Constructor for ServerConnector, opens connection with server, opens output and input streams.
      * @throws ClientSocketConnectionException - Exception thrown upon connection error.
      */
-    public ServerConnector() throws ClientSocketConnectionException {
+    public ServerConnector(GameClient gameClient) throws ClientSocketConnectionException {
         String possibleErrorCause = ClientSocketConnectionException.SOCKET_CONNECTION_FAILURE;
+        this.gameClient = gameClient;
         try {
             socket = new Socket(SERVER_IP, SERVER_PORT);
             possibleErrorCause = ClientSocketConnectionException.OUTPUT_STREAM_OPENING_FAILURE;
