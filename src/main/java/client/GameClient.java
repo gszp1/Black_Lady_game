@@ -15,6 +15,7 @@ import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import messages.requests.LoginRequest;
+import messages.requests.RegisterRequest;
 
 import java.io.IOException;
 
@@ -99,7 +100,7 @@ public class GameClient extends Application{
                 setErrorLabel(e.getErrorCause(), LoginNotificationLabel);
             }
         });
-        
+
         registerButton.setOnAction(e ->openRegistrationWindow());
     }
 
@@ -188,6 +189,22 @@ public class GameClient extends Application{
         grid.add(registerButton, 0, 4, 2, 1); // span button across two columns
         grid.add(registerNotificationLabel, 1, 5, 2, 1);
         GridPane.setHalignment(registerButton, HPos.CENTER);
+
+        registerButton.setOnAction(event -> {
+            RegisterRequest registerRequest = new RegisterRequest(
+                    emailField.getText().trim(),
+                    usernameField.getText().trim(),
+                    passwordField.getText().trim(),
+                    passwordConfirmationField.getText().trim(),
+                    null
+            );
+            try {
+                serverConnector.sendMessage(registerRequest);
+            } catch (ClientSocketConnectionException e) {
+                setErrorLabel(e.getErrorCause(), registerNotificationLabel);
+            }
+
+        });
     }
 
     public static void showAlert(String content) {
