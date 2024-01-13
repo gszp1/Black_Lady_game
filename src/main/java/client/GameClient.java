@@ -25,6 +25,9 @@ public class GameClient extends Application{
 
     private boolean registrationWindowOpened = false;
 
+    private Label loginNotificationLabel;
+
+    private Label registerNotificationLabel;
 
     private boolean establishConnectionWithServer() {
         try {
@@ -76,7 +79,7 @@ public class GameClient extends Application{
         PasswordField passwordField = new PasswordField();
         Button loginButton = new Button("Login");
         Button registerButton = new Button("Register");
-        Label LoginNotificationLabel = new Label("");
+        loginNotificationLabel = new Label("");
 
         // Add components to the GridPane
         grid.add(emailLabel, 0, 0);
@@ -85,7 +88,7 @@ public class GameClient extends Application{
         grid.add(passwordField, 1, 1);
         grid.add(loginButton, 0, 2);
         grid.add(registerButton, 1, 2);
-        grid.add(LoginNotificationLabel, 0, 3, 2, 1);
+        grid.add(loginNotificationLabel, 0, 3, 2, 1);
 
         GridPane.setHalignment(loginButton, HPos.CENTER);
         GridPane.setHalignment(registerButton, HPos.CENTER);
@@ -97,7 +100,7 @@ public class GameClient extends Application{
             try {
                 serverConnector.sendMessage(loginRequest);
             } catch (ClientSocketConnectionException e) {
-                setErrorLabel(e.getErrorCause(), LoginNotificationLabel);
+                setErrorLoginLabel(e.getErrorCause()) ;
             }
         });
 
@@ -119,14 +122,24 @@ public class GameClient extends Application{
         grid.getRowConstraints().addAll(row1, row2, row3);
     }
 
-    private void setErrorLabel(String message, Label label) {
-        label.setText(message);
-        label.setStyle("-fx-text-fill: red;");
+    public void setErrorLoginLabel(String message) {
+        loginNotificationLabel.setText(message);
+        loginNotificationLabel.setStyle("-fx-text-fill: red;");
     }
 
-    private void setSuccessLabel(String message, Label label) {
-        label.setText(message);
-        label.setStyle("-fx-text-fill: green;");
+    public void setSuccessLoginLabel(String message) {
+        loginNotificationLabel.setText(message);
+        loginNotificationLabel.setStyle("-fx-text-fill: green;");
+    }
+
+    public void setErrorRegisterLabel(String message) {
+        registerNotificationLabel.setText(message);
+        registerNotificationLabel.setStyle("-fx-text-fill: red;");
+    }
+
+    public void setSuccessRegisterLabel(String message) {
+        registerNotificationLabel.setText(message);
+        registerNotificationLabel.setStyle("-fx-text-fill: green;");
     }
 
     public static void main(String[] args) throws IOException {
@@ -173,7 +186,7 @@ public class GameClient extends Application{
         Label usernameLabel = new Label("Username:");
         Label passwordLabel = new Label("Password:");
         Label passwordConfirmationLabel = new Label("Confirm password:");
-        Label registerNotificationLabel = new Label("");
+        registerNotificationLabel = new Label("");
 
         Button registerButton = new Button("Register");
 
@@ -201,7 +214,7 @@ public class GameClient extends Application{
             try {
                 serverConnector.sendMessage(registerRequest);
             } catch (ClientSocketConnectionException e) {
-                setErrorLabel(e.getErrorCause(), registerNotificationLabel);
+                setErrorRegisterLabel(e.getErrorCause());
             }
 
         });
