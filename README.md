@@ -7,6 +7,7 @@ The goal of this project is to implement black lady game as a client-server serv
    - JavaFX
    - JavaDoc
    - Maven
+   - Lombok
    - Docker
    - Docker-compose
    - MySQL
