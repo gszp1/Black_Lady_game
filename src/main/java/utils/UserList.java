@@ -39,11 +39,18 @@ public class UserList {
 
     /**
      * Synchronized method for retrieving user from list by his ID.
-     * @param userID - ID of user.
      * @return - User.
      */
-    synchronized public Optional<User> getUser(String userID) {
-        return users.stream().filter(user -> user.getUserID().equals(userID)).findFirst();
+    synchronized public Optional<User> getUserByConnectionId(String connectionId) {
+        return users.stream().filter(user -> user.getConnectionID().equals(connectionId)).findFirst();
+    }
+
+    synchronized public Optional<User> getUserByUserID(String userID) {
+        return users.stream().filter(user -> userID.equals(user.getUserID())).findFirst();
+    }
+
+    synchronized public Optional<User> getUserByUsername(String username) {
+        return users.stream().filter(user -> user.getUsername().equals(username)).findFirst();
     }
 
     /**
@@ -53,5 +60,4 @@ public class UserList {
     public ArrayList<User> getUsers() {
         return users;
     }
-
 }

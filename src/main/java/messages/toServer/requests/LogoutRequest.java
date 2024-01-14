@@ -1,8 +1,9 @@
-package messages.requests;
+package messages.toServer.requests;
 
-import messages.Message;
 import messages.MessageType;
+import messages.toServer.ToServerMessage;
 import server.DatabaseConnector;
+import utils.GameDetails;
 import utils.User;
 import utils.UserList;
 
@@ -13,7 +14,7 @@ import java.util.Optional;
 /**
  * Class for logout request.
  */
-public class LogoutRequest extends Message {
+public class LogoutRequest extends ToServerMessage {
 
     /**
      * Constructor LogoutRequest.
@@ -33,8 +34,8 @@ public class LogoutRequest extends Message {
      * @throws SQLException Thrown if something went wrong with database connection.
      */
     @Override
-    public boolean handleMessage(UserList userList, DatabaseConnector databaseConnector) throws IOException, SQLException {
-        Optional<User> userWrapper = userList.getUser(this.getClientID());
+    public boolean handle(UserList userList, DatabaseConnector databaseConnector, GameDetails gameDetails) throws IOException, SQLException {
+        Optional<User> userWrapper = userList.getUserByConnectionId(this.getConnectionId());
         if (userWrapper.isPresent()) {
             User user = userWrapper.get();
             //todo remove user from all game rooms.

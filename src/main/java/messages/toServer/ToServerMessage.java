@@ -1,17 +1,25 @@
-package messages;
+package messages.toServer;
 
+import messages.MessageType;
 import server.DatabaseConnector;
+import utils.GameDetails;
+import utils.User;
 import utils.UserList;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.sql.SQLException;
+import java.util.Optional;
 
 
 /**
  * Abstract class representing messages sent between server and client.
  */
-public abstract class Message implements Serializable {
+public abstract class ToServerMessage implements Serializable {
+
+    public static String SUCCESS = "Success";
+
+    public static String FAILURE = "Failure";
 
     /**
      *  Type of message.
@@ -26,33 +34,36 @@ public abstract class Message implements Serializable {
     /**
      * ID of client who sent the message / to whom the message is being sent.
      */
-    private String clientID;
+    private String connectionId;
 
     /**
      * Constructor for message.
      * @param messageType - Type of message.
      * @param data - Information passed with message.
-     * @param clientID - ID of client.
      */
-    public Message(MessageType messageType, String data, String clientID) {
+    public ToServerMessage(MessageType messageType, String data, String connectionId) {
         this.messageType = messageType;
-        this.clientID = clientID;
         this.data = data;
+        this.connectionId = connectionId;
     }
 
     /**
-     * Message handling procedure, behaviour defined by type of message.
+     * ToServerMessage handling procedure, behaviour defined by type of message.
      * @param userList List of users.
      * @param databaseConnector Connection to database.
      * @return - Boolean telling if operation was successful.
      * @throws IOException - Exception thrown if something went wrong with sending the message.
      * @throws SQLException Thrown if something went wrong with database connection.
      */
-    public abstract boolean handleMessage(UserList userList, DatabaseConnector databaseConnector) throws IOException, SQLException;
+    public abstract boolean handle(
+            UserList userList,
+            DatabaseConnector databaseConnector,
+            GameDetails gameDetails
+    ) throws IOException, SQLException;
 
     /**
      * Getter for message type.
-     * @return - Message type.
+     * @return - ToServerMessage type.
      */
     public MessageType getMessageType() {
         return messageType;
@@ -60,7 +71,7 @@ public abstract class Message implements Serializable {
 
     /**
      * Getter for message's information.
-     * @return - Message information.
+     * @return - ToServerMessage information.
      */
     public String getData() {
         return data;
@@ -70,19 +81,18 @@ public abstract class Message implements Serializable {
      * Getter for client's ID.
      * @return - ID of client.
      */
-    public String getClientID() {
-        return clientID;
+    public String getConnectionId() {
+        return connectionId;
     }
 
     /**
      * Setter for client's ID
-     * @param clientID - Client id to be set.
      */
-    public void setClientID(String clientID) {
-        this.clientID = clientID;
+    public void setConnectionId(String connectionId) {
+        this.connectionId = connectionId;
     }
 
-    public String [] parseData() {
-        return getData().trim().split("\\|");
+    protected Optional<User> findUserByConnectionId(UserList userList) {
+        return userList.getUserByConnectionId(connectionId);
     }
 }

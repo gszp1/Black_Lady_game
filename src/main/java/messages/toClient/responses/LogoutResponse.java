@@ -1,7 +1,8 @@
-package messages.responses;
+package messages.toClient.responses;
 
-import messages.Message;
 import messages.MessageType;
+import messages.toClient.ToClientMessage;
+import messages.toServer.ToServerMessage;
 import server.DatabaseConnector;
 import utils.UserList;
 
@@ -11,7 +12,7 @@ import java.sql.SQLException;
 /**
  * Class for logout response.
  */
-public class LogoutResponse extends Message {
+public class LogoutResponse extends ToClientMessage {
     /**
      * Constructor for LogoutResponse.
      *
@@ -19,19 +20,17 @@ public class LogoutResponse extends Message {
      * @param clientID ID of client.
      */
     public LogoutResponse(String data, String clientID) {
-        super(MessageType.LogoutResponse, data, clientID);
+        super(MessageType.LogoutResponse, data);
     }
 
     /**
      * Logout response message handling procedure.
-     * @param userList List of users.
-     * @param databaseConnector Connection to database.
      * @return result of message handling: true or false.
      * @throws IOException Thrown if something went wrong with server-user connection.
      * @throws SQLException Thrown if something went wrong with database connection.
      */
     @Override
-    public boolean handleMessage(UserList userList, DatabaseConnector databaseConnector) throws IOException, SQLException {
+    public boolean handle() throws IOException{
         return true;
     }
 }

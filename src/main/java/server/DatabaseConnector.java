@@ -1,5 +1,8 @@
 package server;
 
+import utils.User;
+import utils.model.UserData;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -94,18 +97,22 @@ public class DatabaseConnector {
      * @return - ArrayList of record parameters in forms of strings.
      * @throws SQLException - Thrown when error happens during query lifetime.
      */
-    public ArrayList<String> getUserFromDatabase(String email) throws SQLException {
-        ArrayList<String> fields = new ArrayList<>();
+    public Optional<UserData> getUserByEmail(String email) throws SQLException {
         selectStatement.setString(1, email);
         ResultSet resultSet = selectStatement.executeQuery();
         selectStatement.clearParameters();
-        while (resultSet.next()) {
-            fields.add(Integer.toString(resultSet.getInt("UserID")));
-            fields.add(resultSet.getString("email"));
-            fields.add(resultSet.getString("username"));
-            fields.add(resultSet.getString("password"));
+
+        if (!resultSet.next()){
+            return Optional.empty();
         }
-        return fields;
+        return Optional.of(
+                new UserData(
+                        Integer.toString(resultSet.getInt("UserID")),
+                        resultSet.getString("email"),
+                        resultSet.getString("username"),
+                        resultSet.getString("password")
+                )
+        );
     }
 
     /**

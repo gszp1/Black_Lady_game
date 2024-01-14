@@ -7,7 +7,14 @@ import java.util.ArrayList;
 
 public class GameRoom {
 
-    private final int MAX_USERS = 4;
+    public final int MAX_USERS = 4;
+
+    private static int gameRoomsCounter = 0;
+
+    private int round = 1;
+
+    private int dealerID;
+    private final String gameRoomID;
 
     private final Deck cardDeck;
 
@@ -16,6 +23,8 @@ public class GameRoom {
     public GameRoom() {
         users = new ArrayList<>();
         cardDeck = new Deck();
+        gameRoomID = Integer.toString(gameRoomsCounter + 1);
+        ++gameRoomsCounter;
     }
 
     public boolean addUser(User user) {
@@ -29,4 +38,9 @@ public class GameRoom {
         return users.remove(user);
     }
 
+    private void incrementRound() {
+        if (round < 7) {
+            ++round;
+        }
+    }
 }

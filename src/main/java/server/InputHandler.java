@@ -1,7 +1,7 @@
 package server;
 
 import exceptions.ServerSocketConnectionException;
-import messages.Message;
+import messages.toServer.ToServerMessage;
 import utils.User;
 
 import java.io.IOException;
@@ -26,7 +26,7 @@ public class InputHandler extends Thread{
     /**
      * Reference to linked queue for messages to be handled.
      */
-    private final ConcurrentLinkedQueue<Message> inputQueue;
+    private final ConcurrentLinkedQueue<ToServerMessage> inputQueue;
 
     /**
      * Constructor, sets reference to user and linked list.
@@ -34,7 +34,10 @@ public class InputHandler extends Thread{
      * @param inputQueue - Reference to input queue.
      * @throws ServerSocketConnectionException - Exception thrown upon connection error.
      */
-    public InputHandler(User user, ConcurrentLinkedQueue<Message> inputQueue) throws ServerSocketConnectionException {
+    public InputHandler(
+            User user,
+            ConcurrentLinkedQueue<ToServerMessage> inputQueue
+    ) throws ServerSocketConnectionException {
         this.user = user;
         this.inputQueue = inputQueue;
         try {
@@ -51,8 +54,9 @@ public class InputHandler extends Thread{
     public void run() {
         try {
             while (!interrupted()) {
-                Message message = (Message) inputStream.readObject();
-                message.setClientID(user.getUserID());
+                ToServerMessage message = (ToServerMessage) inputStream.readObject();
+                System.out.println(message.getMessageType());
+                message.setConnectionId(user.getConnectionID());
                 inputQueue.add(message);
             }
         } catch (ClassNotFoundException e) {
@@ -61,11 +65,4 @@ public class InputHandler extends Thread{
             System.out.println(ServerSocketConnectionException.MESSAGE_READING_FAILURE);
         }
     }
-
-
-
-
-
-
-    
 }

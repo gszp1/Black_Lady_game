@@ -1,21 +1,23 @@
 package client;
 
-import messages.Message;
+import messages.toClient.ToClientMessage;
+import messages.toServer.ToServerMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.sql.SQLException;
+import java.util.function.Consumer;
 
 import exceptions.ClientSocketConnectionException;
 
 /**
  * Class for handling connection with server on client side.
  */
-public class ServerConnector extends Thread{
+public class ServerConnector extends Thread {
 
-    private final int SERVER_PORT = 8080;
+    private final int SERVER_PORT = 8081;
 
     private final String SERVER_IP = "0.0.0.0";
 
@@ -26,6 +28,10 @@ public class ServerConnector extends Thread{
     private final ObjectOutputStream outputStream;
 
     private final ObjectInputStream inputStream;
+
+    private Consumer<ToClientMessage> messageHandler = (message) -> {
+        System.out.println("Handler not defined!");
+    };
 
     /**
      * Constructor for ServerConnector, opens connection with server, opens output and input streams.
@@ -47,10 +53,10 @@ public class ServerConnector extends Thread{
 
     /**
      * Method for sending message to server.
-     * @param message - Message to be sent to server.
+     * @param message - ToServerMessage to be sent to server.
      * @throws ClientSocketConnectionException - Exception thrown upon connection error.
      */
-    public void sendMessage(Message message) throws ClientSocketConnectionException {
+    public void sendMessage(ToServerMessage message) throws ClientSocketConnectionException {
         try {
             outputStream.writeObject(message);
         } catch (IOException e) {
@@ -60,36 +66,33 @@ public class ServerConnector extends Thread{
 
     /**
      * Method for reading message from server.
-     * @return message - Message read from server output.
+     * @return message - ToServerMessage read from server output.
      * @throws ClientSocketConnectionException - Exception thrown upon connection error.
      */
-    private Message readMessage() throws ClientSocketConnectionException {
-        Message message = null;
+    private ToClientMessage readMessage() throws ClientSocketConnectionException {
         try {
-            message= (Message) inputStream.readObject();
+            return (ToClientMessage) inputStream.readObject();
         } catch (IOException e) {
             throw new ClientSocketConnectionException(ClientSocketConnectionException.MESSAGE_READING_FAILURE);
         } catch (ClassNotFoundException e) {
             throw new ClientSocketConnectionException(ClientSocketConnectionException.UNKNOWN_MESSAGE_TYPE);
         }
-        return message;
+    }
+
+    public void setMessageHandler(Consumer<ToClientMessage> messageHandler) {
+        this.messageHandler = messageHandler;
     }
 
     @Override
     public void run() {
         try {
             while (!interrupted()) {
-                Message message = readMessage();
-                message.handleMessage(null, null);
+                ToClientMessage message = readMessage();
+                System.out.println(message.getMessageType());
+                this.messageHandler.accept(message);
             }
         } catch (ClientSocketConnectionException e) {
             System.out.println(e.getErrorCause());
-        } catch (SQLException e) {
-            System.out.println("SQL exception occurred.");
-        } catch (IOException e) {
-            System.out.println("InputOutput exception occurred.");
         }
     }
-
-
 }

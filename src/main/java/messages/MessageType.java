@@ -9,7 +9,11 @@ public enum MessageType {
     RegisterRequest("RegisterRequest"),
     RegisterResponse("RegisterResponse"),
     LogoutRequest("LogoutRequest"),
-    LogoutResponse("LogoutResponse");
+    LogoutResponse("LogoutResponse"),
+    UserInviteRequest("UserInviteRequest"),
+    UserInviteResponse("UserInviteResponse"),
+    GameDetailsRequest("GameDetailsRequest"),
+    GameDetailsResponse("GameDetailsResponse");
 
     /**
      * String depicting message type.

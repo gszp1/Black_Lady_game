@@ -15,7 +15,7 @@ public class ClientSocketConnectionException extends Throwable {
 
     public static String MESSAGE_READING_FAILURE = "Failed to read message from server.";
 
-    public static String UNKNOWN_MESSAGE_TYPE = "Message received from server is of unknown type.";
+    public static String UNKNOWN_MESSAGE_TYPE = "ToServerMessage received from server is of unknown type.";
 
     /**
      * String variable defining error cause.

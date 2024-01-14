@@ -1,7 +1,8 @@
 package server;
 
 import exceptions.ServerSocketConnectionException;
-import messages.Message;
+import messages.toServer.ToServerMessage;
+import utils.GameDetails;
 import utils.UserList;
 
 import java.io.IOException;
@@ -16,7 +17,7 @@ public class MessageProcessor extends Thread{
     /**
      * Queue with messages to be handled.
      */
-    private final ConcurrentLinkedQueue<Message> inputQueue;
+    private final ConcurrentLinkedQueue<ToServerMessage> inputQueue;
 
     /**
      * UserList containing all users.
@@ -28,16 +29,24 @@ public class MessageProcessor extends Thread{
      */
     private final DatabaseConnector databaseConnector;
 
+    private final GameDetails gameDetails;
+
     /**
      * Constructor, sets inputQueue and userList with given reference.
      * @param inputQueue - Reference to inputQueue.
      * @param userList - Reference to userList.
      * @param databaseConnector - Reference to DatabaseConnector.
      */
-    public MessageProcessor(ConcurrentLinkedQueue<Message> inputQueue, UserList userList, DatabaseConnector databaseConnector) {
+    public MessageProcessor(
+            ConcurrentLinkedQueue<ToServerMessage> inputQueue,
+            UserList userList,
+            DatabaseConnector databaseConnector,
+            GameDetails gameDetails
+    ) {
         this.inputQueue = inputQueue;
         this.userList = userList;
         this.databaseConnector = databaseConnector;
+        this.gameDetails = gameDetails;
     }
 
     /**
@@ -48,8 +57,9 @@ public class MessageProcessor extends Thread{
         try {
             while(!interrupted()) {
                 if (!inputQueue.isEmpty()) {
-                    Message message = inputQueue.remove();
-                    message.handleMessage(userList, databaseConnector);
+                    ToServerMessage message = inputQueue.remove();
+                    System.out.println(message.getMessageType());
+                    message.handle(userList, databaseConnector, gameDetails);
                 }
             }
         } catch (IOException e) {
@@ -58,6 +68,4 @@ public class MessageProcessor extends Thread{
             System.out.println("Database connection lost.");
         }
     }
-
-
 }

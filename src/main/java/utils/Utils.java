@@ -12,4 +12,7 @@ public class Utils {
 
     public static final Pattern pattern = Pattern.compile(EMAIL_PATTERN);
 
+    public static boolean isEmailValid(String email) {
+        return Pattern.matches(EMAIL_PATTERN, email);
+    }
 }

@@ -1,23 +1,18 @@
 package server;
 
-import exceptions.LoginFailureException;
-import exceptions.RegistrationFailureException;
-import messages.Message;
-import org.apache.commons.codec.digest.DigestUtils;
+import exceptions.ServerSocketConnectionException;
+import messages.toServer.ToServerMessage;
+import utils.GameDetails;
 import utils.User;
 import utils.UserList;
-import utils.Utils;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.regex.Matcher;
 
 
 /**
@@ -25,22 +20,31 @@ import java.util.regex.Matcher;
  */
 public class GameServer {
 
-    private final int PORT = 8080;
+    private final int PORT = 8081;
 
-    private final ConcurrentLinkedQueue<Message> inputQueue;
+    private final ConcurrentLinkedQueue<ToServerMessage> inputQueue;
 
     private final UserList userList;
-
-    private final Map<String, InputHandler> inputHandlerMap;
 
     private MessageProcessor messageProcessor;
 
     private DatabaseConnector databaseConnector;
 
+    private GameDetails gameDetails;
+
+    private Map<String, InputHandler> userHandlersMap = new ConcurrentHashMap<>();
+
     public GameServer() {
         inputQueue = new ConcurrentLinkedQueue<>();
         userList = new UserList();
-        inputHandlerMap = new HashMap<>();
+        gameDetails = new GameDetails();
+    }
+
+    public void addUser(User user) throws ServerSocketConnectionException {
+        userList.addUser(user);
+        InputHandler inputHandler = new InputHandler(user, inputQueue);
+        userHandlersMap.put(user.getConnectionID(), inputHandler);
+        inputHandler.start();
     }
 
     /**
@@ -58,15 +62,6 @@ public class GameServer {
     }
 
     /**
-     * Sets up and runs message processor thread.
-     * Requires inputQueue, userList and databaseConnector being initialized.
-     */
-    public void startMessageProcessorThread() {
-        messageProcessor = new MessageProcessor(inputQueue, userList, databaseConnector);
-        messageProcessor.start();
-    }
-
-    /**
      * Start point for server.
      * Creates ServerSocket in order to listen to incoming client connections.
      * @param args - command line arguments.
@@ -80,73 +75,36 @@ public class GameServer {
         if (!gameServer.establishDatabaseConnection(args[0])) {
             return;
         }
+        gameServer.startMessageProcessorThread();
         try (ServerSocket serverSocket = new ServerSocket(gameServer.PORT)) {
             System.out.println("S: Server is running. Listening for new connections.");
             while (true) {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("S: New connection established with client: "
                         + clientSocket.getInetAddress()
-                        +
-                        "," + clientSocket.getPort()
+                        + ","
+                        + clientSocket.getPort()
                 );
-                String temporaryUserID = String.format("%s|%s", clientSocket.getInetAddress(), clientSocket.getPort());
-                User user = new User(temporaryUserID, null, null, clientSocket);
+                String connectionID = String.format("%s|%s", clientSocket.getInetAddress(), clientSocket.getPort());
+                User user = new User(connectionID, null, null, null, clientSocket);
+                gameServer.addUser(user);
             }
         } catch (IOException e) {
             System.out.println("S: Failed to run server. Terminating process.");
+            throw new RuntimeException(e);
+        } catch (ServerSocketConnectionException e) {
+            System.out.println("S: Failed to add user");
+            throw new RuntimeException(e);
         }
     }
 
-
-
     /**
-     * Method for user registration. Sends query to database with new user credentials.
-     * @param email - New user's email - must be unique for all records.
-     * @param username - New user's username, must be unique for all records;
-     * @param password - New user's raw password, hashed with md5 before being sent.
-     * @param passwordConfirmation - password confirmation. Must be equal to password.
-     * @return - boolean representing registration result.
-     * @throws RegistrationFailureException - Exception with reason of registration failure.
+     * Sets up and runs message processor thread.
+     * Requires inputQueue, userList and databaseConnector being initialized.
      */
-    public boolean registerUser(String email, String username, String password, String passwordConfirmation)
-            throws RegistrationFailureException {
-        Optional<String> validationResult = validateRegistrationCredentials(email, username,
-                password, passwordConfirmation);
-        if(validationResult.isPresent()) {
-            throw(new RegistrationFailureException(validationResult.get()));
-        }
-        String hashPassword = DigestUtils.md5Hex(password).toUpperCase();
-        int insertedRecords = 0;
-        try {
-            insertedRecords = databaseConnector.insertUserIntoDatabase(email, username, hashPassword);
-        } catch (SQLException e) {
-            throw(new RegistrationFailureException(RegistrationFailureException.USER_EXISTS));
-        }
-        return insertedRecords == 1;
-    }
-
-    /**
-     * Method for user login. Checks if such user exists in database and if given credentials are valid.
-     * @param email - User's email.
-     * @param password - User's email. Hashed with md5 encryption for comparison.
-     * @return - boolean representing login result.
-     * @throws LoginFailureException - Exception representing login failure.
-     * @throws SQLException - Exception for error during query lifetime.
-     */
-    public boolean loginUser(String email, String password) throws LoginFailureException, SQLException {
-        Optional<String> validationResult = validateLoginCredentials(email, password);
-        if(validationResult.isPresent()) {
-            throw(new LoginFailureException(validationResult.get()));
-        }
-        String hashPassword = DigestUtils.md5Hex(password).toUpperCase();
-        ArrayList<String> queryResult = databaseConnector.getUserFromDatabase(email);
-        if (queryResult.isEmpty()) {
-            throw (new LoginFailureException(LoginFailureException.INVALID_CREDENTIALS));
-        }
-        if (!queryResult.get(3).equals(hashPassword)) {
-            throw (new LoginFailureException(LoginFailureException.INVALID_CREDENTIALS));
-        }
-        return true;
+    public void startMessageProcessorThread() {
+        messageProcessor = new MessageProcessor(inputQueue, userList, databaseConnector, gameDetails);
+        messageProcessor.start();
     }
 
     /**
@@ -157,48 +115,6 @@ public class GameServer {
      */
     public boolean removeUser(String email) throws SQLException {
         return databaseConnector.removeUserFromDatabase(email) == 1;
-    }
-
-
-    /**
-     * Validates provided login credentials.
-     * @param email - User's email.
-     * @param password - User's password.
-     * @return - Returns empty Optional if credentials are valid, otherwise Optional contains information why credentials are not valid.
-     */
-    public Optional<String> validateLoginCredentials(String email, String password) {
-        if(email.isEmpty() || password.isEmpty()) {
-            return Optional.of(LoginFailureException.EMPTY_FIELDS);
-        }
-        Matcher matcher = Utils.pattern.matcher(email);
-        if(!matcher.matches()) {
-            return Optional.of(LoginFailureException.INCORRECT_EMAIL);
-        }
-        return Optional.empty();
-    }
-
-    /**
-     * Validates provided registration credentials.
-     * @param email - New user's email - must be unique for all records.
-     * @param username - New user's username, must be unique for all records;
-     * @param password - New user's password.
-     * @param passwordConfirmation - password confirmation. Must be equal to password.
-     * @return - Returns empty Optional if credentials are valid, otherwise Optional contains information why credentials are not valid.
-     */
-    public Optional<String> validateRegistrationCredentials(String email, String username,
-                                                             String password, String passwordConfirmation) {
-        if(username.isEmpty() || email.isEmpty() || password.isEmpty() || passwordConfirmation.isEmpty()) {
-            return Optional.of(RegistrationFailureException.EMPTY_FIELDS);
-        }
-        if(!passwordConfirmation.equals(password)) {
-            return Optional.of(RegistrationFailureException.PASSWORDS_NOT_EQUAL);
-        }
-        Matcher matcher = Utils.pattern.matcher(email);
-        if(!matcher.matches()) {
-            return Optional.of(RegistrationFailureException.INCORRECT_EMAIL);
-        }
-
-        return Optional.empty();
     }
 
 }

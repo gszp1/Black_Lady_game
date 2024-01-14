@@ -1,44 +1,45 @@
-package messages.requests;
+package messages.toServer.requests;
 
 import exceptions.RegistrationFailureException;
-import messages.Message;
 import messages.MessageType;
-import messages.responses.RegisterResponse;
+import messages.toClient.responses.RegisterResponse;
+import messages.toServer.ToServerMessage;
 import org.apache.commons.codec.digest.DigestUtils;
 import server.DatabaseConnector;
+import utils.GameDetails;
+import utils.User;
 import utils.UserList;
 import utils.Utils;
+import utils.model.UserData;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Optional;
 import java.util.regex.Matcher;
-
-import utils.User;
 
 /**
  * Class for register request message.
  */
-public class RegisterRequest extends Message {
-
-    public static String REGISTRATION_SUCCESS = "Success";
-
-    public static String REGISTRATION_FAILURE = "Failure";
-
+public class RegisterRequest extends ToServerMessage {
     public static String REGISTRATION_SUCCESS_RESPONSE = "Registration successful.";
+
+    private final String email;
+
+    private final String username;
+
+    private final String password;
 
     /**
      * Constructor for RegisterRequest.
      * @param email New user email.
      * @param username New user username.
      * @param password New user password.
-     * @param passwordConfirmation Password confirmation, must be equal to password.
-     * @param clientID ID of user who sent the message.
      */
-    public RegisterRequest(String email, String username, String password,
-                           String passwordConfirmation, String clientID) {
-        super(MessageType.RegisterRequest, String.format("%s|%s|%s|%s", email, username, password, passwordConfirmation), clientID);
+    public RegisterRequest(String email, String username, String password) {
+        super(MessageType.RegisterRequest, String.format("%s|%s|%s", email, username, password), null);
+        this.email = email;
+        this.username = username;
+        this.password = password;
     }
 
     /**
@@ -50,21 +51,23 @@ public class RegisterRequest extends Message {
      * @throws SQLException Thrown if something went wrong with database connection.
      */
     @Override
-    public boolean handleMessage(UserList userList, DatabaseConnector databaseConnector) throws IOException, SQLException {
+    public boolean handle(UserList userList, DatabaseConnector databaseConnector, GameDetails gameDetails) throws IOException, SQLException {
+        System.out.println("handling");
         try {
-            String [] credentials = parseData();
-            validateCredentials(credentials);
-            ArrayList<String> dbData = databaseConnector.getUserFromDatabase(credentials[0]);
-            if (dbData != null) {
+            validateCredentials();
+            Optional<UserData> userData = databaseConnector.getUserByEmail(email);
+            if (userData.isPresent()) {
                 throw new RegistrationFailureException(RegistrationFailureException.USER_EXISTS);
             }
-            String hashPassword = DigestUtils.md5Hex(credentials[2]).toUpperCase();
-            if (databaseConnector.insertUserIntoDatabase(credentials[0], credentials[1], hashPassword) == 0) {
+            String hashPassword = DigestUtils.md5Hex(password).toUpperCase();
+            if (databaseConnector.insertUserIntoDatabase(email, username, hashPassword) == 0) {
                 throw new RegistrationFailureException(RegistrationFailureException.REGISTRATION_FAIL);
             }
-            sendResponse(REGISTRATION_SUCCESS, REGISTRATION_SUCCESS_RESPONSE, userList);
+            System.out.printf("Registration of user %s %s finished with success", email, username);
+            sendResponse(SUCCESS, REGISTRATION_SUCCESS_RESPONSE, userList);
         } catch (RegistrationFailureException e) {
-            sendResponse(REGISTRATION_FAILURE, e.getExceptionReason(), userList);
+            System.out.println("User is present");
+            sendResponse(FAILURE, e.getExceptionReason(), userList);
         }
         return true;
     }
@@ -81,34 +84,29 @@ public class RegisterRequest extends Message {
 
     /**
      * Validates credentials stored in message content.
-     * @param credentials Credentials after parsing.
      * @throws RegistrationFailureException Thrown if credentials are invalid.
      */
-    private void validateCredentials(String [] credentials) throws RegistrationFailureException {
-        if (credentials[0].isEmpty() || credentials[1].isEmpty() || credentials[2].isEmpty() || credentials[3].isEmpty()) {
+    private void validateCredentials() throws RegistrationFailureException {
+        if (email.isEmpty() || username.isEmpty() || password.isEmpty()) {
             throw new RegistrationFailureException(RegistrationFailureException.EMPTY_FIELDS);
         }
-        if (!validateEmail(credentials[0])) {
+        if (!validateEmail(email)) {
             throw new RegistrationFailureException(RegistrationFailureException.INCORRECT_EMAIL);
-        }
-        if (!credentials[2].equals(credentials[3])) {
-            throw new RegistrationFailureException(RegistrationFailureException.PASSWORDS_NOT_EQUAL);
         }
     }
 
     /**
      * Sends response to user who sent this message.
      * @param result String stating result of operation: Success or Failure.
-     * @param responseContent Message to be sent together with result.
+     * @param responseContent ToServerMessage to be sent together with result.
      * @param userList List of users.
      * @throws IOException Exception thrown if failed to send the message.
      */
     private void sendResponse(String result, String responseContent, UserList userList) throws IOException {
-        Optional<User> user = userList.getUser(this.getClientID());
+        Optional<User> user = userList.getUserByConnectionId(this.getConnectionId());
         if (user.isPresent()) {
-            String responseMessage = result.concat("|").concat(responseContent);
-            user.get().getOutputStream().writeObject(new RegisterResponse(responseMessage, this.getClientID()));
+            System.out.printf("Sending to %s", user.get().getConnectionID());
+            user.get().getOutputStream().writeObject(new RegisterResponse(result, responseContent));
         }
     }
-
 }
