@@ -44,5 +44,4 @@ public class LogoutRequest extends ToServerMessage {
         }
         return true;
     }
-
 }

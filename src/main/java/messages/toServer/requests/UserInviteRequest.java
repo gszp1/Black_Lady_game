@@ -30,7 +30,7 @@ public class UserInviteRequest extends ToServerMessage {
      * @param userID ID of user who sends message.
      */
     public UserInviteRequest(String inviterUsername, String recipientUsername, String gameRoomID, String userID) {
-        super(MessageType.UserInviteRequest, String.format("%s|%s|%s", inviterUsername, recipientUsername, gameRoomID), userID);
+        super(MessageType.InviteUserRequest, String.format("%s|%s|%s", inviterUsername, recipientUsername, gameRoomID), userID);
         this.gameRoomID = gameRoomID;
         this.inviterUsername = inviterUsername;
         this.recipientUsername = recipientUsername;

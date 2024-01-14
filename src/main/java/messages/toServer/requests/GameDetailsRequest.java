@@ -31,7 +31,7 @@ public class GameDetailsRequest extends ToServerMessage {
             if (!user.isPresent()) {
                 throw new PlayException("User is not logged in");
             }
-            GameView gameView = GameView.fromGameDetails(gameDetails, user.get().getConnectionID());
+            GameView gameView = GameView.fromGameDetails(gameDetails, user.get().getUserID());
             user.get().getOutputStream().writeObject(new GameDetailsResponse(gameView));
             return true;
         } catch (PlayException e) {

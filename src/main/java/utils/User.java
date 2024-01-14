@@ -1,5 +1,7 @@
 package utils;
 
+import lombok.Getter;
+import lombok.Setter;
 import utils.model.UserData;
 
 import java.io.IOException;
@@ -9,7 +11,8 @@ import java.net.Socket;
 /**
  * Class containing all data required for handling clients who connect with our service.
  */
-
+@Getter
+@Setter
 public class User {
 
     /**
@@ -68,74 +71,6 @@ public class User {
         setUserID(userData.getUserId());
         setUsername(userData.getUsername());
         setEmail(userData.getEmail());
-    }
-
-    /**
-     * Getter for userID.
-     * @return - user's ID.
-     */
-    public String getUserID() {
-        return userID;
-    }
-
-    /**
-     * Getter for user's email.
-     * @return - user's email.
-     */
-    public String getEmail() {
-        return email;
-    }
-
-    /**
-     * Getter for user's username.
-     * @return - user's username.
-     */
-    public String getUsername() {
-        return username;
-    }
-
-    public String getConnectionID() {
-        return connectionID;
-    }
-
-    /**
-     * Getter for server side socket handling connection with client.
-     * @return - socket to which client is connected.
-     */
-    public Socket getSocket() {
-        return socket;
-    }
-
-    /**
-     * Getter for ObjectOutputStream wrapping socket OutputStream.
-     * @return - reference for socket's ObjectOutputStream.
-     */
-    public ObjectOutputStream getOutputStream() {
-        return outputStream;
-    }
-
-    /**
-     * Setter for userID.
-     * @param userID - New userID.
-     */
-    public void setUserID(String userID) {
-        this.userID = userID;
-    }
-
-    /**
-     * Setter for email.
-     * @param email - New email.
-     */
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    /**
-     * Setter for username;
-     * @param username - New username;
-     */
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public void close() {

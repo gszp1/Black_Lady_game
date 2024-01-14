@@ -1,15 +1,21 @@
 package messages.toServer;
 
 import messages.MessageType;
+import messages.dto.GameView;
+import messages.dto.RoomDetails;
+import messages.toClient.responses.GameDetailsResponse;
+import messages.toClient.responses.RoomDetailsResponse;
 import server.DatabaseConnector;
 import utils.GameDetails;
 import utils.User;
 import utils.UserList;
+import utils.model.Room;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.Optional;
+import java.util.function.Function;
 
 
 /**
@@ -94,5 +100,30 @@ public abstract class ToServerMessage implements Serializable {
 
     protected Optional<User> findUserByConnectionId(UserList userList) {
         return userList.getUserByConnectionId(connectionId);
+    }
+
+    public void broadcastGameDetails(UserList userList, GameDetails gameDetails) {
+        try {
+            Function<User, GameView> createGameView = (user) -> GameView.fromGameDetails(gameDetails, user.getUserID());
+            for (User user : userList.getUsers()) {
+                user.getOutputStream().writeObject(new GameDetailsResponse(createGameView.apply(user)));
+            }
+        } catch (IOException e) {
+            System.out.println("S: Cannot write Game Details");
+        }
+    }
+
+    public void broadcastRoomDetails(UserList userList, GameDetails gameDetails) {
+        try {
+            for (Room room : gameDetails.getRooms()) {
+                for (User participant: room.getParticipants()) {
+                    participant.getOutputStream().writeObject(
+                            new RoomDetailsResponse(RoomDetails.fromRoom(room, userList, participant.getUserID()))
+                    );
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("S: Cannot Write Room Details");
+        }
     }
 }

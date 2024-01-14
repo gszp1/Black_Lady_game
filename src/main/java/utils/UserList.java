@@ -53,6 +53,10 @@ public class UserList {
         return users.stream().filter(user -> user.getUsername().equals(username)).findFirst();
     }
 
+    synchronized public Optional<User> getUserByEmail(String email) {
+        return users.stream().filter(user -> user.getEmail().equals(email)).findFirst();
+    }
+
     /**
      * Getter for user list.
      * @return - ArrayList of users.

@@ -1,5 +1,6 @@
 package messages.toClient.responses;
 
+import lombok.Getter;
 import messages.MessageType;
 import messages.toClient.ToClientMessage;
 import messages.toServer.ToServerMessage;
@@ -9,12 +10,16 @@ import utils.UserList;
 import java.io.IOException;
 import java.sql.SQLException;
 
+@Getter
 public class UserInviteResponse extends ToClientMessage {
+
+    private final String data;
 
     private final String userId;
 
     public UserInviteResponse(String data, String userID) {
-        super(MessageType.UserInviteResponse, data);
+        super(MessageType.InviteUserResponse, data);
+        this.data = data;
         this.userId = userID;
     }
 

@@ -1,9 +1,11 @@
 package cards;
 
+import java.io.Serializable;
+
 /**
  * Enumerate for sets to which a card may belong.
  */
-public enum CardSet {
+public enum CardSet implements Serializable {
     Spades("Spades"),
     Hearts("Hearts"),
     Diamonds("Diamonds"),

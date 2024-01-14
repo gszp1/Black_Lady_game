@@ -10,10 +10,25 @@ public enum MessageType {
     RegisterResponse("RegisterResponse"),
     LogoutRequest("LogoutRequest"),
     LogoutResponse("LogoutResponse"),
-    UserInviteRequest("UserInviteRequest"),
-    UserInviteResponse("UserInviteResponse"),
+    InviteUserRequest("InviteUserRequest"),
+    InviteUserResponse("InviteUserResponse"),
     GameDetailsRequest("GameDetailsRequest"),
-    GameDetailsResponse("GameDetailsResponse");
+    GameDetailsResponse("GameDetailsResponse"),
+    CreateGameRequest("CreateRoomRequest"),
+    CreateGameResponse("CreateGameResponse"),
+    DeleteRoomRequest("DeleteRoomRequest"),
+    DeleteRoomResponse("DeleteRoomResponse"),
+    JoinRoomRequest("JoinRoomRequest"),
+    JoinRoomResponse("JoinRoomResponse"),
+    RoomInviteToServerRequest("UserInviteToServerRequest"),
+    RoomInviteToReceiverRequest("RoomInviteToClientRequest"),
+    RoomInviteAcceptRequest("RoomInviteAcceptRequest"),
+    RoomInviteDenyRequest("RoomInviteDenyRequest"),
+    RoomInviteSenderResponse("RoomInviteDenySenderResponse"),
+    LeaveRoomRequest("LeaveRoomRequest"),
+    LeaveRoomResponse("LeaveRoomResponse"),
+    RoomDetailsRequest("RoomDetailsRequest"),
+    RoomDetailsResponse("RoomDetailsResponse");
 
     /**
      * String depicting message type.

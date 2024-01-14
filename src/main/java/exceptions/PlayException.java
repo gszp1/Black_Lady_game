@@ -8,6 +8,8 @@ public class PlayException extends Exception {
 
     public static final String NOT_ENOUGH_PARTICIPANTS = "Not enough participants in game room";
 
+    public static final String USER_DOES_NOT_EXIST = "User does not exist";
+
     private final String errorCause;
 
     public PlayException(String errorCause) {

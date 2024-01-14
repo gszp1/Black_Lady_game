@@ -4,8 +4,7 @@ import cards.Card;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.sun.xml.internal.ws.policy.sourcemodel.wspolicy.XmlToken.Optional;
+import java.util.Optional;
 
 public class UserDeck {
 
@@ -25,10 +24,20 @@ public class UserDeck {
 
     public void addCard(Card cardToAdd) {
         cards.add(cardToAdd);
-
     }
 
     public boolean removeCard(Card cardToRemove) {
         return cards.remove(cardToRemove);
+    }
+
+    public Optional<Card> getLast() {
+        if (cards.isEmpty()){
+            return Optional.empty();
+        }
+        return Optional.of(cards.get(cards.size() - 1));
+    }
+
+    public int getCardsCount() {
+        return cards.size();
     }
 }

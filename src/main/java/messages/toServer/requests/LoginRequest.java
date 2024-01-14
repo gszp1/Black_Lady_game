@@ -73,6 +73,7 @@ public class LoginRequest extends ToServerMessage {
             }
             thisUser.get().updateUserData(userData.get());
             sendResponse(SUCCESS, SUCCESS_RESPONSE, thisUser.get());
+            broadcastRoomDetails(userList, gameDetails);
             // Set ClientID on server side to the ClientID stored on server
         } catch (LoginFailureException l) {
             Optional<User> user = userList.getUserByConnectionId(getConnectionId());

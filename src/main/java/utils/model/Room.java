@@ -1,5 +1,6 @@
 package utils.model;
 
+import cards.Card;
 import exceptions.ClientRoomJoinException;
 import exceptions.ClientRoomLeaveException;
 import exceptions.PlayException;
@@ -28,8 +29,9 @@ public class Room {
 
     private Optional<Play> play = Optional.empty();
 
-    public Room(User owner) {
+    public Room(User owner, int id) {
         this.owner = owner;
+        this.id = id;
         participants.add(owner);
     }
 
@@ -38,7 +40,7 @@ public class Room {
     }
 
     public boolean join(User user) throws ClientRoomJoinException {
-        if (participants.size() == MAX_PLAYERS) {
+        if (participants.size() >= MAX_PLAYERS) {
             throw new ClientRoomJoinException(ClientRoomJoinException.ROOM_FULL);
         }
         if (isUserInRoom(user)) {
@@ -62,8 +64,26 @@ public class Room {
         play = Optional.of(new Play());
     }
 
-    private boolean isUserInRoom(User user) {
+    public Optional<User> getParticipantByEmail(String email) {
+        return participants.stream()
+                .filter(participant -> participant.getEmail().equals(email))
+                .findFirst();
+    }
+
+    public boolean isUserInRoom(User user) {
         return participants.stream()
                 .anyMatch(participant -> participant.getUserID().equals(user.getUserID()));
+    }
+
+    public boolean isUserOwner(User user) {
+        return isUserIdOwner(user.getUserID());
+    }
+
+    public boolean isUserIdOwner(String userId) {
+        return owner.getUserID().equals(userId);
+    }
+
+    public List<Card> getCardsOnTable() {
+        return play.map(Play::getCardsOnTable).orElse(new ArrayList<>());
     }
 }
