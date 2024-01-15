@@ -5,6 +5,7 @@ import client.ServerConnector;
 import lombok.Builder;
 import lombok.Data;
 import utils.UserList;
+import utils.model.ChatEntry;
 import utils.model.Room;
 
 import java.io.Serializable;
@@ -26,6 +27,8 @@ public class RoomDetails implements Serializable {
     private boolean isMyTurn;
     private boolean isMyRoom;
     private List<UserView> nonInvitedUsers;
+    private boolean isReadyToStart;
+    private List<ChatEntryView> chat;
 
     public static RoomDetails fromRoom(Room room, UserList userList, String loggedInUserId) {
         return RoomDetails.builder()
@@ -37,11 +40,15 @@ public class RoomDetails implements Serializable {
                 .isMyTurn(false)
                 .isMyRoom(room.isUserIdOwner(loggedInUserId))
                 .nonInvitedUsers(getNonInvitedUsers(room, userList, loggedInUserId))
+                .isReadyToStart(!room.isStarted() && room.isMaxParticipants() && room.isUserIdOwner(loggedInUserId))
+                .chat(room.getChatEntries().stream().map(ChatEntryView::fromChatEntry).collect(Collectors.toList()))
                 .build();
     }
 
     private static Map<UserView, Integer> getScores(Room room, String loggedInUserId) {
         Map<UserView, Integer> scores = new HashMap<>();
+        System.out.println("SCORES:");
+        System.out.println(room.getScores());
         room.getScores().forEach((email, score) -> {
             room.getParticipantByEmail(email).ifPresent(user -> {
                 UserView userView = UserView.fromUser(user, loggedInUserId);

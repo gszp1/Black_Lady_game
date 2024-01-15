@@ -123,6 +123,7 @@ public abstract class ToServerMessage implements Serializable {
                 }
             }
         } catch (IOException e) {
+            e.printStackTrace();
             System.out.println("S: Cannot Write Room Details");
         }
     }

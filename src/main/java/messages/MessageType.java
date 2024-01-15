@@ -28,7 +28,11 @@ public enum MessageType {
     LeaveRoomRequest("LeaveRoomRequest"),
     LeaveRoomResponse("LeaveRoomResponse"),
     RoomDetailsRequest("RoomDetailsRequest"),
-    RoomDetailsResponse("RoomDetailsResponse");
+    RoomDetailsResponse("RoomDetailsResponse"),
+    WriteChatRequest("WriteChatRequest"),
+    WriteChatResponse("WriteChatResponse"),
+    StartGameRequest("StartGameRequest"),
+    StartGameResponse("StartGameResponse");
 
     /**
      * String depicting message type.

@@ -2,19 +2,36 @@ package utils.model;
 
 import cards.Card;
 import cards.Deck;
+import exceptions.PlayException;
 import lombok.Getter;
+import utils.Utils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Getter
 public class Play {
 
+    private final List<String> userEmails;
+
     private Map<String, UserDeck> cardsInHand = new HashMap<>();
 
     private Map<String, UserDeck> cardsPut = new HashMap<>();
+
+    public Play(List<String> userEmails) throws PlayException {
+        if (userEmails.size() != Room.MAX_PLAYERS) {
+            throw new PlayException("Creation of game resulted in not enough players!");
+        }
+        this.userEmails = userEmails;
+
+    }
+
+    private Map<String, UserDeck> getInitialDecks() {
+        List<Card> cards = Utils.getFullDeck();
+        Collections.shuffle(cards);
+        for (int i = 0; i < Room.MAX_PLAYERS; i++) {
+
+        }
+    }
 
     synchronized public boolean playCard(String userId, Card card) {
         boolean cardRemovalResult = cardsInHand.get(userId).getCards().remove(card);

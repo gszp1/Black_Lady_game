@@ -29,10 +29,20 @@ public class Room {
 
     private Optional<Play> play = Optional.empty();
 
+    private List<ChatEntry> chatEntries = new ArrayList<>();
+
     public Room(User owner, int id) {
         this.owner = owner;
         this.id = id;
+        scores.put(owner.getEmail(), 0);
         participants.add(owner);
+    }
+
+    public void writeToChat(String email, String message) throws PlayException {
+        if (!isUserInRoomByEmail(email)) {
+            throw new PlayException("Cannot write to chat if user is not in room");
+        }
+        chatEntries.add(new ChatEntry(email, message));
     }
 
     public boolean isStarted() {
@@ -46,18 +56,20 @@ public class Room {
         if (isUserInRoom(user)) {
             throw new ClientRoomJoinException(ClientRoomJoinException.PLAYER_ALREADY_JOINED);
         }
+        scores.put(user.getEmail(), 0);
         // TODO exception handling
         return participants.add(user);
     }
 
-    public boolean leave(User user) throws ClientRoomLeaveException {
+    synchronized public boolean leave(User user) throws ClientRoomLeaveException {
         if (!isUserInRoom(user)) {
             throw new ClientRoomLeaveException(ClientRoomLeaveException.USER_NOT_IN_ROOM);
         }
+        scores.remove(user.getEmail());
         return participants.remove(user);
     }
 
-    public void start() throws PlayException{
+    synchronized public void start() throws PlayException{
         if (participants.size() != MAX_PLAYERS) {
             throw new PlayException(String.format("Must be %s players to start a game", MAX_PLAYERS));
         }
@@ -70,9 +82,17 @@ public class Room {
                 .findFirst();
     }
 
+    public boolean isUserInRoomByEmail(String email) {
+        return participants.stream().map(User::getEmail).anyMatch(email::equals);
+    }
+
     public boolean isUserInRoom(User user) {
         return participants.stream()
                 .anyMatch(participant -> participant.getUserID().equals(user.getUserID()));
+    }
+
+    public boolean isMaxParticipants() {
+        return participants.size() == MAX_PLAYERS;
     }
 
     public boolean isUserOwner(User user) {

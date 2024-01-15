@@ -10,6 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import lombok.Data;
 import messages.toServer.requests.RoomInviteAcceptRequest;
+import messages.toServer.requests.RoomInviteDenyRequest;
 
 import java.io.IOException;
 
@@ -40,6 +41,10 @@ public class RoomInviteDialog {
         });
 
         final Button rejectButton = new Button("Reject");
+        rejectButton.setOnAction(e -> {
+            sendRoomInviteDenyRequest();
+            roomInviteStage.close();
+        });
         hbox.getChildren().addAll(acceptButton, rejectButton);
 
         vbox.getChildren().addAll(inviteLabel, hbox);
@@ -49,6 +54,14 @@ public class RoomInviteDialog {
         roomInviteStage.setTitle(TITLE);
         roomInviteStage.setScene(scene);
         roomInviteStage.show();
+    }
+
+    private void sendRoomInviteDenyRequest() {
+        try {
+            serverConnector.sendMessage(new RoomInviteDenyRequest(roomId, receiverEmail, senderEmail));
+        } catch (ClientSocketConnectionException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void sendRoomInviteAcceptRequest() {
