@@ -33,20 +33,26 @@ public enum CardType implements Serializable {
     AceCard(13, "AceCard");
 
     /**
-     * Provides information about card's rank.
+     * Provides information about type's rank.
      */
     private final int rank;
 
     /**
-     * Provides name of given card type.
+     * Provides name of given type.
      */
     private final String cardTypeName;
 
+    /**
+     * Constructor, creates type with given rank and name.
+     * @param rank Rank of card 1 - 13.
+     * @param cardTypeName Name of card's type.
+     */
     CardType(int rank, String cardTypeName) {
         this.rank = rank;
         this.cardTypeName = cardTypeName;
     }
 
+    // Returns name of type with given rank.
     public CardType getCardTypeByRank(int rank) {
         for (CardType cardType: values()) {
             if (cardType.rank == rank) {
@@ -56,10 +62,12 @@ public enum CardType implements Serializable {
         return null;
     }
 
+    // Getter for type name.
     public String getCardTypeName() {
         return cardTypeName;
     }
 
+    // Getter for rank of given type.
     public int getRank() {
         return rank;
     }
