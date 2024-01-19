@@ -11,12 +11,17 @@ public enum CardSet implements Serializable {
     Diamonds("Diamonds"),
     Clubs("Clubs");
 
+    /**
+     * Name of set.
+     */
     private final String typeName;
 
+    // Constructor, sets card's set.
     CardSet(String typeName) {
         this.typeName = typeName;
     }
 
+    // Getter for set name.
     public String getTypeName() {
         return typeName;
     }
