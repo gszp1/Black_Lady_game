@@ -28,6 +28,9 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+/**
+ * Stage for main room.s
+ */
 public class RoomPanelStage extends GameStage {
 
     private final Map<Integer, GameRoomPlay> gameRoomPlays = new HashMap<>();

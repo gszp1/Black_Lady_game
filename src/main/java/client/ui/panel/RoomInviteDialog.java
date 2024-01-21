@@ -14,19 +14,40 @@ import messages.toServer.requests.RoomInviteDenyRequest;
 
 import java.io.IOException;
 
+/**
+ * Class for invitation window.
+ */
 @Data
 public class RoomInviteDialog {
 
+    /**
+     * Title of window.
+     */
     public static String TITLE = "Room Invitation.";
 
+    /**
+     * ID of room to which user was invited.
+     */
     private final int roomId;
 
+    /**
+     * Email of receiver.
+     */
     private final String receiverEmail;
 
+    /**
+     * Email of sender.
+     */
     private final String senderEmail;
 
+    /**
+     * Reference to server connector.
+     */
     private final ServerConnector serverConnector;
 
+    /**
+     * Opens invitation window.
+     */
     public void open() {
         final Stage roomInviteStage = new Stage();
         final VBox vbox = new VBox(10);
@@ -56,6 +77,9 @@ public class RoomInviteDialog {
         roomInviteStage.show();
     }
 
+    /**
+     * Sends invitation denial response.
+     */
     private void sendRoomInviteDenyRequest() {
         try {
             serverConnector.sendMessage(new RoomInviteDenyRequest(roomId, receiverEmail, senderEmail));
@@ -64,6 +88,9 @@ public class RoomInviteDialog {
         }
     }
 
+    /**
+     * Sends invitation accept response.
+     */
     private void sendRoomInviteAcceptRequest() {
         try {
             serverConnector.sendMessage(new RoomInviteAcceptRequest(roomId, receiverEmail, senderEmail));
