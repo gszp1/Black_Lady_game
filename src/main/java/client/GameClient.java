@@ -12,17 +12,16 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import messages.toServer.requests.LogoutRequest;
 
+
+/**
+ * Main class for client application.
+ */
 public class GameClient extends Application {
 
+    /**
+     * Connector with server.
+     */
     private ServerConnector serverConnector = null;
-
-    private boolean registrationWindowOpened = false;
-
-    private Label loginNotificationLabel;
-
-    private Label registerNotificationLabel;
-
-    private LoginStage loginStage;
 
     private GameStagesController gameStagesController;
 
