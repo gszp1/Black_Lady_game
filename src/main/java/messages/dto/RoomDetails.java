@@ -1,12 +1,10 @@
 package messages.dto;
 
 import cards.Card;
-import client.ServerConnector;
 import lombok.Builder;
 import lombok.Data;
 import utils.User;
 import utils.UserList;
-import utils.model.ChatEntry;
 import utils.model.Room;
 
 import java.io.Serializable;
