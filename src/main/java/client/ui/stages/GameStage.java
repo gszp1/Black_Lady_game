@@ -6,11 +6,21 @@ import messages.toClient.ToClientMessage;
 
 import java.util.function.Consumer;
 
+/**
+ * Abstract method declaring stages behaviour.
+ */
 public abstract class GameStage {
 
+    /**
+     * Primary stage.
+     */
     protected final Stage primaryStage;
 
+    /**
+     * Reference to client-server connector.
+     */
     protected final ServerConnector serverConnector;
+
 
     protected final Consumer<GameStageType> changeStageHandler;
 

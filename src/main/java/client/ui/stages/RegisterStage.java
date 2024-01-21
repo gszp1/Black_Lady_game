@@ -23,19 +23,49 @@ import java.util.Optional;
 
 import java.util.function.Consumer;
 
+/**
+ * Stage for user registration."
+ */
 public class RegisterStage extends GameStage {
 
+    /**
+     * Page name.
+     */
     private String TITLE = "Register page";
 
+    /**
+     * Label for displaying register notifications.
+     */
     private Label registerNotificationLabel = new Label("");
 
+    /**
+     * Button for moving to logsin stage.
+     */
     private Button changeToLoginStageButton = new Button("Move to Login");
 
+    /**
+     * Field for inserting email.
+     */
     private TextField emailField;
+    /**
+     * Field for inserting username.
+     */
     private TextField usernameField;
+    /**
+     * Field for inserting password.
+     */
     private PasswordField passwordField;
+    /**
+     * Field for inserting password confirmation.
+     */
     private PasswordField passwordConfirmationField;
 
+    /**
+     * Constructor, sets fields from GameStage.
+     * @param primaryStage Reference to primaryStage.
+     * @param serverConnector Reference to serverConnector.
+     * @param changeStageHandler Handler for changing stages.
+     */
     public RegisterStage(
             Stage primaryStage,
             ServerConnector serverConnector,
@@ -44,6 +74,9 @@ public class RegisterStage extends GameStage {
         super(primaryStage, serverConnector, changeStageHandler);
     }
 
+    /**
+     * Operations performed upon changing stages.
+     */
     @Override
     public void onOpen() {
         primaryStage.setTitle(TITLE);
@@ -52,6 +85,10 @@ public class RegisterStage extends GameStage {
         primaryStage.setScene(scene);
     }
 
+    /**
+     * Creates and initializes main grid.
+     * @return Created grid.
+     */
     private GridPane getMainGrid() {
         GridPane grid = new GridPane();
         grid.setHgap(10);
@@ -63,6 +100,10 @@ public class RegisterStage extends GameStage {
         return grid;
     }
 
+    /**
+     * Adds constraints to grid pane.
+     * @param grid Grid pane to which constraints are meant to be added.
+     */
     private void addGridConstraints(GridPane grid) {
         ColumnConstraints column1 = new ColumnConstraints();
         ColumnConstraints column2 = new ColumnConstraints();
@@ -72,12 +113,16 @@ public class RegisterStage extends GameStage {
         RowConstraints row1 = new RowConstraints();
         RowConstraints row2 = new RowConstraints();
         RowConstraints row3 = new RowConstraints();
-        row1.setVgrow(Priority.ALWAYS); // Allow row 4 to grow
-        row2.setVgrow(Priority.ALWAYS); // Allow row 4 to grow
-        row3.setVgrow(Priority.ALWAYS); // Allow row 4 to grow
+        row1.setVgrow(Priority.ALWAYS);
+        row2.setVgrow(Priority.ALWAYS);
+        row3.setVgrow(Priority.ALWAYS);
         grid.getRowConstraints().addAll(row1, row2, row3);
     }
 
+    /**
+     * Adds components of grid pane for Registration view.
+     * @param grid Grid pane to which components are added.
+     */
     public void addRegistrationGridComponents(GridPane grid) {
         // Create UI components for the new window
         emailField = new TextField();
@@ -116,6 +161,10 @@ public class RegisterStage extends GameStage {
         changeToLoginStageButton.setOnAction(e -> changeStageHandler.accept(GameStageType.LOGIN));
     }
 
+    /**
+     * Creates form based on data in text fields, creates register request and sends it to server.
+     * @throws ClientSocketConnectionException Connection error excepiton.
+     */
     private void handleRegisterClicked() throws ClientSocketConnectionException {
         final FormData formData = new FormData();
         Optional<String> formError = getFormError(formData);
@@ -125,13 +174,13 @@ public class RegisterStage extends GameStage {
         }
         final RegisterRequest registerRequest = formData.toRegisterRequest();
         serverConnector.sendMessage(registerRequest);
-
-//        String password = passwordField.getText().trim();
-//        if (!password.equals(passwordConfirmationField.getText().trim())) {
-//            setErrorRegisterLabel("Passwords do not match");
-//        }
     }
 
+    /**
+     * Validates credentials in form.
+     * @param formData Form.
+     * @return Optional with error.
+     */
     private Optional<String> getFormError(FormData formData) {
         if (formData.email.isEmpty()) {
             return Optional.of("Email field is empty");
@@ -154,27 +203,45 @@ public class RegisterStage extends GameStage {
         return Optional.empty();
     }
 
+    /**
+     * Sets notification label with given message and failure.
+     * @param message Message to be set into notification label.
+     */
     public void setErrorRegisterLabel(String message) {
         registerNotificationLabel.setText(message);
         registerNotificationLabel.setStyle("-fx-text-fill: red;");
     }
 
+    /**
+     * Sets notification label with given message and success.
+     * @param message Message to be set into notification label.
+     */
     public void setSuccessRegisterLabel(String message) {
         registerNotificationLabel.setText(message);
         registerNotificationLabel.setStyle("-fx-text-fill: green;");
     }
 
+    /**
+     * Sets register label with data from message.
+     * @param message Received message.
+     */
     @Override
     public void handleMessage(ToClientMessage message) {
         Platform.runLater(() -> setErrorRegisterLabel(message.getData()));
     }
 
+    /**
+     * Inner class representing data form.
+     */
     class FormData {
         String email;
         String username;
         String password;
         String passwordConfirmation;
 
+        /**
+         * Constructor sets fields using data in textfields.
+         */
         FormData() {
             this.email = emailField.getText().trim();
             this.username = usernameField.getText().trim();
@@ -182,6 +249,10 @@ public class RegisterStage extends GameStage {
             this.passwordConfirmation = passwordConfirmationField.getText().trim();
         }
 
+        /**
+         * Generates Register request using data from form.
+         * @return Register request.
+         */
         RegisterRequest toRegisterRequest() {
             return new RegisterRequest(email, username, password);
         }
