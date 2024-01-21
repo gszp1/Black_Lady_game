@@ -101,35 +101,6 @@ public class GameRoomPlay {
         GridPane gridPane = new GridPane();
         gridPane.setVgap(5);
         gridPane.setHgap(5);
-
-//
-//        BorderPane borderPane = new BorderPane();
-//        Text cardDisplay = new Text("Player's cards here");
-//        final ImageView img1 = new ImageView("cards/AceCard_Diamonds.png");
-//        img1.setFitWidth(100);
-//        img1.setFitHeight(145);
-//        final ImageView img2 = new ImageView("cards/AceCard_Hearts.png");
-//        img2.setFitWidth(100);
-//        img2.setFitHeight(145);
-//        final ImageView img3 = new ImageView("cards/AceCard_Spades.png");
-//        img3.setFitWidth(100);
-//        img3.setFitHeight(145);
-//        final ImageView imageView = new ImageView("cards/AceCard_Clubs.png");
-//        imageView.setFitWidth(100);
-//        imageView.setFitHeight(145);
-
-//        borderPane.setBottom(img1);
-////        borderPane.setCenter(img1);
-//        borderPane.setLeft(img2);
-//        borderPane.setTop(img3);
-//        borderPane.setRight(imageView);
-//        borderPane.setBottom();
-//        gridPane.add(img1, 12, 2, 1, 1);
-//        gridPane.add(img2, 13, 3, 1, 1);
-//        gridPane.add(img3, 14, 4, 1, 1);
-//        gridPane.add(imageView, 15, 5, 1, 1);
-
-
         gamePanel.getChildren().addAll(cardsGridPane, gridPane);
     }
 
