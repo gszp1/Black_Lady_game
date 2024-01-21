@@ -9,7 +9,7 @@ public class ClientRoomLeaveException extends Exception {
      * Error message if user can't leave the room.
      */
     public static final String LEAVE_FAIL = "Failed to leave room.";
-    
+
     /**
      * Error message if user is not in the room.
      */
