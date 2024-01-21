@@ -22,7 +22,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class GameServer {
 
-    private final int PORT = 8081;
+    private final int PORT = 8080;
 
     private final ConcurrentLinkedQueue<ToServerMessage> inputQueue;
 
