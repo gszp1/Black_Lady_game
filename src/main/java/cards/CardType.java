@@ -1,9 +1,11 @@
 package cards;
 
+import java.io.Serializable;
+
 /**
  * Enumerate for each type of cards in classic card deck.
  */
-public enum CardType {
+public enum CardType implements Serializable {
     TwoCard(1, "TwoCard"),
 
     ThreeCard(2, "ThreeCard"),
@@ -22,7 +24,7 @@ public enum CardType {
 
     TenCard(9, "TenCard"),
 
-    KnavesCard(10, "KnavesCard"),
+    KnavesCard(10, "JackCard"),
 
     QueenCard(11, "QueenCard"),
 

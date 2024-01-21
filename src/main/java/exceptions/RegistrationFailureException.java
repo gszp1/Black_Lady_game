@@ -16,6 +16,8 @@ public class RegistrationFailureException extends Exception{
 
     public static String EMPTY_FIELDS = "Not all registration data provided.";
 
+    public static String REGISTRATION_FAIL = "Registration refused.";
+
     private final String exceptionReason;
 
     public RegistrationFailureException(String exceptionReason) {

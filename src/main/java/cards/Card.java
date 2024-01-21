@@ -1,9 +1,14 @@
 package cards;
 
-/**
- * Class representing a game card.
- */
-public class Card {
+import javafx.scene.image.ImageView;
+import lombok.Data;
+import lombok.ToString;
+
+import java.io.Serializable;
+
+@Data
+@ToString
+public class Card implements Serializable {
     /**
      * To which set (Spades, Hearts, Diamonds, Clubs) does this card belong.
      */
@@ -13,17 +18,4 @@ public class Card {
      * Provides information about card type and it's rank.
      */
     private final CardType cardType;
-
-    Card(CardSet cardSet, CardType cardType) {
-        this.cardSet = cardSet;
-        this.cardType = cardType;
-    }
-
-    public CardSet getCardSet() {
-        return cardSet;
-    }
-
-    public CardType getCardType() {
-        return cardType;
-    }
 }

@@ -1,10 +1,12 @@
 package server;
 
 import exceptions.ServerSocketConnectionException;
-import messages.Message;
+import messages.toServer.ToServerMessage;
+import utils.GameDetails;
 import utils.UserList;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -15,7 +17,7 @@ public class MessageProcessor extends Thread{
     /**
      * Queue with messages to be handled.
      */
-    private final ConcurrentLinkedQueue<Message> inputQueue;
+    private final ConcurrentLinkedQueue<ToServerMessage> inputQueue;
 
     /**
      * UserList containing all users.
@@ -23,13 +25,28 @@ public class MessageProcessor extends Thread{
     private final UserList userList;
 
     /**
+     * DatabaseConnector for retrieving user data from database.
+     */
+    private final DatabaseConnector databaseConnector;
+
+    private final GameDetails gameDetails;
+
+    /**
      * Constructor, sets inputQueue and userList with given reference.
      * @param inputQueue - Reference to inputQueue.
      * @param userList - Reference to userList.
+     * @param databaseConnector - Reference to DatabaseConnector.
      */
-    public MessageProcessor(ConcurrentLinkedQueue<Message> inputQueue, UserList userList) {
+    public MessageProcessor(
+            ConcurrentLinkedQueue<ToServerMessage> inputQueue,
+            UserList userList,
+            DatabaseConnector databaseConnector,
+            GameDetails gameDetails
+    ) {
         this.inputQueue = inputQueue;
         this.userList = userList;
+        this.databaseConnector = databaseConnector;
+        this.gameDetails = gameDetails;
     }
 
     /**
@@ -40,14 +57,17 @@ public class MessageProcessor extends Thread{
         try {
             while(!interrupted()) {
                 if (!inputQueue.isEmpty()) {
-                    Message message = inputQueue.remove();
-                    message.handleMessage();
+                    System.out.println("Handling");
+                    ToServerMessage message = inputQueue.remove();
+                    System.out.println(message.getMessageType());
+                    System.out.println("HERE");
+                    message.handle(userList, databaseConnector, gameDetails);
                 }
             }
         } catch (IOException e) {
             System.out.println(ServerSocketConnectionException.MESSAGE_SENDING_FAILURE);
+        } catch (SQLException e) {
+            System.out.println("Database connection lost.");
         }
     }
-
-
 }
