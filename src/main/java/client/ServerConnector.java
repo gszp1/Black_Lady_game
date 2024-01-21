@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.sql.SQLException;
 import java.util.function.Consumer;
 
 import exceptions.ClientSocketConnectionException;
@@ -17,25 +16,46 @@ import exceptions.ClientSocketConnectionException;
  */
 public class ServerConnector extends Thread {
 
+    /**
+     * Game server's port.
+     */
     private final int SERVER_PORT = 8080;
 
+    /**
+     * Game server's IP address.
+     */
     private final String SERVER_IP = "0.0.0.0";
 
+    /**
+     * Client-server connection socket.
+     */
     private final Socket socket;
 
+    /**
+     * Reference to application main class.
+     */
     private final GameClient gameClient;
 
+    /**
+     *  Output stream for sending messages.
+     */
     private final ObjectOutputStream outputStream;
 
+    /**
+     * Input stream for receiving messages.
+     */
     private final ObjectInputStream inputStream;
 
+    /**
+     * Handler for incoming messages.
+     */
     private Consumer<ToClientMessage> messageHandler = (message) -> {
         System.out.println("Handler not defined!");
     };
 
     /**
      * Constructor for ServerConnector, opens connection with server, opens output and input streams.
-     * @throws ClientSocketConnectionException - Exception thrown upon connection error.
+     * @throws ClientSocketConnectionException Exception thrown upon connection error.
      */
     public ServerConnector(GameClient gameClient) throws ClientSocketConnectionException {
         String possibleErrorCause = ClientSocketConnectionException.SOCKET_CONNECTION_FAILURE;
@@ -53,8 +73,8 @@ public class ServerConnector extends Thread {
 
     /**
      * Method for sending message to server.
-     * @param message - ToServerMessage to be sent to server.
-     * @throws ClientSocketConnectionException - Exception thrown upon connection error.
+     * @param message ToServerMessage to be sent to server.
+     * @throws ClientSocketConnectionException Exception thrown upon connection error.
      */
     public void sendMessage(ToServerMessage message) throws ClientSocketConnectionException {
         try {
@@ -66,8 +86,8 @@ public class ServerConnector extends Thread {
 
     /**
      * Method for reading message from server.
-     * @return message - ToServerMessage read from server output.
-     * @throws ClientSocketConnectionException - Exception thrown upon connection error.
+     * @return message ToServerMessage read from server output.
+     * @throws ClientSocketConnectionException Exception thrown upon connection error.
      */
     private ToClientMessage readMessage() throws ClientSocketConnectionException {
         try {
@@ -79,10 +99,17 @@ public class ServerConnector extends Thread {
         }
     }
 
+    /**
+     * Setter for message handler.
+     * @param messageHandler Message handler implementing Consumer functional interface.
+     */
     public void setMessageHandler(Consumer<ToClientMessage> messageHandler) {
         this.messageHandler = messageHandler;
     }
 
+    /**
+     * Thread run method.
+     */
     @Override
     public void run() {
         try {
