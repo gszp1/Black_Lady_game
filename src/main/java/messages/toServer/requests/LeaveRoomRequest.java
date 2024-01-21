@@ -41,6 +41,7 @@ public class LeaveRoomRequest extends ToServerMessage {
             return false;
         }
         deleteRoomIfOwnerLeft(user.get(), room.get(), gameDetails);
+        deleteRoomIfGameInProgress(room.get(), gameDetails);
         sendSuccess(user.get(), String.format("Successfully joined room %s", room.get().getId()));
         broadcastGameDetails(userList, gameDetails);
         broadcastRoomDetails(userList, gameDetails);
@@ -59,6 +60,12 @@ public class LeaveRoomRequest extends ToServerMessage {
 
     private void deleteRoomIfOwnerLeft(User user, Room room, GameDetails gameDetails) {
         if (room.isUserOwner(user)) {
+            gameDetails.deleteRoom(room.getId());
+        }
+    }
+
+    private void deleteRoomIfGameInProgress(Room room, GameDetails gameDetails) {
+        if (room.isStarted()) {
             gameDetails.deleteRoom(room.getId());
         }
     }

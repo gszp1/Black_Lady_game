@@ -19,16 +19,16 @@ services:
                       - ./Users.sql:/docker-entrypoint-initdb.d/Users.sql
                     networks:
                       - backend_network
-    server_service:
-                  build:
-                       context: .
-                       dockerfile: Dockerfile
-                  ports:
-                    - "8080:8080"
-                  depends_on:
-                    - database_service
-                  networks:
-                    - backend_network
+#    server_service:
+#                  build:
+#                       context: .
+#                       dockerfile: Dockerfile
+#                  ports:
+#                    - "8080:8080"
+#                  depends_on:
+#                    - database_service
+#                  networks:
+#                    - backend_network
 
 networks:
   backend_network:

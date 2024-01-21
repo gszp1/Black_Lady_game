@@ -57,6 +57,7 @@ public class InputHandler extends Thread{
                 ToServerMessage message = (ToServerMessage) inputStream.readObject();
                 System.out.println(message.getMessageType());
                 message.setConnectionId(user.getConnectionID());
+                System.out.println(user.getConnectionID());
                 inputQueue.add(message);
             }
         } catch (ClassNotFoundException e) {

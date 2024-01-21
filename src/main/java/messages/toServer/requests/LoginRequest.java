@@ -52,6 +52,7 @@ public class LoginRequest extends ToServerMessage {
     @Override
     public boolean handle(UserList userList, DatabaseConnector databaseConnector, GameDetails gameDetails) throws IOException, SQLException{
         try {
+            System.out.println("Handling login request");
             Optional<UserData> userData = databaseConnector.getUserByEmail(email);
             // Check if user exists.
             if (!userData.isPresent()) {
@@ -65,12 +66,14 @@ public class LoginRequest extends ToServerMessage {
             // Check if such user is already logged in.
             Optional<User> user = userList.getUserByUserID(userData.get().getUserId());
             if (user.isPresent()) {
+                System.out.printf("User %s is present\n", user.get().getUserID());
                 throw new LoginFailureException(LoginFailureException.USER_ALREADY_LOGGED_IN);
             }
             Optional<User> thisUser = userList.getUserByConnectionId(this.getConnectionId());
             if (!thisUser.isPresent()) {
                 return false; // user who wanted to log in turned off application
             }
+            System.out.println("User connected!");
             thisUser.get().updateUserData(userData.get());
             sendResponse(SUCCESS, SUCCESS_RESPONSE, thisUser.get());
             broadcastRoomDetails(userList, gameDetails);

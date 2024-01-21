@@ -57,8 +57,10 @@ public class MessageProcessor extends Thread{
         try {
             while(!interrupted()) {
                 if (!inputQueue.isEmpty()) {
+                    System.out.println("Handling");
                     ToServerMessage message = inputQueue.remove();
                     System.out.println(message.getMessageType());
+                    System.out.println("HERE");
                     message.handle(userList, databaseConnector, gameDetails);
                 }
             }

@@ -32,7 +32,10 @@ public enum MessageType {
     WriteChatRequest("WriteChatRequest"),
     WriteChatResponse("WriteChatResponse"),
     StartGameRequest("StartGameRequest"),
-    StartGameResponse("StartGameResponse");
+    StartGameResponse("StartGameResponse"),
+    PlayCardRequest("PlayCardRequest"),
+    PlayCardResponse("PlayCardResponse"),
+    SkipGameRequest("SkipGameRequest");
 
     /**
      * String depicting message type.

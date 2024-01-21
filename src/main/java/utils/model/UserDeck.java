@@ -3,12 +3,17 @@ package utils.model;
 import cards.Card;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
 public class UserDeck {
 
     private List<Card> cards = new ArrayList();
+
+    public UserDeck() {
+        this.cards = new ArrayList<>();
+    }
 
     public UserDeck(List<Card> cards) {
         this.cards = cards;

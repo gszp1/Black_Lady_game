@@ -1,8 +1,10 @@
 package client.ui.panel;
 
 import cards.Card;
+import cards.CardSet;
 import client.ServerConnector;
 import client.ui.utils.Utils;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import exceptions.ClientRoomJoinException;
 import exceptions.ClientSocketConnectionException;
 import javafx.application.Platform;
@@ -13,7 +15,10 @@ import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import lombok.Builder;
@@ -25,14 +30,13 @@ import messages.dto.RoomView;
 import messages.dto.UserView;
 import messages.toClient.ToClientMessage;
 import messages.toClient.responses.RoomDetailsResponse;
-import messages.toServer.requests.InviteUserRequest;
-import messages.toServer.requests.LeaveRoomRequest;
-import messages.toServer.requests.RoomDetailsRequest;
-import messages.toServer.requests.WriteChatRequest;
+import messages.toServer.requests.*;
 import utils.model.ChatEntry;
+import utils.model.Room;
 
-import java.util.List;
-import java.util.Observable;
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 
@@ -40,6 +44,8 @@ import java.util.stream.Collectors;
 public class GameRoomPlay {
 
     private final int roomId;
+
+    private final Label gameStatusLabel = new Label();
 
     private final ServerConnector serverConnector;
 
@@ -49,6 +55,8 @@ public class GameRoomPlay {
 
     private BooleanProperty isReadyToStart = new SimpleBooleanProperty(false);
 
+    private BooleanProperty isOwnerOfStartedGame = new SimpleBooleanProperty(false);
+
     private BooleanProperty isMyRoom = new SimpleBooleanProperty(false);
 
     ObservableList<Score> scores = FXCollections.observableArrayList();
@@ -57,9 +65,23 @@ public class GameRoomPlay {
 
     private ObservableList<Card> myCards = FXCollections.observableArrayList();
 
+    private GridPane cardsGridPane = new GridPane();
+
     private Stage stage;
 
+    private Label myPlayerLabel = new Label("Player - me");
+
+    private Label leftPlayerLabel = new Label("Player - left");
+
+    private Label topPlayerLabel = new Label("Player - top");
+
+    private Label rightPlayerLabel = new Label("Player - right");
+
+    final Button skipPlayButton = new Button("Skip round");
+
     public void open() {
+
+        setDefaultPlayerLabelsStyle();
         HBox root = new HBox(20);
 
         VBox gamePanel = new VBox(10);
@@ -70,9 +92,9 @@ public class GameRoomPlay {
         HBox.setHgrow(scoreAndControls, Priority.NEVER);
         setupScoreAndControls(scoreAndControls);
 
-        root.getChildren().addAll(gamePanel, scoreAndControls);
+        root.getChildren().addAll(gameStatusLabel, gamePanel, scoreAndControls);
 
-        Scene primaryScene = new Scene(root, 1200, 1000);
+        Scene primaryScene = new Scene(root, 1750, 1000);
 
         Stage gamePlayWindow = new Stage();
         gamePlayWindow.setTitle(getTitle(roomId));
@@ -86,26 +108,25 @@ public class GameRoomPlay {
     }
 
     private void setupGamePanel(VBox gamePanel) {
-
         GridPane gridPane = new GridPane();
         gridPane.setVgap(5);
         gridPane.setHgap(5);
 
-
-        BorderPane borderPane = new BorderPane();
-        Text cardDisplay = new Text("Player's cards here");
-        final ImageView img1 = new ImageView("cards/AceCard_Diamonds.png");
-        img1.setFitWidth(100);
-        img1.setFitHeight(145);
-        final ImageView img2 = new ImageView("cards/AceCard_Hearts.png");
-        img2.setFitWidth(100);
-        img2.setFitHeight(145);
-        final ImageView img3 = new ImageView("cards/AceCard_Spades.png");
-        img3.setFitWidth(100);
-        img3.setFitHeight(145);
-        final ImageView imageView = new ImageView("cards/AceCard_Clubs.png");
-        imageView.setFitWidth(100);
-        imageView.setFitHeight(145);
+//
+//        BorderPane borderPane = new BorderPane();
+//        Text cardDisplay = new Text("Player's cards here");
+//        final ImageView img1 = new ImageView("cards/AceCard_Diamonds.png");
+//        img1.setFitWidth(100);
+//        img1.setFitHeight(145);
+//        final ImageView img2 = new ImageView("cards/AceCard_Hearts.png");
+//        img2.setFitWidth(100);
+//        img2.setFitHeight(145);
+//        final ImageView img3 = new ImageView("cards/AceCard_Spades.png");
+//        img3.setFitWidth(100);
+//        img3.setFitHeight(145);
+//        final ImageView imageView = new ImageView("cards/AceCard_Clubs.png");
+//        imageView.setFitWidth(100);
+//        imageView.setFitHeight(145);
 
 //        borderPane.setBottom(img1);
 ////        borderPane.setCenter(img1);
@@ -113,13 +134,13 @@ public class GameRoomPlay {
 //        borderPane.setTop(img3);
 //        borderPane.setRight(imageView);
 //        borderPane.setBottom();
-        gridPane.add(img1, 12, 2, 1, 1);
-        gridPane.add(img2, 13, 3, 1, 1);
-        gridPane.add(img3, 14, 4, 1, 1);
-        gridPane.add(imageView, 15, 5, 1, 1);
+//        gridPane.add(img1, 12, 2, 1, 1);
+//        gridPane.add(img2, 13, 3, 1, 1);
+//        gridPane.add(img3, 14, 4, 1, 1);
+//        gridPane.add(imageView, 15, 5, 1, 1);
 
 
-        gamePanel.getChildren().addAll(cardDisplay, gridPane);
+        gamePanel.getChildren().addAll(cardsGridPane, gridPane);
     }
 
     private void setupScoreAndControls(VBox scoreAndControls) {
@@ -165,10 +186,20 @@ public class GameRoomPlay {
         final Button startGameButton = new Button("Start Game");
         startGameButton.setStyle(getBigButtonStyle("green"));
         startGameButton.visibleProperty().bind(isReadyToStart);
+        startGameButton.setOnAction(e -> {
+            sendStartGameRequest();
+        });
 
-
-
-        scoreAndControls.getChildren().addAll(invitationHbox, chat, leaveGameButton, startGameButton);
+        skipPlayButton.setStyle(getBigButtonStyle("green"));
+        skipPlayButton.visibleProperty().bind(isOwnerOfStartedGame);
+        skipPlayButton.setOnAction(e -> {
+            try {
+                serverConnector.sendMessage(new SkipPlayRequest(roomId));
+            } catch (ClientSocketConnectionException ex) {
+                Utils.showError("Failed to send skip play request");
+            }
+        });
+        scoreAndControls.getChildren().addAll(invitationHbox, chat, leaveGameButton, startGameButton, skipPlayButton);
     }
 
     private ListCell<UserView> createUserViewListCell() {
@@ -240,6 +271,14 @@ public class GameRoomPlay {
         return vbox;
     }
 
+    private void sendStartGameRequest() {
+        try {
+            serverConnector.sendMessage(new StartGameRequest(roomId));
+        } catch (ClientSocketConnectionException e) {
+            Utils.showError("Failed to start game");
+        }
+    }
+
     private void sendInviteUserRequest(UserView userView) {
         try {
             serverConnector.sendMessage(new InviteUserRequest(userView.getEmail(), roomId));
@@ -275,16 +314,184 @@ public class GameRoomPlay {
     public void handleRoomDetailsResponse(RoomDetailsResponse message) {
         System.out.println("Handling room details response ");
         System.out.println(message.getRoomDetails().isMyRoom());
-        System.out.println(message);
-        System.out.println(getScores(message.getRoomDetails()));
+
+        System.out.println("Cards on table:");
+        System.out.println(message.getRoomDetails().getCardsOnTable());
+
         Platform.runLater(() -> {
+            if (message.getRoomDetails().isMyTurn()) {
+                gameStatusLabel.setText("Your turn!");
+            } else {
+                gameStatusLabel.setText("Not your turn");
+            }
+            gameStatusLabel.setStyle("-fx-font-size: 24pt; -fx-font-weight: bold;");
             userList.setAll(message.getRoomDetails().getNonInvitedUsers());
             isMyRoom.set(message.getRoomDetails().isMyRoom());
             isReadyToStart.set(message.getRoomDetails().isReadyToStart());
             scores.setAll(getScores(message.getRoomDetails()));
             chat.setAll(message.getRoomDetails().getChat());
             myCards.setAll(message.getRoomDetails().getMyCards());
+            isOwnerOfStartedGame.set(message.getRoomDetails().isMyRoom() && message.getRoomDetails().isStarted());
+            if (message.getRoomDetails().isStarted()) {
+                displayCards(
+                        myCards,
+                        message.getRoomDetails().isMyTurn(),
+                        Optional.ofNullable(message.getRoomDetails().getFirstCardOnTable())
+                );
+                setPlayerLabels(message.getRoomDetails());
+                displayCardsOnTable(message.getRoomDetails());
+                displayLastTrick(message.getRoomDetails());
+            } else if (message.getRoomDetails().isFinished()) {
+                cardsGridPane.getChildren().clear();
+                final Label finishedGameLabel = new Label("Game has finished");
+                setNotPlayingLabelStyle(finishedGameLabel);
+                cardsGridPane.add(finishedGameLabel, 7, 4);
+            }
         });
+    }
+
+    private void displayCardsOnTable(RoomDetails roomDetails) {
+        final List<String> relativeUserIdsOrder = getRelativeClockWisePlayersOrderUserIds(roomDetails);
+        final Map<String, Card> cardsOnTable = roomDetails.getCardsOnTable();
+
+        final String myUserId = relativeUserIdsOrder.get(0);
+        final String leftUserId = relativeUserIdsOrder.get(1);
+        final String topUserId = relativeUserIdsOrder.get(2);
+        final String rightUserId = relativeUserIdsOrder.get(3);
+
+        if (cardsOnTable.containsKey(myUserId)) {
+            showMyPlayedCard(cardsOnTable.get(myUserId));
+        }
+        if (cardsOnTable.containsKey(leftUserId)) {
+            showLeftPlayerCard(cardsOnTable.get(leftUserId));
+        }
+        if (cardsOnTable.containsKey(topUserId)) {
+            showTopPlayerCard(cardsOnTable.get(topUserId));
+        }
+        if (cardsOnTable.containsKey(rightUserId)) {
+            showRightPlayedCard(cardsOnTable.get(rightUserId));
+        }
+    }
+
+    private void showMyPlayedCard(Card card) {
+        cardsGridPane.add(getCardImage(card), 7, 4, 2, 1);
+    }
+
+    private void showLeftPlayerCard(Card card) {
+        cardsGridPane.add(getCardImage(card), 6, 3);
+    }
+
+    private void showTopPlayerCard(Card card) {
+        cardsGridPane.add(getCardImage(card), 7, 2, 2, 1);
+    }
+
+    private void showRightPlayedCard(Card card) {
+        cardsGridPane.add(getCardImage(card), 8, 3);
+    }
+
+    private void displayCards(List<Card> cards, boolean isMyTurn, Optional<Card> firstCardOnTable) {
+        cardsGridPane.getChildren().clear();
+        for (int i = 0; i < cards.size(); i++) {
+            final Card card = cards.get(i);
+            final ImageView img = getCardImage(cards.get(i));
+            if (isCardClickable(card, cards, isMyTurn, firstCardOnTable)) {
+                img.setOnMouseClicked(event -> {
+                    sendPlayCardRequest(card);
+                });
+            }
+            cardsGridPane.add(getDummyImage(), i + 1, 0);
+            cardsGridPane.add(img, i + 1, 6);
+        }
+        cardsGridPane.add(myPlayerLabel, 7, 5);
+        fillLeftColumn();
+        fillTopRow();
+        fillRightColumn();
+    }
+
+    private boolean isCardClickable(Card card, List<Card> cards, boolean isMyTurn, Optional<Card> firstCardOnTable) {
+        if (!isMyTurn) {
+            return false;
+        }
+        if (!firstCardOnTable.isPresent()) {
+            return true;
+        }
+        final boolean anyCardsMatchFirstCardColor = cards.stream()
+                .map(Card::getCardSet)
+                .anyMatch(firstCardOnTable.get().getCardSet()::equals);
+        if (anyCardsMatchFirstCardColor) {
+            return card.getCardSet().equals(firstCardOnTable.get().getCardSet());
+        }
+        return true;
+    }
+
+    private void fillLeftColumn() {
+        for (int i = 0; i < 7; i++) {
+            final ImageView image = Math.abs(3 - i) <= 1 ? getBackCardImage() : getDummyImage();
+            cardsGridPane.add(image, 0, i);
+        }
+        cardsGridPane.add(leftPlayerLabel, 1, 3);
+    }
+
+    private void fillTopRow() {
+        for (int i = 0; i < 15; i++) {
+            final ImageView image = Math.abs(7 - i) <= 1 ? getBackCardImage() : getDummyImage();
+            cardsGridPane.add(image, i, 0);
+        }
+        cardsGridPane.add(topPlayerLabel, 7, 1);
+    }
+
+    private void fillRightColumn() {
+        for (int i = 0; i < 7; i++) {
+            final ImageView image = Math.abs(3 - i) <= 1 ? getBackCardImage() : getDummyImage();
+            cardsGridPane.add(image, 14, i);
+        }
+        cardsGridPane.add(rightPlayerLabel, 13, 3);
+    }
+
+    private void sendPlayCardRequest(Card card) {
+        try {
+            serverConnector.sendMessage(new PlayCardRequest(roomId, card));
+        } catch (ClientSocketConnectionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private ImageView getSmallCardImage(Card card) {
+        final ImageView imageView = new ImageView(
+            String.format("cards/%s_%s.png", card.getCardType().getCardTypeName(), card.getCardSet().getTypeName())
+        );
+        imageView.setFitWidth(10);
+        imageView.setFitHeight(14);
+        return imageView;
+    }
+
+    private ImageView getCardImage(Card card) {
+        final ImageView imageView = new ImageView(
+          String.format("cards/%s_%s.png", card.getCardType().getCardTypeName(), card.getCardSet().getTypeName())
+        );
+        imageView.setFitWidth(90);
+        imageView.setFitHeight(126);
+        return imageView;
+    }
+
+    private ImageView getBackCardImage() {
+        final ImageView emptyCard = new ImageView("cards/Hidden.png");
+        emptyCard.setFitWidth(90);
+        emptyCard.setFitHeight(126);
+        return emptyCard;
+    }
+
+    private ImageView getDummyImage() {
+        int width = 90;
+        int height = 126;
+        final WritableImage writableImage = new WritableImage(width, height);
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                writableImage.getPixelWriter().setColor(x, y, Color.rgb(244, 244, 244, 255.0 / 255));
+            }
+        }
+        return new ImageView(writableImage);
     }
 
     private List<Score> getScores(RoomDetails room) {
@@ -306,6 +513,92 @@ public class GameRoomPlay {
                 "-fx-font-size: 20px; -fx-background-color: %s; -fx-padding: 20px; -fx-border-color: black; -fx-border-width: 2px; -fx-border-style: solid;",
                 color
         );
+    }
+
+    private void setPlayerLabels(RoomDetails roomDetails) {
+        Function<String, String> getStyle = getStyleFunction(roomDetails);
+        final List<String> relativeUserEmailsOrder = getRelativeClockWisePlayersOrderEmails(roomDetails);
+
+        myPlayerLabel.setText(relativeUserEmailsOrder.get(0));
+        myPlayerLabel.setStyle(getStyle.apply(relativeUserEmailsOrder.get(0)));
+
+        leftPlayerLabel.setText(relativeUserEmailsOrder.get(1));
+        leftPlayerLabel.setStyle(getStyle.apply(relativeUserEmailsOrder.get(1)));
+
+        topPlayerLabel.setText(relativeUserEmailsOrder.get(2));
+        topPlayerLabel.setStyle(getStyle.apply(relativeUserEmailsOrder.get(2)));
+
+        rightPlayerLabel.setText(relativeUserEmailsOrder.get(3));
+        rightPlayerLabel.setStyle(getStyle.apply(relativeUserEmailsOrder.get(3)));
+    }
+
+    private Function<String, String> getStyleFunction(RoomDetails roomDetails) {
+        return (String email) -> {
+            Optional<String> userId = roomDetails.getUserIdsToEmailsMapping().entrySet().stream()
+                    .filter(idToEmail -> idToEmail.getValue().equals(email))
+                    .map(Map.Entry::getKey)
+                    .findFirst();
+            if (userId.isPresent() && roomDetails.getCurrentPlayingUserId().equals(userId.get())) {
+                return "-fx-background-color: green; -fx-font-weight: bold; -fx-border-style: solid; -fx-border-color: black;";
+            }
+            return "-fx-background-color: orange; -fx-font-weight: bold; -fx-border-style: solid; -fx-border-color: black;";
+        };
+    }
+
+    private List<String> getRelativeClockWisePlayersOrderEmails(RoomDetails roomDetails) {
+        final List<String> userIdsOrder = getRelativeClockWisePlayersOrderUserIds(roomDetails);
+        final Map<String, String> userIdsToEmailMapping = roomDetails.getUserIdsToEmailsMapping();
+        return userIdsOrder.stream().map(userIdsToEmailMapping::get).collect(Collectors.toList());
+    }
+
+    private List<String> getRelativeClockWisePlayersOrderUserIds(RoomDetails roomDetails) {
+        final List<String> userIdsOrder = roomDetails.getUsersOrder();
+        final String myUserId = roomDetails.getMyUserId();
+        final List<String> userOrder = new ArrayList<>(userIdsOrder);
+        Collections.rotate(userOrder, (-1) * userOrder.indexOf(myUserId));
+        return userOrder;
+    }
+
+    private void setDefaultPlayerLabelsStyle() {
+        setNotPlayingLabelStyle(myPlayerLabel);
+        myPlayerLabel.setWrapText(true);
+        setNotPlayingLabelStyle(leftPlayerLabel);
+        leftPlayerLabel.setWrapText(true);
+        setNotPlayingLabelStyle(topPlayerLabel);
+        topPlayerLabel.setWrapText(true);
+        setNotPlayingLabelStyle(rightPlayerLabel);
+        rightPlayerLabel.setWrapText(true);
+    }
+
+    private void setPlayingLabelStyle(Label label) {
+        label.setStyle("-fx-background-color: green; -fx-font-weight: bold; -fx-border-style: solid; -fx-border-color: black;");
+    }
+
+    private void setNotPlayingLabelStyle(Label label) {
+        label.setStyle("-fx-background-color: orange; -fx-font-weight: bold; -fx-border-style: solid; -fx-border-color: black;");
+    }
+
+    private void displayLastTrick(RoomDetails roomDetails) {
+        final Map<String, Card> trickCards = roomDetails.getLastTrick();
+        final List<String> clockWiseUserIds = getRelativeClockWisePlayersOrderUserIds(roomDetails);
+        if (clockWiseUserIds.size() != trickCards.size()) {
+            return;
+        }
+
+        final ImageView bottomCard = getCardImage(trickCards.get(clockWiseUserIds.get(0)));
+        final ImageView leftCard = getCardImage(trickCards.get(clockWiseUserIds.get(1)));
+        final ImageView topCard = getCardImage(trickCards.get(clockWiseUserIds.get(2)));
+        final ImageView rightCard = getCardImage(trickCards.get(clockWiseUserIds.get(3)));
+
+        final Label lastTrickLabel = new Label("Last trick ->");
+        lastTrickLabel.setWrapText(true);
+        lastTrickLabel.setStyle("-fx-background-color: lightblue; -fx-font-weight: bold; -fx-border-style: solid; -fx-border-color: black;");
+
+        cardsGridPane.add(bottomCard, 13, 1);
+        cardsGridPane.add(leftCard, 12, 0);
+        cardsGridPane.add(topCard, 13, 0);
+        cardsGridPane.add(rightCard, 14, 0);
+        cardsGridPane.add(lastTrickLabel, 11, 0);
     }
 
     @Data

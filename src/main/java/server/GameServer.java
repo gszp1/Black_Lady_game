@@ -2,10 +2,12 @@ package server;
 
 import exceptions.ServerSocketConnectionException;
 import messages.toServer.ToServerMessage;
+import org.xml.sax.SAXException;
 import utils.GameDetails;
 import utils.User;
 import utils.UserList;
 
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -66,7 +68,7 @@ public class GameServer {
      * Creates ServerSocket in order to listen to incoming client connections.
      * @param args - command line arguments.
      */
-    public static void main(String [] args) {
+    public static void main(String [] args) throws ParserConfigurationException, IOException, SAXException {
         if (args.length < 1) {
             System.out.println("No database url given.");
             return;

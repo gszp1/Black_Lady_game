@@ -19,7 +19,7 @@ public class LogoutResponse extends ToClientMessage {
      * @param data     Information passed with message.
      * @param clientID ID of client.
      */
-    public LogoutResponse(String data, String clientID) {
+    public LogoutResponse(String data) {
         super(MessageType.LogoutResponse, data);
     }
 

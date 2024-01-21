@@ -4,6 +4,7 @@ import cards.Card;
 import client.ServerConnector;
 import lombok.Builder;
 import lombok.Data;
+import utils.User;
 import utils.UserList;
 import utils.model.ChatEntry;
 import utils.model.Room;
@@ -23,25 +24,45 @@ public class RoomDetails implements Serializable {
     private Map<UserView, Integer> scores;
 //    private List<TrickDetails> tricks;
     private List<Card> myCards;
-    private List<Card> cardsOnTable;
+//    private List<Card> cardsOnTable;
     private boolean isMyTurn;
     private boolean isMyRoom;
     private List<UserView> nonInvitedUsers;
     private boolean isReadyToStart;
     private List<ChatEntryView> chat;
+    private Map<String, Card> cardsOnTable;
+    private Map<String, Card> lastTrick;
+    private String lastTrickPicker;
+    private List<String> usersOrder;
+    private Map<String, String> userIdsToEmailsMapping;
+    private String myEmail;
+    private String myUserId;
+    private String currentPlayingUserId;
+    private Card firstCardOnTable;
+    private boolean isFinished;
 
     public static RoomDetails fromRoom(Room room, UserList userList, String loggedInUserId) {
+        System.out.println("Creating room details");
+        System.out.println(room.getCardsOnTable());
         return RoomDetails.builder()
                 .roomId(room.getId())
                 .started(room.isStarted())
                 .scores(getScores(room, loggedInUserId))
-                .myCards(getMyCards(room, loggedInUserId))
+                .myCards(new ArrayList<>(getMyCards(room, loggedInUserId)))
                 .cardsOnTable(room.getCardsOnTable())
-                .isMyTurn(false)
+                .lastTrick(room.getLastTrick())
+                .isMyTurn(room.isUserTurn(loggedInUserId))
                 .isMyRoom(room.isUserIdOwner(loggedInUserId))
                 .nonInvitedUsers(getNonInvitedUsers(room, userList, loggedInUserId))
                 .isReadyToStart(!room.isStarted() && room.isMaxParticipants() && room.isUserIdOwner(loggedInUserId))
                 .chat(room.getChatEntries().stream().map(ChatEntryView::fromChatEntry).collect(Collectors.toList()))
+                .usersOrder(room.getPlayersOrder())
+                .userIdsToEmailsMapping(room.getUserIdsToEmailsMapping())
+                .myEmail(getMyEmail(userList, loggedInUserId))
+                .myUserId(loggedInUserId)
+                .currentPlayingUserId(room.getCurrentPlayingUserId())
+                .firstCardOnTable(room.getFirstCardOnTable())
+                .isFinished(room.hasGameFinished())
                 .build();
     }
 
@@ -70,5 +91,11 @@ public class RoomDetails implements Serializable {
                 .filter(user -> !room.isUserInRoom(user))
                 .map(user -> UserView.fromUser(user, loggedInUserId))
                 .collect(Collectors.toList());
+    }
+
+    private static String getMyEmail(UserList userList, String loggedInUserId) {
+        return userList.getUserByUserID(loggedInUserId)
+                .map(User::getEmail)
+                .orElse("");
     }
 }

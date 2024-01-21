@@ -1,10 +1,13 @@
 package cards;
 
+import javafx.scene.image.ImageView;
 import lombok.Data;
+import lombok.ToString;
 
 import java.io.Serializable;
 
 @Data
+@ToString
 public class Card implements Serializable {
     /**
      * To which set (Spades, Hearts, Diamonds, Clubs) does this card belong.

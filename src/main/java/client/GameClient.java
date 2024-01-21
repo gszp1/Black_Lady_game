@@ -44,7 +44,7 @@ public class GameClient extends Application {
 
         primaryStage.setOnCloseRequest(event -> {
             if (loggedIn) {
-                LogoutRequest logoutRequest = new LogoutRequest("", "");
+                LogoutRequest logoutRequest = new LogoutRequest();
                 try {
                     serverConnector.sendMessage(logoutRequest);
                 } catch (ClientSocketConnectionException e) {

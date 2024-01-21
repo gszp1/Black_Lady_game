@@ -47,8 +47,17 @@ public class RoomPanelStage extends GameStage {
     @Override
     public void onOpen() {
         primaryStage.setTitle(ROOM_PANEL_STAGE_TITLE);
+        primaryStage.setOnCloseRequest(e -> logout());
         createView();
         sendGameDetailsRequest();
+    }
+
+    private void logout() {
+        try {
+            serverConnector.sendMessage(new LogoutRequest());
+        } catch (ClientSocketConnectionException e) {
+            Utils.showError("Failed to logout!");
+        }
     }
 
     public void createView() {

@@ -1,6 +1,7 @@
 package messages.toServer.requests;
 
 import messages.MessageType;
+import messages.toClient.responses.LogoutResponse;
 import messages.toServer.ToServerMessage;
 import server.DatabaseConnector;
 import utils.GameDetails;
@@ -21,8 +22,8 @@ public class LogoutRequest extends ToServerMessage {
      * @param data        - Information passed with message.
      * @param clientID    - ID of client.
      */
-    public LogoutRequest(String data, String clientID) {
-        super(MessageType.LogoutRequest, data, clientID);
+    public LogoutRequest() {
+        super(MessageType.LogoutRequest, "", null);
     }
 
     /**
@@ -41,7 +42,12 @@ public class LogoutRequest extends ToServerMessage {
             //todo remove user from all game rooms.
             user.close();
             userList.removeUser(user);
+            gameDetails.getRooms().stream()
+                    .filter(room -> room.getOwner().getUserID().equals(user.getUserID()))
+                    .forEach(room -> gameDetails.deleteRoom(room.getId()));
+            user.getOutputStream().writeObject(new LogoutResponse("Logged out"));
+            return true;
         }
-        return true;
+        return false;
     }
 }
