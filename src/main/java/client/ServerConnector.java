@@ -17,7 +17,7 @@ import exceptions.ClientSocketConnectionException;
  */
 public class ServerConnector extends Thread {
 
-    private final int SERVER_PORT = 8081;
+    private final int SERVER_PORT = 8080;
 
     private final String SERVER_IP = "0.0.0.0";
 

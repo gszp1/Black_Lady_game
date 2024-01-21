@@ -1,6 +1,5 @@
 package cards;
 
-import javafx.scene.image.ImageView;
 import lombok.Data;
 import lombok.ToString;
 

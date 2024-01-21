@@ -2,10 +2,6 @@ package utils.score;
 
 import cards.Card;
 import cards.CardSet;
-import cards.CardType;
-import client.GameClient;
-import client.ServerConnector;
-import exceptions.ClientSocketConnectionException;
 import utils.model.Play;
 
 import java.util.HashMap;
