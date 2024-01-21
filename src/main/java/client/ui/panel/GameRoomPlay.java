@@ -1,11 +1,8 @@
 package client.ui.panel;
 
 import cards.Card;
-import cards.CardSet;
 import client.ServerConnector;
 import client.ui.utils.Utils;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import exceptions.ClientRoomJoinException;
 import exceptions.ClientSocketConnectionException;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
@@ -15,27 +12,20 @@ import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import lombok.Builder;
 import lombok.Data;
 import javafx.scene.image.ImageView;
 import messages.dto.ChatEntryView;
 import messages.dto.RoomDetails;
-import messages.dto.RoomView;
 import messages.dto.UserView;
-import messages.toClient.ToClientMessage;
 import messages.toClient.responses.RoomDetailsResponse;
 import messages.toServer.requests.*;
-import utils.model.ChatEntry;
-import utils.model.Room;
 
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
