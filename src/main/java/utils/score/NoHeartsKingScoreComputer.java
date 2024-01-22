@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Score computer for NoHeartsKiers round.
+ * Score computer for NoHeartsKiers game.
  */
 public class NoHeartsKingScoreComputer extends ScoreComputer {
 
@@ -22,7 +22,7 @@ public class NoHeartsKingScoreComputer extends ScoreComputer {
     }
 
     /**
-     * Gets score for game.
+     * Gets score for round.
      * @param cardsOnTable Cards put on table.
      * @param firstCard First card in trick.
      * @param playOutId ID of turn.

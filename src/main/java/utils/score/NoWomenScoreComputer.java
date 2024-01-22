@@ -1,7 +1,6 @@
 package utils.score;
 
 import cards.Card;
-import cards.CardSet;
 import cards.CardType;
 import utils.model.Play;
 
