@@ -2,9 +2,6 @@ package messages.toClient.responses;
 
 import messages.MessageType;
 import messages.toClient.ToClientMessage;
-import messages.toServer.ToServerMessage;
-import server.DatabaseConnector;
-import utils.UserList;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -13,11 +10,10 @@ import java.sql.SQLException;
  * Class for logout response.
  */
 public class LogoutResponse extends ToClientMessage {
+
     /**
-     * Constructor for LogoutResponse.
-     *
-     * @param data     Information passed with message.
-     * @param clientID ID of client.
+     * Constructor, sets data.
+     * @param data Additional data.
      */
     public LogoutResponse(String data) {
         super(MessageType.LogoutResponse, data);
