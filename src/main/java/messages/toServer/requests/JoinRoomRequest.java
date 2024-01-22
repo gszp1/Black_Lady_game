@@ -29,6 +29,7 @@ public class JoinRoomRequest extends ToServerMessage {
 
     /**
      * Constructor for message.
+     * @param roomId - room's ID.
      */
     public JoinRoomRequest(int roomId) {
         super(MessageType.JoinRoomRequest, String.format("Request to join room %s", roomId), null);

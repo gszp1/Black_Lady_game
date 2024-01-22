@@ -17,7 +17,7 @@ public class RequestFailureException extends Exception {
 
     /**
      * Constructor, sets error cause.
-     * @param errorCause
+     * @param errorCause Cause of error.
      */
     public RequestFailureException(String errorCause) {
         this.errorCause = errorCause;

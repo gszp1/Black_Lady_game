@@ -19,7 +19,7 @@ public class GameDetailsResponse extends ToClientMessage {
 
     /**
      * Constructor, sets data and game room data.
-     * @param gameView
+     * @param gameView game room data.
      */
     public GameDetailsResponse(GameView gameView) {
         super(MessageType.GameDetailsResponse, gameView.toString());

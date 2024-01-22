@@ -81,6 +81,8 @@ public class GameServer {
     /**
      * Establishes connection with database.
      * Creates DatabaseConnector object.
+     * @param databaseURL URL of database.
+     * @return Boolean.
      */
     public boolean establishDatabaseConnection(String databaseURL) {
         try {
@@ -96,6 +98,8 @@ public class GameServer {
      * Start point for server.
      * Creates ServerSocket in order to listen to incoming client connections.
      * @param args - command line arguments.
+     * @throws IOException Connection exception.
+     * @throws SAXException XML parser error.
      */
     public static void main(String [] args) throws ParserConfigurationException, IOException, SAXException {
         if (args.length < 1) {

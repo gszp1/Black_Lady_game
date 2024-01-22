@@ -81,7 +81,6 @@ public class UserData {
 
     /**
      * Setter for user's username.
-     * @return User's new username.
      */
     public void setUsername(String username) {
         this.username = username;
@@ -97,7 +96,7 @@ public class UserData {
 
     /**
      * Setter for user's password.
-     * @return User's new password.
+     * @param password user's password.
      */
     public void setPassword(String password) {
         this.password = password;

@@ -26,7 +26,7 @@ public class NoKiersScoreComputer extends ScoreComputer {
      * @param cardsOnTable Cards put on table.
      * @param firstCard First card in trick.
      * @param playOutId ID of turn.
-     * @return
+     * @return Map binding userID with score.
      */
     @Override
     public Map<String, Integer> computeSinglePlayOut(Map<String, Card> cardsOnTable, Card firstCard, int playOutId) {

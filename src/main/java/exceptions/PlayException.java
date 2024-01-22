@@ -32,6 +32,7 @@ public class PlayException extends Exception {
 
     /**
      * Constructor, sets cause of error.
+     * @param errorCause Cause of error.
      */
     public PlayException(String errorCause) {
         this.errorCause = errorCause;

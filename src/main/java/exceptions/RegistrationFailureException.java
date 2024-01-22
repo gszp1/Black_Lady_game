@@ -37,6 +37,7 @@ public class RegistrationFailureException extends Exception{
 
     /**
      * Constructor, sets error cause.
+     * @param exceptionReason Cause of exception.
      */
     public RegistrationFailureException(String exceptionReason) {
         this.exceptionReason = exceptionReason;
@@ -44,6 +45,7 @@ public class RegistrationFailureException extends Exception{
 
     /**
      * Returns error cause.
+     * @return Cause of exception.
      */
     public String getExceptionReason() {
         return exceptionReason;

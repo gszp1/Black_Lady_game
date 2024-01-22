@@ -24,6 +24,8 @@ public class LoginResponse extends ToClientMessage {
 
     /**
      * Constructor for login response.
+     * @param result Requested action result.
+     * @param additionalData Response additional data.
      */
     public LoginResponse(String result, String additionalData) {
         super(MessageType.LoginResponse, String.format("%s|%s", result, additionalData));
@@ -35,7 +37,6 @@ public class LoginResponse extends ToClientMessage {
      * Login response handling procedure.
      * @return - Boolean telling if operation was successful.
      * @throws IOException - Exception thrown if something went wrong with sending the message.
-     * @throws SQLException Thrown if something went wrong with database connection.
      */
     @Override
     public boolean handle() throws IOException {

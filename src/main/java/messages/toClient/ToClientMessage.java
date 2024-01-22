@@ -22,8 +22,8 @@ public abstract class ToClientMessage implements Serializable {
 
     /**
      * Constructor, sets message's type and data.
-     * @param messageType
-     * @param data
+     * @param messageType Type of message.
+     * @param data message data.
      */
     public ToClientMessage(MessageType messageType, String data) {
         this.messageType = messageType;
@@ -47,7 +47,7 @@ public abstract class ToClientMessage implements Serializable {
 
     /**
      * Getter for data
-     * @return
+     * @return data.
      */
     public String getData() {
         return data;

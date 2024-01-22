@@ -37,8 +37,8 @@ public class DeleteRoomResponse extends ToClientMessage {
 
     /**
      * Default procedure.
-     * @return
-     * @throws IOException
+     * @return Boolean.
+     * @throws IOException Thrown upon connection error.
      */
     @Override
     public boolean handle() throws IOException {

@@ -23,6 +23,8 @@ public class RegisterResponse extends ToClientMessage {
 
     /**
      * Constructor for register response.
+     * @param result Requested action result.
+     * @param additionalData Response's additional data.
      */
     public RegisterResponse(String result, String additionalData) {
         super(MessageType.RegisterResponse, String.format("%s|%s", result, additionalData));
@@ -34,7 +36,6 @@ public class RegisterResponse extends ToClientMessage {
      * Register response message handling procedure.
      * @return result of message handling: true or false.
      * @throws IOException Thrown if something went wrong with server-user connection.
-     * @throws SQLException Thrown if something went wrong with database connection.
      */
     @Override
     public boolean handle() throws IOException {

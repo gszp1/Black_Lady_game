@@ -39,6 +39,7 @@ public class MessageProcessor extends Thread{
      * @param inputQueue - Reference to inputQueue.
      * @param userList - Reference to userList.
      * @param databaseConnector - Reference to DatabaseConnector.
+     * @param gameDetails - Server game details.
      */
     public MessageProcessor(
             ConcurrentLinkedQueue<ToServerMessage> inputQueue,

@@ -23,7 +23,6 @@ public class LogoutResponse extends ToClientMessage {
      * Logout response message handling procedure.
      * @return result of message handling: true or false.
      * @throws IOException Thrown if something went wrong with server-user connection.
-     * @throws SQLException Thrown if something went wrong with database connection.
      */
     @Override
     public boolean handle() throws IOException{
