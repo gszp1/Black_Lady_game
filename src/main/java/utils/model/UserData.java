@@ -1,5 +1,8 @@
 package utils.model;
 
+/**
+ * Class for storing user information.
+ */
 public class UserData {
 
     /**

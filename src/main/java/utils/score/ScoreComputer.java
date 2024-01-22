@@ -10,10 +10,21 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+
+/**
+ * Class for score calculation.
+ */
 public abstract class ScoreComputer {
 
+    /**
+     * Current tour.
+     */
     private final Play play;
 
+    /**
+     * Constructor, sets play.
+     * @param play Tour.
+     */
     public ScoreComputer(Play play) {
         this.play = play;
     }
