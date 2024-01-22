@@ -32,7 +32,7 @@ public class WriteChatResponse extends ToClientMessage {
         this.result = result;
         this.details = details;
     }
-    
+
     /**
      * Default handling procedure.
      * @return false;
