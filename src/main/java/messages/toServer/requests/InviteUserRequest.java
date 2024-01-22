@@ -30,6 +30,8 @@ public class InviteUserRequest extends ToServerMessage {
 
     /**
      * Constructor for message.
+     * @param receiverEmail Receiver's email.
+     * @param roomId Room's ID.
      */
     public InviteUserRequest(String receiverEmail, int roomId){
         super(MessageType.InviteUserRequest, String.format("Invite user request to room %s sent to email %s", roomId, receiverEmail), null);
