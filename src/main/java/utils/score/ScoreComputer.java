@@ -17,18 +17,23 @@ import java.util.stream.Collectors;
 public abstract class ScoreComputer {
 
     /**
-     * Current tour.
+     * Current game.
      */
     private final Play play;
 
     /**
      * Constructor, sets play.
-     * @param play Tour.
+     * @param play Game.
      */
     public ScoreComputer(Play play) {
         this.play = play;
     }
 
+    /**
+     * Calculates user's scores
+     * @return
+     * @throws PlayException
+     */
     public Map<String, Integer> computeScores() throws PlayException {
         assertCardsPutLengthEqual();
         final int playOutCount = new ArrayList<>(play.getCardsPut().values()).get(0).getCardsCount();
@@ -40,6 +45,11 @@ public abstract class ScoreComputer {
         return scores;
     }
 
+    /**
+     * Updates player's scores.
+     * @param base Current players scores.
+     * @param playOutScore Current turn scores.
+     */
     private void adjustScores(
             Map<String, Integer> base,
             Map<String, Integer> playOutScore
@@ -52,6 +62,10 @@ public abstract class ScoreComputer {
         });
     }
 
+    /**
+     * Initializes scores with 0.
+     * @return Map<userId, score>
+     */
     private Map<String, Integer> getInitialScores() {
         return play.getUserIds().stream()
                 .collect(Collectors.toMap(Function.identity(), (userId) -> 0));
@@ -65,12 +79,28 @@ public abstract class ScoreComputer {
         return cardsOnTable;
     }
 
+    /**
+     * Get first card in i'th turn.
+     * @param i Turn number.
+     * @return First card of i'th turn.
+     */
     private Card getFirstCard(int i) {
         return play.getFirstCards().get(i);
     }
 
+    /**
+     * Calculates scores for turn.
+     * @param cardsOnTable Cards put on table.
+     * @param firstCard First card in trick.
+     * @param playOutId ID of turn.
+     * @return Map <userID, score>
+     */
     public abstract Map<String, Integer> computeSinglePlayOut(Map<String, Card> cardsOnTable, Card firstCard, int playOutId);
 
+    /**
+     * Checks if users' decks are equal length.
+     * @throws PlayException Thrown when decks are not of equal length.
+     */
     private void assertCardsPutLengthEqual() throws PlayException {
         boolean areCardDeckSizesEqual = play.getCardsPut().values().stream()
                 .map((userDeck) -> userDeck.getCards().size())
@@ -81,6 +111,13 @@ public abstract class ScoreComputer {
         }
     }
 
+    /**
+     * Checks if user with userID picks the trick.
+     * @param userId User's trick.
+     * @param cardsOnTable Cards put on table.
+     * @param firstCard First card put on table.
+     * @return Boolean.
+     */
     protected boolean isTrickPicker(String userId, Map<String, Card> cardsOnTable, Card firstCard) {
         return userId.equals(PlayUtils.getTrickPicker(cardsOnTable, firstCard));
     }
