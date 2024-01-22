@@ -24,7 +24,7 @@ public class GameDetailsRequest extends ToServerMessage {
     public GameDetailsRequest() {
         super(MessageType.GameDetailsRequest, "Game details request", null);
     }
-    
+
     /**
      * Request Handling procedure.
      * @param userList List of users.
