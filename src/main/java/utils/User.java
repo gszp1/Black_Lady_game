@@ -63,9 +63,8 @@ public class User {
     }
 
     /**
-     * Updates userID of user to whom this message was sent.
-     * @param userData userData to set.
-     * @return true if update was successful, false if not.
+     * Updates user's data with information from userData.
+     * @param userData User's data.
      */
     public void updateUserData(UserData userData) {
         setUserID(userData.getUserId());
@@ -73,6 +72,9 @@ public class User {
         setEmail(userData.getEmail());
     }
 
+    /**
+     * Closes connection sockets.
+     */
     public void close() {
         try {
             if (outputStream != null) {
