@@ -46,7 +46,7 @@ public abstract class ToClientMessage implements Serializable {
     }
 
     /**
-     * Getter for m
+     * Getter for data
      * @return
      */
     public String getData() {
