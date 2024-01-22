@@ -9,10 +9,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Score computer for Robber game.
+ */
 public class RobberScoreComputer extends ScoreComputer{
 
+    /**
+     * Score computers.
+     */
     private List<ScoreComputer> scoreComputers = new ArrayList<>();
 
+    /**
+     * Constructor.
+     * @param play Current game.
+     */
     public RobberScoreComputer(Play play) {
         super(play);
         scoreComputers.add(new NoTrickScoreComputer(play));
@@ -23,6 +33,13 @@ public class RobberScoreComputer extends ScoreComputer{
         scoreComputers.add(new NoSevenLastTrickScoreComputer(play));
     }
 
+    /**
+     * Gets score for round.
+     * @param cardsOnTable Cards put on table.
+     * @param firstCard First card in trick.
+     * @param playOutId ID of turn.
+     * @return scores
+     */
     @Override
     public Map<String, Integer> computeSinglePlayOut(Map<String, Card> cardsOnTable, Card firstCard, int playOutId) {
         Map<String, Integer> scores = new HashMap<>();
