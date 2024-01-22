@@ -3,22 +3,23 @@ package messages.toClient.responses;
 import messages.MessageType;
 import messages.toClient.ToClientMessage;
 import messages.toServer.ToServerMessage;
-import messages.toServer.requests.LoginRequest;
-import server.DatabaseConnector;
-import utils.UserList;
 
 import java.io.IOException;
 import java.sql.SQLException;
-
-//todo: adapt to needs when implementing login
 
 /**
  * Class for login response message.
  */
 public class LoginResponse extends ToClientMessage {
 
+    /**
+     * Requested action result.
+     */
     private final String result;
 
+    /**
+     * Response details.
+     */
     private final String additionalData;
 
     /**
@@ -41,14 +42,26 @@ public class LoginResponse extends ToClientMessage {
         return true;
     }
 
+    /**
+     * Checks if requested operation was finished successfully.
+     * @return Boolean stating operation result.
+     */
     public boolean isSuccess() {
         return this.result.equals(ToServerMessage.SUCCESS);
     }
 
+    /**
+     * Getter for result;
+     * @return Result.
+     */
     public String getResult() {
         return result;
     }
 
+    /**
+     * Getter for additional data.
+     * @return Additional data.
+     */
     public String getAdditionalData() {
         return additionalData;
     }
