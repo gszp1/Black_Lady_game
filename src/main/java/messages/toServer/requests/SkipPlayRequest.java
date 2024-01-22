@@ -67,6 +67,7 @@ public class SkipPlayRequest extends ToServerMessage {
         broadcastRoomDetails(userList, gameDetails);
         return true;
     }
+
     /**
      * Method for sending error.
      * @param user Error message receiver.
