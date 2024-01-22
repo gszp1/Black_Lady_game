@@ -39,6 +39,7 @@ public class UserList {
 
     /**
      * Synchronized method for retrieving user from list by his ID.
+     * @param connectionId User's connectionID.
      * @return - User.
      */
     synchronized public Optional<User> getUserByConnectionId(String connectionId) {

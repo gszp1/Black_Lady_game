@@ -51,6 +51,7 @@ public class User {
      * @param email - user's Email.
      * @param username - user's username.
      * @param socket - Server side socket, to which client's app socket is connected.
+     * @param connectionID - user's connectionID.
      * @throws IOException - Input Output Exception thrown when it's impossible to open output stream.
      */
     public User(String connectionID, String userID, String email, String username, Socket socket) throws IOException {

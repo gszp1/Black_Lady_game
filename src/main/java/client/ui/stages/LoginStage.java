@@ -188,7 +188,7 @@ public class LoginStage extends GameStage {
 
     /**
      * Message handler for login .
-     * @param message
+     * @param message Handled message.
      */
     @Override
     public void handleMessage(ToClientMessage message) {

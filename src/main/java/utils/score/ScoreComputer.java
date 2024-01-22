@@ -31,8 +31,8 @@ public abstract class ScoreComputer {
 
     /**
      * Calculates user's scores
-     * @return
-     * @throws PlayException
+     * @return Map with user scores.
+     * @throws PlayException Exception for error during playtime.
      */
     public Map<String, Integer> computeScores() throws PlayException {
         assertCardsPutLengthEqual();
@@ -93,7 +93,7 @@ public abstract class ScoreComputer {
      * @param cardsOnTable Cards put on table.
      * @param firstCard First card in trick.
      * @param playOutId ID of turn.
-     * @return Map <userID, score>
+     * @return Map binding userID with score.
      */
     public abstract Map<String, Integer> computeSinglePlayOut(Map<String, Card> cardsOnTable, Card firstCard, int playOutId);
 

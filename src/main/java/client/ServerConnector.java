@@ -55,6 +55,7 @@ public class ServerConnector extends Thread {
 
     /**
      * Constructor for ServerConnector, opens connection with server, opens output and input streams.
+     * @param gameClient Reference to game client.
      * @throws ClientSocketConnectionException Exception thrown upon connection error.
      */
     public ServerConnector(GameClient gameClient) throws ClientSocketConnectionException {

@@ -24,8 +24,8 @@ public class StartGameResponse extends ToClientMessage {
 
     /**
      * Constructor, sets result and description.
-     * @param result
-     * @param description
+     * @param result Requested action result.
+     * @param description Response description.
      */
     public StartGameResponse(String result, String description) {
         super(MessageType.StartGameResponse, String.format("%s|%s", result, description));

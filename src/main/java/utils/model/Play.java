@@ -79,7 +79,7 @@ public class Play {
 
     /**
      * Distributes cards between players.
-     * @return Map <UserID, Cards>
+     * @return Map binding userID with User deck.
      */
     private Map<String, UserDeck> getInitialDecks() {
         final List<Card> cards = Utils.getFullDeck();
@@ -170,7 +170,7 @@ public class Play {
 
     /**
      * Maps users' IDs to their emails
-     * @return Map <ID, email>.
+     * @return Map binding userID with email.
      */
     public Map<String, String> getUserIdsToEmailsMapping() {
         return userIdsToEmails;

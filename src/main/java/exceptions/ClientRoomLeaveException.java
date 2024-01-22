@@ -22,7 +22,7 @@ public class ClientRoomLeaveException extends Exception {
 
     /**
      * Constructor, sets error cause.
-     * @param errorCause
+     * @param errorCause Cause of error.
      */
     public ClientRoomLeaveException(String errorCause) {
         this.errorCause = errorCause;

@@ -52,6 +52,7 @@ public abstract class ToServerMessage implements Serializable {
      * Constructor for message.
      * @param messageType - Type of message.
      * @param data - Information passed with message.
+     * @param connectionId User's connection ID.
      */
     public ToServerMessage(MessageType messageType, String data, String connectionId) {
         this.messageType = messageType;
@@ -63,6 +64,7 @@ public abstract class ToServerMessage implements Serializable {
      * ToServerMessage handling procedure, behaviour defined by type of message.
      * @param userList List of users.
      * @param databaseConnector Connection to database.
+     * @param gameDetails Rooms data.
      * @return - Boolean telling if operation was successful.
      * @throws IOException - Exception thrown if something went wrong with sending the message.
      * @throws SQLException Thrown if something went wrong with database connection.
@@ -99,6 +101,7 @@ public abstract class ToServerMessage implements Serializable {
 
     /**
      * Setter for client's ID
+     * @param connectionId User's connection ID.
      */
     public void setConnectionId(String connectionId) {
         this.connectionId = connectionId;

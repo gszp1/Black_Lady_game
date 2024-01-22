@@ -12,9 +12,9 @@ public class PlayUtils {
 
     /**
      * Gets player who takes trick.
-     * @param cardsOnTable
-     * @param firstCard
-     * @return
+     * @param cardsOnTable Cards put on table.
+     * @param firstCard first card of trick.
+     * @return UserID.
      */
     public static String getTrickPicker(Map<String, Card> cardsOnTable, Card firstCard) {
         final Card winningCard = getWinningCard(cardsOnTable, firstCard);

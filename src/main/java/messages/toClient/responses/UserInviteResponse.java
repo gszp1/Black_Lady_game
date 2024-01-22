@@ -24,8 +24,8 @@ public class UserInviteResponse extends ToClientMessage {
 
     /**
      * Constructor, sets user's ID and data.
-     * @param data
-     * @param userID
+     * @param data Response data.
+     * @param userID User ID.
      */
     public UserInviteResponse(String data, String userID) {
         super(MessageType.InviteUserResponse, data);
