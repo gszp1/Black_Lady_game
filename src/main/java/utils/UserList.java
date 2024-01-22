@@ -45,14 +45,29 @@ public class UserList {
         return users.stream().filter(user -> user.getConnectionID().equals(connectionId)).findFirst();
     }
 
+    /**
+     * Synchronized method for searching for user with given ID.
+     * @param userID - User's ID.
+     * @return Optional with found user.
+     */
     synchronized public Optional<User> getUserByUserID(String userID) {
         return users.stream().filter(user -> userID.equals(user.getUserID())).findFirst();
     }
 
+    /**
+     * Synchronized method for searching for user with given username.
+     * @param username - User's username.
+     * @return Optional with found user.
+     */
     synchronized public Optional<User> getUserByUsername(String username) {
         return users.stream().filter(user -> user.getUsername().equals(username)).findFirst();
     }
 
+    /**
+     * Synchronized method for searching for user with given email.
+     * @param email - User's email.
+     * @return Optional with found user.
+     */
     synchronized public Optional<User> getUserByEmail(String email) {
         return users.stream().filter(user -> user.getEmail().equals(email)).findFirst();
     }
