@@ -7,12 +7,26 @@ import utils.model.Play;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Score computer for NoWomen game.
+ */
 public class NoWomenScoreComputer extends ScoreComputer {
 
+    /**
+     * Constructor.
+     * @param play Current game.
+     */
     public NoWomenScoreComputer(Play play) {
         super(play);
     }
 
+    /**
+     * Gets score for round.
+     * @param cardsOnTable Cards put on table.
+     * @param firstCard First card in trick.
+     * @param playOutId ID of turn.
+     * @return scores
+     */
     @Override
     public Map<String, Integer> computeSinglePlayOut(Map<String, Card> cardsOnTable, Card firstCard, int playOutId) {
         Map<String, Integer> scores = new HashMap<>();
@@ -21,7 +35,15 @@ public class NoWomenScoreComputer extends ScoreComputer {
         });
         return scores;
     }
-
+    
+    /**
+     * Gets score for given card.
+     * @param userId ID of user.
+     * @param card Card.
+     * @param cardsOnTable Carts on table.
+     * @param firstCard First card of trick.
+     * @return Score.
+     */
     private int getScore(String userId, Card card, Map<String, Card> cardsOnTable, Card firstCard) {
         if (!isTrickPicker(userId, cardsOnTable, firstCard)) {
             return 0;
