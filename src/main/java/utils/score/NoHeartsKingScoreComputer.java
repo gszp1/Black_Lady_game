@@ -26,7 +26,7 @@ public class NoHeartsKingScoreComputer extends ScoreComputer {
      * @param cardsOnTable Cards put on table.
      * @param firstCard First card in trick.
      * @param playOutId ID of turn.
-     * @return
+     * @return scores
      */
     @Override
     public Map<String, Integer> computeSinglePlayOut(Map<String, Card> cardsOnTable, Card firstCard, int playOutId) {
