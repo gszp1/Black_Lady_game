@@ -16,18 +16,41 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Optional;
 
+/**
+ * Request for playing selected card.
+ */
 public class PlayCardRequest extends ToServerMessage {
 
+    /**
+     * Room's ID.
+     */
     private final int roomId;
 
+    /**
+     * Card.
+     */
     private final Card card;
 
+    /**
+     * Constructor.
+     * @param roomId Room's ID.
+     * @param card Card;
+     */
     public PlayCardRequest(int roomId, Card card) {
         super(MessageType.PlayCardRequest, String.format("%s|%s", roomId, card.toString()), null);
         this.roomId = roomId;
         this.card = card;
     }
 
+    /**
+     * Request Handling procedure.
+     * @param userList List of users.
+     * @param databaseConnector Connection to database.
+     * @param gameDetails Data about active game rooms.
+     * @return Boolean.
+     * @throws IOException Exception for connection errors.
+     * @throws SQLException Exception for database connection error.
+     */
     @Override
     public boolean handle(UserList userList, DatabaseConnector databaseConnector, GameDetails gameDetails) throws IOException, SQLException {
         Optional<User> loggedInUser = userList.getUserByConnectionId(getConnectionId());
@@ -52,6 +75,13 @@ public class PlayCardRequest extends ToServerMessage {
         return true;
     }
 
+    /**
+     * Play given card.
+     * @param user User.
+     * @param card Card.
+     * @param room Room.
+     * @return Boolean.
+     */
     private boolean playCard(User user, Card card, Room room) {
         try {
             room.playCard(user.getUserID(), card);
@@ -62,6 +92,11 @@ public class PlayCardRequest extends ToServerMessage {
         }
     }
 
+    /**
+     * Sends error.
+     * @param user User.
+     * @param message Error message.
+     */
     private void sendError(User user, String message) {
         try {
             user.getOutputStream().writeObject(new PlayCardResponse(ToServerMessage.FAILURE, message));
@@ -70,6 +105,11 @@ public class PlayCardRequest extends ToServerMessage {
         }
     }
 
+    /**
+     * Sends success message.
+     * @param user User.
+     * @param message Success message.
+     */
     private void sendSuccess(User user, String message) {
         try {
             user.getOutputStream().writeObject(new PlayCardResponse(ToServerMessage.SUCCESS, message));
