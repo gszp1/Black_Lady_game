@@ -15,18 +15,35 @@ import java.util.Optional;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.stream.Collectors;
 
+/**
+ * Request for creating game room.
+ */
 @Getter
 public class JoinRoomRequest extends ToServerMessage {
 
+    /**
+     * ID of room to which user wants to join.
+     */
     final private int roomId;
 
+    /**
+     * Constructor for message.
+     */
     public JoinRoomRequest(int roomId) {
         super(MessageType.JoinRoomRequest, String.format("Request to join room %s", roomId), null);
         this.roomId = roomId;
     }
 
+    /**
+     * Request Handling procedure.
+     * @param userList List of users.
+     * @param databaseConnector Connection to database.
+     * @param gameDetails Data about active game rooms.
+     * @return Boolean.
+     * @throws IOException Exception for connection errors.
+     * @throws SQLException Exception for database connection error.
+     */
     @Override
     public boolean handle(UserList userList, DatabaseConnector databaseConnector, GameDetails gameDetails) throws IOException, SQLException {
         Optional<User> user = userList.getUserByConnectionId(getConnectionId());
@@ -48,6 +65,12 @@ public class JoinRoomRequest extends ToServerMessage {
         return true;
     }
 
+    /**
+     * Adds user to room.
+     * @param room Room.
+     * @param user User.
+     * @return Boolean.
+     */
     private boolean joinRoom(Room room, User user) {
         try {
             room.join(user);
@@ -58,6 +81,11 @@ public class JoinRoomRequest extends ToServerMessage {
         }
     }
 
+    /**
+     * Sends error to user.
+     * @param user User.
+     * @param error Error.
+     */
     private void sendError(User user, String error) {
         try {
             user.getOutputStream().writeObject(new JoinRoomResponse(ToServerMessage.FAILURE, error));
@@ -66,6 +94,11 @@ public class JoinRoomRequest extends ToServerMessage {
         }
     }
 
+    /**
+     * Sends success message to user.
+     * @param user User.
+     * @param message Message contents.
+     */
     private void sendSuccess(User user, String message) {
         try {
             user.getOutputStream().writeObject(new JoinRoomResponse(ToServerMessage.SUCCESS, message));
