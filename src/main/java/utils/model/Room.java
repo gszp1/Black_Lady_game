@@ -7,35 +7,58 @@ import exceptions.PlayException;
 import lombok.Getter;
 import server.ConfigReader;
 import utils.User;
-import utils.score.NoTrickScoreComputer;
 import utils.score.ScoreComputer;
 
 import java.util.*;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
- *
+ * Class for game room.
  */
 @Getter
 public class Room {
 
+    /**
+     * Max number of players.
+     */
     public static int MAX_PLAYERS = 4;
 
+    /**
+     *
+     */
     private final List<Function<Play, ScoreComputer>> scoreComputerGetters;
 
+    /**
+     * Room's ID.
+     */
     private int id;
 
+    /**
+     * List of players in room.
+     */
     private List<User> participants = new ArrayList<>();
 
+    /**
+     * Map of players and their scores.
+     */
     private Map<String, Integer> scores = new HashMap<>();
 
+    /**
+     * Reference to user who is the owner to this room.
+     */
     private User owner;
 
+    /**
+     * History of plays.
+     */
     private List<Play> playHistory = new ArrayList<>();
+
 
     private Optional<Play> play = Optional.empty();
 
+    /**
+     * Chant entries.
+     */
     private List<ChatEntry> chatEntries = new ArrayList<>();
 
     public Room(User owner, int id) {
@@ -137,18 +160,6 @@ public class Room {
     public boolean hasGameFinished() {
         return playHistory.size() == scoreComputerGetters.size();
     }
-
-//    synchronized public void playCard(User user, Card card) throws PlayException {
-//        if (!userHasCard(user.getUserID(), card)) {
-//            throw new PlayException(String.format("%s does not have card %s", user.getUsername(), card.toString()));
-//        }
-//    }
-//
-//    private boolean userHasCard(String userId, Card card) {
-//        return play.map(value -> value.getCards(userId).stream()
-//                .anyMatch(c -> c.getCardType().equals(card.getCardType()) && c.getCardSet().equals(card.getCardSet()))
-//        ).orElse(false);
-//    }
 
     public Optional<User> getParticipantByEmail(String email) {
         return participants.stream()
