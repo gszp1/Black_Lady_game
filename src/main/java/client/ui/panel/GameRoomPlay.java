@@ -33,40 +33,94 @@ import java.util.stream.Collectors;
 @Data
 public class GameRoomPlay {
 
+    /**
+     * Room's ID.
+     */
     private final int roomId;
 
+    /**
+     * Label for game status.
+     */
     private final Label gameStatusLabel = new Label();
 
+    /**
+     * Reference to serverConnector.
+     */
     private final ServerConnector serverConnector;
 
+    /**
+     * List of users.
+     */
     private ObservableList<UserView> userList = FXCollections.observableArrayList();
 
+    /**
+     * Game started flag.
+     */
     boolean started = false;
 
+    /**
+     * Is game ready to start.
+     */
     private BooleanProperty isReadyToStart = new SimpleBooleanProperty(false);
 
+    /**
+     * Is user owner of started game.
+     */
     private BooleanProperty isOwnerOfStartedGame = new SimpleBooleanProperty(false);
 
+    /**
+     * Is user owner of room.
+     */
     private BooleanProperty isMyRoom = new SimpleBooleanProperty(false);
 
+    /**
+     * User's scores.
+     */
     ObservableList<Score> scores = FXCollections.observableArrayList();
 
+    /**
+     * Chat.
+     */
     private ObservableList<ChatEntryView> chat = FXCollections.observableArrayList();
 
+    /**
+     * User's cards.
+     */
     private ObservableList<Card> myCards = FXCollections.observableArrayList();
 
+    /**
+     * Grid pane for displaying cards.
+     */
     private GridPane cardsGridPane = new GridPane();
 
+    /**
+     * Stage.
+     */
     private Stage stage;
 
+    /**
+     * Label for displaying this player name (bottom)
+     */
     private Label myPlayerLabel = new Label("Player - me");
 
+    /**
+     * Label for displaying other player name (Left)
+     */
     private Label leftPlayerLabel = new Label("Player - left");
 
+    /**
+     * Label for displaying other player name (Top)
+     */
     private Label topPlayerLabel = new Label("Player - top");
 
+    /**
+     * Label for displaying other player name (Right)
+     */
     private Label rightPlayerLabel = new Label("Player - right");
 
+    /**
+     * Button for skipping round.
+     */
     final Button skipPlayButton = new Button("Skip round");
 
     public void open() {
@@ -97,6 +151,10 @@ public class GameRoomPlay {
         sendRoomDetailsRequest();
     }
 
+    /**
+     * Sets up game panel given by argument.
+     * @param gamePanel game panel.
+     */
     private void setupGamePanel(VBox gamePanel) {
         GridPane gridPane = new GridPane();
         gridPane.setVgap(5);
