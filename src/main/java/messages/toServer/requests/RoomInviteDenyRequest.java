@@ -13,14 +13,33 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Optional;
 
+/**
+ * Request for invitation denial.
+ */
+
 public class RoomInviteDenyRequest extends ToServerMessage {
 
+    /**
+     * Room's ID.
+     */
     private final int roomId;
 
+    /**
+     * Inviter's email.
+     */
     private final String inviterEmail;
 
+    /**
+     * Denier's email.
+     */
     private final String denierEmail;
 
+    /**
+     * Constructor.
+     * @param roomId Room's ID.
+     * @param inviterEmail Inviter's email.
+     * @param denierEmail Denier's email.
+     */
     public RoomInviteDenyRequest(int roomId, String inviterEmail, String denierEmail) {
         super(MessageType.RoomInviteDenyRequest, String.format("%s|%s|%s", roomId, inviterEmail, denierEmail), null);
         this.roomId = roomId;
@@ -28,6 +47,15 @@ public class RoomInviteDenyRequest extends ToServerMessage {
         this.denierEmail = denierEmail;
     }
 
+    /**
+     * Request Handling procedure.
+     * @param userList List of users.
+     * @param databaseConnector Connection to database.
+     * @param gameDetails Data about active game rooms.
+     * @return Boolean.
+     * @throws IOException Exception for connection errors.
+     * @throws SQLException Exception for database connection error.
+     */
     @Override
     public boolean handle(UserList userList, DatabaseConnector databaseConnector, GameDetails gameDetails) throws IOException, SQLException {
         Optional<User> denier = userList.getUserByConnectionId(getConnectionId());
@@ -51,6 +79,11 @@ public class RoomInviteDenyRequest extends ToServerMessage {
         return true;
     }
 
+    /**
+     * Method for sending error.
+     * @param user Error message receiver.
+     * @param msg Error message.
+     */
     private void sendError(User user, String msg) {
         try {
             user.getOutputStream().writeObject(new InviteUserResponse(ToServerMessage.FAILURE, msg));
@@ -59,6 +92,11 @@ public class RoomInviteDenyRequest extends ToServerMessage {
         }
     }
 
+    /**
+     * Method for sending success message.
+     * @param user Success message receiver.
+     * @param msg Success message.
+     */
     private void sendSuccess(User user, String msg) {
         try {
             user.getOutputStream().writeObject(new InviteUserResponse(ToServerMessage.SUCCESS, msg));
