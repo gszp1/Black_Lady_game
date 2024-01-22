@@ -35,7 +35,7 @@ public class NoWomenScoreComputer extends ScoreComputer {
         });
         return scores;
     }
-    
+
     /**
      * Gets score for given card.
      * @param userId ID of user.
