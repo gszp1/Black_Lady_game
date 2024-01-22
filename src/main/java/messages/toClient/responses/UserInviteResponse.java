@@ -3,20 +3,30 @@ package messages.toClient.responses;
 import lombok.Getter;
 import messages.MessageType;
 import messages.toClient.ToClientMessage;
-import messages.toServer.ToServerMessage;
-import server.DatabaseConnector;
-import utils.UserList;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
+/**
+ * Response for user invitation request.
+ */
 @Getter
 public class UserInviteResponse extends ToClientMessage {
 
+    /**
+     * Response data.
+     */
     private final String data;
 
+    /**
+     * User's ID.
+     */
     private final String userId;
 
+    /**
+     * Constructor, sets user's ID and data.
+     * @param data
+     * @param userID
+     */
     public UserInviteResponse(String data, String userID) {
         super(MessageType.InviteUserResponse, data);
         this.data = data;
