@@ -123,6 +123,13 @@ public class GameRoomPlay {
      */
     final Button skipPlayButton = new Button("Skip round");
 
+    /**
+     * Opens the game play window, displaying the game UI and managing user interactions.
+     * This method sets up the main components, such as the game panel, score, and controls,
+     * and initializes the communication with the server to retrieve or update game details.
+     * The window includes player labels, a game status label, and buttons for player interactions.
+     * The window is responsive to user actions, and closing the window triggers a leave game request.
+     */
     public void open() {
 
         setDefaultPlayerLabelsStyle();
@@ -162,6 +169,11 @@ public class GameRoomPlay {
         gamePanel.getChildren().addAll(cardsGridPane, gridPane);
     }
 
+    /**
+     * Sets up the score and controls section of the game UI, including game status, score table,
+     * user invitation, chat, leave game button, start game button, and skip play button.
+     * @param scoreAndControls The VBox container to which the score and controls components will be added.
+     */
     private void setupScoreAndControls(VBox scoreAndControls) {
         // Game status
         Text gameStatus = new Text("Game Status: Not Started");
@@ -221,6 +233,11 @@ public class GameRoomPlay {
         scoreAndControls.getChildren().addAll(invitationHbox, chat, leaveGameButton, startGameButton, skipPlayButton);
     }
 
+    /**
+     * Creates a customized ListCell for rendering UserView items in a JavaFX ComboBox.
+     * this list cell displays the user email.
+     * @return The customized ListCell for user email.
+     */
     private ListCell<UserView> createUserViewListCell() {
         return new ListCell<UserView>() {
             @Override
@@ -235,6 +252,10 @@ public class GameRoomPlay {
         };
     }
 
+    /**
+     *  Configures columns of JavaFX scoreTable.
+     * @param scoreTable Table of user scores.
+     */
     private void setupScoreTable(TableView<Score> scoreTable) {
         // Set up the score table with dummy data for illustration
         TableColumn<Score, String> playerColumn = new TableColumn<>("Player");
@@ -248,6 +269,10 @@ public class GameRoomPlay {
         scoreTable.getColumns().addAll(playerColumn, scoreColumn);
     }
 
+    /**
+     * Sets up VBox representing chat.
+     * @return Chat VBox.
+     */
     private VBox createChat() {
         VBox vbox = new VBox(20);
 
@@ -290,6 +315,9 @@ public class GameRoomPlay {
         return vbox;
     }
 
+    /**
+     * Sends start game request.
+     */
     private void sendStartGameRequest() {
         try {
             serverConnector.sendMessage(new StartGameRequest(roomId));
@@ -298,6 +326,10 @@ public class GameRoomPlay {
         }
     }
 
+    /**
+     * Sends user invitation.
+     * @param userView User view representing user to be invited.
+     */
     private void sendInviteUserRequest(UserView userView) {
         try {
             serverConnector.sendMessage(new InviteUserRequest(userView.getEmail(), roomId));
@@ -306,6 +338,9 @@ public class GameRoomPlay {
         }
     }
 
+    /**
+     * Sends request for room details.
+     */
     private void sendRoomDetailsRequest() {
         try {
             serverConnector.sendMessage(new RoomDetailsRequest(roomId));
@@ -314,6 +349,9 @@ public class GameRoomPlay {
         }
     }
 
+    /**
+     * Sends request to leave game room.
+     */
     private void sendLeaveGameRequest() {
         try {
             serverConnector.sendMessage(new LeaveRoomRequest(roomId));
@@ -322,6 +360,10 @@ public class GameRoomPlay {
         }
     }
 
+    /**
+     * Sends request for writing message to chat.
+     * @param message Message to be inserted into chat.
+     */
     private void sendWriteChatRequest(String message) {
         try {
             serverConnector.sendMessage(new WriteChatRequest(roomId, message));
@@ -330,13 +372,12 @@ public class GameRoomPlay {
         }
     }
 
+    /**
+     * Handles the response containing details about the game room.
+     * This method updates the UI components based on the received room details.
+     * @param message Message containing data for UI update.
+     */
     public void handleRoomDetailsResponse(RoomDetailsResponse message) {
-        System.out.println("Handling room details response ");
-        System.out.println(message.getRoomDetails().isMyRoom());
-
-        System.out.println("Cards on table:");
-        System.out.println(message.getRoomDetails().getCardsOnTable());
-
         Platform.runLater(() -> {
             if (message.getRoomDetails().isMyTurn()) {
                 gameStatusLabel.setText("Your turn!");
@@ -369,6 +410,10 @@ public class GameRoomPlay {
         });
     }
 
+    /**
+     * Displays cards in UI.
+     * @param roomDetails Room details.
+     */
     private void displayCardsOnTable(RoomDetails roomDetails) {
         final List<String> relativeUserIdsOrder = getRelativeClockWisePlayersOrderUserIds(roomDetails);
         final Map<String, Card> cardsOnTable = roomDetails.getCardsOnTable();
@@ -392,22 +437,44 @@ public class GameRoomPlay {
         }
     }
 
+    /**
+     * Shows user's card in trick.
+     * @param card Card.
+     */
     private void showMyPlayedCard(Card card) {
         cardsGridPane.add(getCardImage(card), 7, 4, 2, 1);
     }
 
+    /**
+     * Shows user on left card in trick.
+     * @param card Card.
+     */
     private void showLeftPlayerCard(Card card) {
         cardsGridPane.add(getCardImage(card), 6, 3);
     }
 
+    /**
+     * Shows user on top card in trick.
+     * @param card Card.
+     */
     private void showTopPlayerCard(Card card) {
         cardsGridPane.add(getCardImage(card), 7, 2, 2, 1);
     }
 
+    /**
+     * Shows user on right card in trick.
+     * @param card Card.
+     */
     private void showRightPlayedCard(Card card) {
         cardsGridPane.add(getCardImage(card), 8, 3);
     }
 
+    /**
+     * Displays cards on table.
+     * @param cards Cards.
+     * @param isMyTurn Is this user's move.
+     * @param firstCardOnTable First card in trick.
+     */
     private void displayCards(List<Card> cards, boolean isMyTurn, Optional<Card> firstCardOnTable) {
         cardsGridPane.getChildren().clear();
         for (int i = 0; i < cards.size(); i++) {
@@ -427,6 +494,15 @@ public class GameRoomPlay {
         fillRightColumn();
     }
 
+
+    /**
+     * Checks if card is clickable.
+     * @param card Card.
+     * @param cards Cards.
+     * @param isMyTurn Is this user's turn.
+     * @param firstCardOnTable First card in trick.
+     * @return Boolean
+     */
     private boolean isCardClickable(Card card, List<Card> cards, boolean isMyTurn, Optional<Card> firstCardOnTable) {
         if (!isMyTurn) {
             return false;
@@ -443,6 +519,9 @@ public class GameRoomPlay {
         return true;
     }
 
+    /**
+     * Fills left column with cards.
+     */
     private void fillLeftColumn() {
         for (int i = 0; i < 7; i++) {
             final ImageView image = Math.abs(3 - i) <= 1 ? getBackCardImage() : getDummyImage();
@@ -451,6 +530,9 @@ public class GameRoomPlay {
         cardsGridPane.add(leftPlayerLabel, 1, 3);
     }
 
+    /**
+     * Fills top row with cards.
+     */
     private void fillTopRow() {
         for (int i = 0; i < 15; i++) {
             final ImageView image = Math.abs(7 - i) <= 1 ? getBackCardImage() : getDummyImage();
@@ -459,6 +541,9 @@ public class GameRoomPlay {
         cardsGridPane.add(topPlayerLabel, 7, 1);
     }
 
+    /**
+     * Fills right column with cards.
+     */
     private void fillRightColumn() {
         for (int i = 0; i < 7; i++) {
             final ImageView image = Math.abs(3 - i) <= 1 ? getBackCardImage() : getDummyImage();
@@ -467,6 +552,10 @@ public class GameRoomPlay {
         cardsGridPane.add(rightPlayerLabel, 13, 3);
     }
 
+    /**
+     * Sends request to play given card.
+     * @param card Card.
+     */
     private void sendPlayCardRequest(Card card) {
         try {
             serverConnector.sendMessage(new PlayCardRequest(roomId, card));
@@ -475,15 +564,11 @@ public class GameRoomPlay {
         }
     }
 
-    private ImageView getSmallCardImage(Card card) {
-        final ImageView imageView = new ImageView(
-            String.format("cards/%s_%s.png", card.getCardType().getCardTypeName(), card.getCardSet().getTypeName())
-        );
-        imageView.setFitWidth(10);
-        imageView.setFitHeight(14);
-        return imageView;
-    }
-
+    /**
+     * Gets card's front image.
+     * @param card Card.
+     * @return Card's front image.
+     */
     private ImageView getCardImage(Card card) {
         final ImageView imageView = new ImageView(
           String.format("cards/%s_%s.png", card.getCardType().getCardTypeName(), card.getCardSet().getTypeName())
@@ -493,6 +578,10 @@ public class GameRoomPlay {
         return imageView;
     }
 
+    /**
+     * Gets card's back image.
+     * @return Card's back image.
+     */
     private ImageView getBackCardImage() {
         final ImageView emptyCard = new ImageView("cards/Hidden.png");
         emptyCard.setFitWidth(90);
@@ -500,6 +589,10 @@ public class GameRoomPlay {
         return emptyCard;
     }
 
+    /**
+     * Creates dummy image.
+     * @return dummy image.
+     */
     private ImageView getDummyImage() {
         int width = 90;
         int height = 126;
@@ -513,20 +606,38 @@ public class GameRoomPlay {
         return new ImageView(writableImage);
     }
 
+    /**
+     * Returns players scores.
+     * @param room Room.
+     * @return List of scores.
+     */
     private List<Score> getScores(RoomDetails room) {
         return room.getScores().entrySet().stream()
                 .map(entry -> new Score(entry.getKey().getEmail(), entry.getValue()))
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Closes stage.
+     */
     public void close() {
         stage.close();
     }
 
+    /**
+     * Getter for title.
+     * @param roomId Room's ID.
+     * @return Room's title.
+     */
     private String getTitle(int roomId) {
         return String.format("Hearts Game - Room %s", roomId);
     }
 
+    /**
+     * Generates and returns a JavaFX style string for styling a button with given properties.
+     * @param color Button color.
+     * @return Styling string.
+     */
     private String getBigButtonStyle(String color) {
         return String.format(
                 "-fx-font-size: 20px; -fx-background-color: %s; -fx-padding: 20px; -fx-border-color: black; -fx-border-width: 2px; -fx-border-style: solid;",
@@ -534,6 +645,10 @@ public class GameRoomPlay {
         );
     }
 
+    /**
+     * Sets player's labels with their emails.
+     * @param roomDetails Game room data.
+     */
     private void setPlayerLabels(RoomDetails roomDetails) {
         Function<String, String> getStyle = getStyleFunction(roomDetails);
         final List<String> relativeUserEmailsOrder = getRelativeClockWisePlayersOrderEmails(roomDetails);
@@ -551,6 +666,11 @@ public class GameRoomPlay {
         rightPlayerLabel.setStyle(getStyle.apply(relativeUserEmailsOrder.get(3)));
     }
 
+    /**
+     * Gets styling function for player email labels, user gets green background, while other players get orange one.
+     * @param roomDetails Room's data.
+     * @return Styling function.
+     */
     private Function<String, String> getStyleFunction(RoomDetails roomDetails) {
         return (String email) -> {
             Optional<String> userId = roomDetails.getUserIdsToEmailsMapping().entrySet().stream()
@@ -564,12 +684,22 @@ public class GameRoomPlay {
         };
     }
 
+    /**
+     * Gets a list of player emails ordered in a relative clockwise direction;
+     * @param roomDetails Room's data.
+     * @return List of emails.
+     */
     private List<String> getRelativeClockWisePlayersOrderEmails(RoomDetails roomDetails) {
         final List<String> userIdsOrder = getRelativeClockWisePlayersOrderUserIds(roomDetails);
         final Map<String, String> userIdsToEmailMapping = roomDetails.getUserIdsToEmailsMapping();
         return userIdsOrder.stream().map(userIdsToEmailMapping::get).collect(Collectors.toList());
     }
 
+    /**
+     * Gets a list of player IDs ordered in a relative clockwise direction;
+     * @param roomDetails Room's data.
+     * @return List of IDs.
+     */
     private List<String> getRelativeClockWisePlayersOrderUserIds(RoomDetails roomDetails) {
         final List<String> userIdsOrder = roomDetails.getUsersOrder();
         final String myUserId = roomDetails.getMyUserId();
@@ -578,6 +708,9 @@ public class GameRoomPlay {
         return userOrder;
     }
 
+    /**
+     * Sets default users' email label styles.
+     */
     private void setDefaultPlayerLabelsStyle() {
         setNotPlayingLabelStyle(myPlayerLabel);
         myPlayerLabel.setWrapText(true);
@@ -589,14 +722,26 @@ public class GameRoomPlay {
         rightPlayerLabel.setWrapText(true);
     }
 
+    /**
+     * Sets label style for player.
+     * @param label Styled label.
+     */
     private void setPlayingLabelStyle(Label label) {
         label.setStyle("-fx-background-color: green; -fx-font-weight: bold; -fx-border-style: solid; -fx-border-color: black;");
     }
 
+    /**
+     * Sets label style for other player.
+     * @param label Styled label.
+     */
     private void setNotPlayingLabelStyle(Label label) {
         label.setStyle("-fx-background-color: orange; -fx-font-weight: bold; -fx-border-style: solid; -fx-border-color: black;");
     }
 
+    /**
+     * Displays trick from previous round.
+     * @param roomDetails Room's data.
+     */
     private void displayLastTrick(RoomDetails roomDetails) {
         final Map<String, Card> trickCards = roomDetails.getLastTrick();
         final List<String> clockWiseUserIds = getRelativeClockWisePlayersOrderUserIds(roomDetails);
@@ -620,6 +765,9 @@ public class GameRoomPlay {
         cardsGridPane.add(lastTrickLabel, 11, 0);
     }
 
+    /**
+     * Class for storing user's email and score.
+     */
     @Data
     public class Score {
         final String email;
