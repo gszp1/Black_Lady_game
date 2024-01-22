@@ -29,6 +29,9 @@ public class MessageProcessor extends Thread{
      */
     private final DatabaseConnector databaseConnector;
 
+    /**
+     * Server game details.
+     */
     private final GameDetails gameDetails;
 
     /**
@@ -60,7 +63,6 @@ public class MessageProcessor extends Thread{
                     System.out.println("Handling");
                     ToServerMessage message = inputQueue.remove();
                     System.out.println(message.getMessageType());
-                    System.out.println("HERE");
                     message.handle(userList, databaseConnector, gameDetails);
                 }
             }
