@@ -2,7 +2,6 @@ package client;
 
 import client.ui.stages.GameStageType;
 import client.ui.stages.GameStagesController;
-import client.ui.stages.LoginStage;
 import exceptions.ClientSocketConnectionException;
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
@@ -12,26 +11,41 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import messages.toServer.requests.LogoutRequest;
 
+
+/**
+ * Main class for client application.
+ */
 public class GameClient extends Application {
 
+    /**
+     * Connector with server.
+     */
     private ServerConnector serverConnector = null;
 
-    private boolean registrationWindowOpened = false;
-
-    private Label loginNotificationLabel;
-
-    private Label registerNotificationLabel;
-
-    private LoginStage loginStage;
-
+    /**
+     * Controller for managing program stages.
+     */
     private GameStagesController gameStagesController;
 
+    /**
+     * Flag stating that user logged in or not.
+     */
     private boolean loggedIn = false;
 
+    /**
+     * Entry point for Client application.
+     * @param args Program arguments.
+     */
     public static void main(String[] args) {
         launch(args);
     }
 
+    /**
+     * The entry point of the application. Initializes the primary stage, establishes a connection
+     * with the server, and sets up the necessary components for handling game stages.
+     * @param primaryStage the primary stage for this application, onto which
+     * the application scene can be set.
+     */
     @Override
     public void start(Stage primaryStage) {
         if (!establishConnectionWithServer()) {
@@ -54,10 +68,13 @@ public class GameClient extends Application {
         });
 
         gameStagesController.open(GameStageType.LOGIN);
-        // Show the Stage
         primaryStage.show();
     }
 
+    /**
+     * Initializes ServerConnector.
+     * @return Boolean for initialization status.
+     */
     private boolean establishConnectionWithServer() {
         try {
             if (serverConnector == null) {
@@ -70,6 +87,10 @@ public class GameClient extends Application {
         return true;
     }
 
+    /**
+     * Shows alert box with given content for 3 seconds.
+     * @param content Alert message.
+     */
     public static void showAlert(String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 /**
  * Class representing cards deck.
  */
-
 public class Deck {
 
     /**

@@ -20,12 +20,24 @@ import java.util.Optional;
  */
 public class LoginRequest extends ToServerMessage {
 
+    /**
+     * Success response contents.
+     */
     public static String SUCCESS_RESPONSE = "Login successful.";
 
+    /**
+     * User email.
+     */
     private final String email;
 
+    /**
+     * User password.
+     */
     private final String password;
 
+    /**
+     * Client's ID.
+     */
     private String clientId;
 
     /**
@@ -45,6 +57,7 @@ public class LoginRequest extends ToServerMessage {
      * Login request handling procedure.
      * @param userList List of users.
      * @param databaseConnector Connection to database.
+     * @param gameDetails Game server data.
      * @return - Boolean telling if operation was successful.
      * @throws IOException - Exception thrown if something went wrong with sending the message.
      * @throws SQLException Thrown if something went wrong with database connection.

@@ -21,12 +21,25 @@ import java.util.regex.Matcher;
  * Class for register request message.
  */
 public class RegisterRequest extends ToServerMessage {
+
+    /**
+     * Success response.
+     */
     public static String REGISTRATION_SUCCESS_RESPONSE = "Registration successful.";
 
+    /**
+     * User's email.
+     */
     private final String email;
 
+    /**
+     * User's username.
+     */
     private final String username;
 
+    /**
+     * User's password.
+     */
     private final String password;
 
     /**
@@ -46,6 +59,7 @@ public class RegisterRequest extends ToServerMessage {
      * Register request handling procedure.
      * @param userList List of users.
      * @param databaseConnector Connection to database.
+     * @param gameDetails Game server details.
      * @return - Boolean telling if operation was successful.
      * @throws IOException - Exception thrown if something went wrong with sending the message.
      * @throws SQLException Thrown if something went wrong with database connection.

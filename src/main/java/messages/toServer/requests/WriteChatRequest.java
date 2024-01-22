@@ -14,17 +14,42 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Optional;
 
+
+/**
+ * Request for writing message to chat.
+ */
 public class WriteChatRequest extends ToServerMessage {
 
+    /**
+     * Room's ID.
+     */
     private final int roomId;
 
+    /**
+     * Message.
+     */
     private final String message;
 
+    /**
+     * Constructor.
+     * @param roomId Room's ID.
+     * @param message Message.
+     */
     public WriteChatRequest(int roomId, String message) {
         super(MessageType.WriteChatRequest, message, null);
         this.roomId = roomId;
         this.message = message;
     }
+
+    /**
+     * Request Handling procedure.
+     * @param userList List of users.
+     * @param databaseConnector Connection to database.
+     * @param gameDetails Data about active game rooms.
+     * @return Boolean.
+     * @throws IOException Exception for connection errors.
+     * @throws SQLException Exception for database connection error.
+     */
     @Override
     public boolean handle(UserList userList, DatabaseConnector databaseConnector, GameDetails gameDetails) throws IOException, SQLException {
         Optional<User> user = userList.getUserByConnectionId(getConnectionId());
@@ -44,6 +69,13 @@ public class WriteChatRequest extends ToServerMessage {
         return true;
     }
 
+    /**
+     * Write message to chat.
+     * @param room Room.
+     * @param user User.
+     * @param msg Message.
+     * @return Boolean.
+     */
     private boolean writeToChat(Room room, User user, String msg) {
         try {
             room.writeToChat(user.getEmail(), msg);
@@ -54,14 +86,30 @@ public class WriteChatRequest extends ToServerMessage {
         }
     }
 
+    /**
+     * Sends success message.
+     * @param user User.
+     * @param msg Message.
+     */
     private void sendSuccess(User user, String msg) {
         send(user, msg, true);
     }
 
+    /**
+     * Sends error message.
+     * @param user User.
+     * @param msg Message.
+     */
     private void sendError(User user, String msg) {
         send(user, msg, false);
     }
 
+    /**
+     * Send response.
+     * @param user User.
+     * @param msg Message.
+     * @param isSuccess Message writing success.
+     */
     private void send(User user, String msg, boolean isSuccess) {
         try {
             user.getOutputStream().writeObject(new WriteChatResponse(

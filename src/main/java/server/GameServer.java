@@ -22,26 +22,55 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class GameServer {
 
+    /**
+     * Server port.
+     */
     private final int PORT = 8080;
 
+    /**
+     * Queue to store messages to handle.
+     */
     private final ConcurrentLinkedQueue<ToServerMessage> inputQueue;
 
+    /**
+     * List of users.
+     */
     private final UserList userList;
 
+    /**
+     * Message processor.
+     */
     private MessageProcessor messageProcessor;
 
+    /**
+     * Database connector.
+     */
     private DatabaseConnector databaseConnector;
 
+    /**
+     * Details of game server.
+     */
     private GameDetails gameDetails;
 
+    /**
+     * Map for user handlers.
+     */
     private Map<String, InputHandler> userHandlersMap = new ConcurrentHashMap<>();
 
+    /**
+     * Constructor.
+     */
     public GameServer() {
         inputQueue = new ConcurrentLinkedQueue<>();
         userList = new UserList();
         gameDetails = new GameDetails();
     }
 
+    /**
+     * Adds user to users list.
+     * @param user New user.
+     * @throws ServerSocketConnectionException Thrown when a connection error occurred.
+     */
     public void addUser(User user) throws ServerSocketConnectionException {
         userList.addUser(user);
         InputHandler inputHandler = new InputHandler(user, inputQueue);

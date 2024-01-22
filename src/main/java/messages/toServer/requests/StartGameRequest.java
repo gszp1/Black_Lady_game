@@ -14,15 +14,34 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Optional;
 
+/**
+ * Request for game start.
+ */
 public class StartGameRequest extends ToServerMessage {
 
+    /**
+     * Room's ID.
+     */
     private int roomId;
 
+    /**
+     * Constructor.
+     * @param roomId Room's ID.
+     */
     public StartGameRequest(int roomId) {
         super(MessageType.StartGameRequest, String.format("Start game %s", roomId), null);
         this.roomId = roomId;
     }
 
+    /**
+     * Request Handling procedure.
+     * @param userList List of users.
+     * @param databaseConnector Connection to database.
+     * @param gameDetails Data about active game rooms.
+     * @return Boolean.
+     * @throws IOException Exception for connection errors.
+     * @throws SQLException Exception for database connection error.
+     */
     @Override
     public boolean handle(UserList userList, DatabaseConnector databaseConnector, GameDetails gameDetails) throws IOException, SQLException {
         Optional<User> user = userList.getUserByConnectionId(getConnectionId());
@@ -42,6 +61,11 @@ public class StartGameRequest extends ToServerMessage {
         return true;
     }
 
+    /**
+     * Method for sending error.
+     * @param user Error message receiver.
+     * @param message Error message.
+     */
     private void sendError(User user, String message) {
         try {
             user.getOutputStream().writeObject(new StartGameResponse(ToServerMessage.FAILURE, message));
@@ -50,6 +74,12 @@ public class StartGameRequest extends ToServerMessage {
         }
     }
 
+    /**
+     * Start game.
+     * @param user User.
+     * @param room Room.
+     * @return Boolean
+     */
     private boolean startGame(User user, Room room) {
         try {
             if (!room.isUserIdOwner(user.getUserID())){

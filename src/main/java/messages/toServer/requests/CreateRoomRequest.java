@@ -1,6 +1,5 @@
 package messages.toServer.requests;
 
-import exceptions.ClientRoomJoinException;
 import messages.MessageType;
 import messages.toServer.ToServerMessage;
 import server.DatabaseConnector;
@@ -13,6 +12,9 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Optional;
 
+/**
+ * Request for creating game room.
+ */
 public class CreateRoomRequest extends ToServerMessage {
     /**
      * Constructor for message.
@@ -21,6 +23,15 @@ public class CreateRoomRequest extends ToServerMessage {
         super(MessageType.CreateGameRequest, "Create Game request", "");
     }
 
+    /**
+     * Handling procedure for create room request.
+     * @param userList List of users.
+     * @param databaseConnector Connection to database.
+     * @param gameDetails Data about active game rooms.
+     * @return Boolean.
+     * @throws IOException Exception for connection errors.
+     * @throws SQLException Exception for database connection error.
+     */
     @Override
     public boolean handle(UserList userList, DatabaseConnector databaseConnector, GameDetails gameDetails) throws IOException, SQLException {
         Optional<User> user = findUserByConnectionId(userList);

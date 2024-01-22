@@ -2,22 +2,23 @@ package messages.toClient.responses;
 
 import messages.MessageType;
 import messages.toClient.ToClientMessage;
-import messages.toServer.ToServerMessage;
-import server.DatabaseConnector;
-import utils.UserList;
 
 import java.io.IOException;
 import java.sql.SQLException;
-
-//todo: adapt to needs when implementing register
 
 /**
  * Class for register response message.
  */
 public class RegisterResponse extends ToClientMessage {
 
+    /**
+     * Requested action result.
+     */
     private final String result;
 
+    /**
+     * Response additional data.
+     */
     private final String additionalData;
 
     /**
@@ -40,10 +41,18 @@ public class RegisterResponse extends ToClientMessage {
         return false;
     }
 
+    /**
+     * Gets requested action result.
+     * @return Result.
+     */
     public String getResult() {
         return result;
     }
 
+    /**
+     * Getter for additional data.
+     * @return additional data.
+     */
     public String getAdditionalData() {
         return additionalData;
     }

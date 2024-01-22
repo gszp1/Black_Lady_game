@@ -17,8 +17,14 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * Game configuration reader.
+ */
 public class ConfigReader {
-
+    /**
+     * Reads XML file and maps rule names with score computers.
+     * @return List of mapped
+     */
     public List<Function<Play, ScoreComputer>> readConfig() {
         try {
             String filePath = "src/main/resources/configurations/configuration.xml";
@@ -39,6 +45,11 @@ public class ConfigReader {
         }
     }
 
+    /**
+     * Returns score computer by name.
+     * @param gameType Name of game type.
+     * @return Score computer for given game type.
+     */
     private Function<Play, ScoreComputer> getScoreComputer(String gameType) {
         if (gameType.equals("NoTrick")) {
             return (NoTrickScoreComputer::new);

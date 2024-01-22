@@ -13,18 +13,39 @@ import java.util.Optional;
 
 public class DatabaseConnector {
 
+    /**
+     * Username for logging into database.
+     */
     private final String DB_USERNAME = "root";
 
+    /**
+     * Password for logging into database.
+     */
     private final String DB_PASSWORD = "root";
 
+    /**
+     * Connection with database.
+     */
     private Connection connection;
 
+    /**
+     * Database URL.
+     */
     private final String dbServiceUrl;
 
+    /**
+     * Prepared statement for retrieving user from database.
+     */
     private final PreparedStatement selectStatement;
 
+    /**
+     * Prepared statement for inserting user to database.
+     */
     private final PreparedStatement insertStatement;
 
+    /**
+     * Prepared statement for removing user from database.
+     */
     private final PreparedStatement deleteStatement;
 
     /**

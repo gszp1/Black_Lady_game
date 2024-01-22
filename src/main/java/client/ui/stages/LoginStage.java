@@ -23,18 +23,42 @@ import messages.toServer.requests.LoginRequest;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+/**
+ * Stage for user login."
+ */
 public class LoginStage extends GameStage {
 
+    /**
+     * Stage title.
+     */
     private String TITLE = "Login page";
 
+    /**
+     * Label for displaying notifications.
+     */
     private final Label loginNotificationLabel = new Label("");
 
+    /**
+     * Button for moving to register stage.
+     */
     private final Button changeToRegisterStageButton = new Button("Move to Register");
 
+    /**
+     * Text field for email.
+     */
     private TextField emailTextField;
 
+    /**
+     * Text field for password.
+     */
     private TextField passwordField;
 
+    /**
+     * Constructor for LoginStage.
+     * @param primaryStage Reference to primaryStage.
+     * @param serverConnector Reference to serverConnector.
+     * @param changeStageHandler Handler for changing stages.
+     */
     public LoginStage(
             Stage primaryStage,
             ServerConnector serverConnector,
@@ -43,6 +67,9 @@ public class LoginStage extends GameStage {
         super(primaryStage, serverConnector, changeStageHandler);
     }
 
+    /**
+     * Actions to do when login stage is opened.
+     */
     @Override
     public void onOpen() {
         primaryStage.setTitle(TITLE);
@@ -51,6 +78,10 @@ public class LoginStage extends GameStage {
         primaryStage.setScene(scene);
     }
 
+    /**
+     * Creates main grid pane.
+     * @return Main grid pane.
+     */
     private GridPane getMainGrid() {
         GridPane grid = new GridPane();
         grid.setHgap(10);
@@ -63,6 +94,10 @@ public class LoginStage extends GameStage {
         return grid;
     }
 
+    /**
+     * Adds elements to gridPane.
+     * @param grid Grid pane.
+     */
     private void addGridElements(GridPane grid) {
         // Create UI components
         Label emailLabel = new Label("Email:");
@@ -100,6 +135,10 @@ public class LoginStage extends GameStage {
         changeToRegisterStageButton.setOnAction(e -> changeStageHandler.accept(GameStageType.REGISTER));
     }
 
+    /**
+     * Validates form's contents.
+     * @return Optional with error message.
+     */
     private Optional<String> validateForm() {
         if (emailTextField.getText().trim().isEmpty()) {
             return Optional.of("Email cannot be empty");
@@ -110,6 +149,10 @@ public class LoginStage extends GameStage {
         return Optional.empty();
     }
 
+    /**
+     * Adds constraint to grid.
+     * @param grid Grid.
+     */
     private void addGridConstraints(GridPane grid) {
         ColumnConstraints column1 = new ColumnConstraints();
         ColumnConstraints column2 = new ColumnConstraints();
@@ -125,16 +168,28 @@ public class LoginStage extends GameStage {
         grid.getRowConstraints().addAll(row1, row2, row3);
     }
 
+    /**
+     * Sets notification contents with given message.
+     * @param message Message to be inserted into label.
+     */
     public void setErrorLoginLabel(String message) {
         loginNotificationLabel.setText(message);
         loginNotificationLabel.setStyle("-fx-text-fill: red;");
     }
 
+    /**
+     * Sets notification contents with given message.
+     * @param message Message to be inserted into label.
+     */
     public void setSuccessLoginLabel(String message) {
         loginNotificationLabel.setText(message);
         loginNotificationLabel.setStyle("-fx-text-fill: green;");
     }
 
+    /**
+     * Message handler for login .
+     * @param message
+     */
     @Override
     public void handleMessage(ToClientMessage message) {
         if (message.getMessageType() == MessageType.LoginResponse){

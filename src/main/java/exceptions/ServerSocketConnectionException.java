@@ -6,12 +6,24 @@ package exceptions;
  */
 public class ServerSocketConnectionException  extends Exception{
 
+    /**
+     * Error for unknown received message.
+     */
     public static final String UNKNOWN_MESSAGE_TYPE = "ToServerMessage received from client is of unknown type.";
 
+    /**
+     * Error for failing to read message.
+     */
     public static final String MESSAGE_READING_FAILURE = "Failed to read message from client.";
 
+    /**
+     * Error for failing to send message.
+     */
     public static final String MESSAGE_SENDING_FAILURE = "Failed to send message to client.";
 
+    /**
+     * Error for failing to open input stream.
+     */
     public static final String INPUT_STREAM_OPENING_FAILURE = "Failed to open input stream.";
 
     /**

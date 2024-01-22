@@ -14,12 +14,26 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Optional;
 
+/**
+ * Request for game details.
+ */
 public class GameDetailsRequest extends ToServerMessage {
-
+    /**
+     * Constructor for message.
+     */
     public GameDetailsRequest() {
         super(MessageType.GameDetailsRequest, "Game details request", null);
     }
 
+    /**
+     * Request Handling procedure.
+     * @param userList List of users.
+     * @param databaseConnector Connection to database.
+     * @param gameDetails Data about active game rooms.
+     * @return Boolean.
+     * @throws IOException Exception for connection errors.
+     * @throws SQLException Exception for database connection error.
+     */
     @Override
     public boolean handle(
             UserList userList,

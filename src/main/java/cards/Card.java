@@ -5,6 +5,9 @@ import lombok.ToString;
 
 import java.io.Serializable;
 
+/**
+ * Class representing playing card from a specific set and of specific type.
+ */
 @Data
 @ToString
 public class Card implements Serializable {

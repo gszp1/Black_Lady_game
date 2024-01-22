@@ -28,14 +28,32 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+/**
+ * Stage for main room.
+ */
 public class RoomPanelStage extends GameStage {
 
+    /**
+     * Map to associate rooms' ID's with games.
+     */
     private final Map<Integer, GameRoomPlay> gameRoomPlays = new HashMap<>();
 
+    /**
+     * Title of stage.
+     */
     public static String ROOM_PANEL_STAGE_TITLE = "Choose game";
 
+    /**
+     * List for storing room views to display in UI.
+     */
     ObservableList<RoomView> rooms = FXCollections.observableArrayList();
 
+    /**
+     * Constructor.
+     * @param primaryStage Primary stage.
+     * @param serverConnector Reference to server connector.
+     * @param changeStageHandler Reference change stage handler.
+     */
     public RoomPanelStage(
             Stage primaryStage,
             ServerConnector serverConnector,
@@ -44,6 +62,9 @@ public class RoomPanelStage extends GameStage {
         super(primaryStage, serverConnector, changeStageHandler);
     }
 
+    /**
+     * Procedure to do upon stage opening.
+     */
     @Override
     public void onOpen() {
         primaryStage.setTitle(ROOM_PANEL_STAGE_TITLE);
@@ -52,6 +73,9 @@ public class RoomPanelStage extends GameStage {
         sendGameDetailsRequest();
     }
 
+    /**
+     * Sends LogoutRequest to server.
+     */
     private void logout() {
         try {
             serverConnector.sendMessage(new LogoutRequest());
@@ -60,10 +84,12 @@ public class RoomPanelStage extends GameStage {
         }
     }
 
+    /**
+     * Creates GUI for main room panel.
+     */
     public void createView() {
         TableView<RoomView> table = new TableView<>(rooms);
 
-        // Room ID Column
         TableColumn<RoomView, Number> roomIdCol = new TableColumn<>("Room ID");
         roomIdCol.setCellValueFactory(new PropertyValueFactory<>("roomId"));
 
@@ -72,7 +98,6 @@ public class RoomPanelStage extends GameStage {
                 new SimpleStringProperty(cellData.getValue().isUserInRoom() ? "YES" : "NO")
         );
 
-        // Join Button Column
         TableColumn<RoomView, Void> joinCol = new TableColumn<>("Join");
         joinCol.setCellFactory(col -> new TableCell<RoomView, Void>() {
             private final Button joinButton = new Button("Join");
@@ -152,6 +177,10 @@ public class RoomPanelStage extends GameStage {
         this.primaryStage.setScene(scene);
     }
 
+    /**
+     * Sends join room request.
+     * @param roomId Room's ID.
+     */
     private void sendJoinRoomRequest(int roomId) {
         try {
             serverConnector.sendMessage(new JoinRoomRequest(roomId));
@@ -160,6 +189,10 @@ public class RoomPanelStage extends GameStage {
         }
     }
 
+    /**
+     * Sends delete room request.
+     * @param roomId Room's ID.
+     */
     private void sendDeleteGameRequest(int roomId) {
         try {
             serverConnector.sendMessage(new DeleteRoomRequest(roomId));
@@ -168,6 +201,9 @@ public class RoomPanelStage extends GameStage {
         }
     }
 
+    /**
+     * Sends create room request.
+     */
     private void sendCreateGameRequest() {
         try {
             serverConnector.sendMessage(new CreateRoomRequest());
@@ -176,6 +212,9 @@ public class RoomPanelStage extends GameStage {
         }
     }
 
+    /**
+     * Sends request for game details.
+     */
     private void sendGameDetailsRequest() {
         try {
             serverConnector.sendMessage(new GameDetailsRequest());
@@ -184,6 +223,10 @@ public class RoomPanelStage extends GameStage {
         }
     }
 
+    /**
+     * Message handler.
+     * @param message Received message.
+     */
     @Override
     public void handleMessage(ToClientMessage message) {
         if (message instanceof GameDetailsResponse) {
@@ -222,6 +265,11 @@ public class RoomPanelStage extends GameStage {
         }
     }
 
+    /**
+     * Get UI rooms that need closing.
+     * @param gameView Rooms.
+     * @return Set of rooms ids to close.
+     */
     private Set<Integer> getRoomsToClose(GameView gameView) {
         Set<Integer> actualParticipatedRooms = getActualParticipatedRooms(gameView);
         Set<Integer> roomsToLeave = new HashSet<>(getUiOpenRooms());
@@ -229,6 +277,11 @@ public class RoomPanelStage extends GameStage {
         return roomsToLeave;
     }
 
+    /**
+     * Gets rooms that need to be opened in UI.
+     * @param gameView Rooms.
+     * @return IDs of rooms that need opening.
+     */
     private Set<Integer> getRoomsToOpen(GameView gameView) {
         Set<Integer> openUiRooms = getUiOpenRooms();
         Set<Integer> roomsToOpen = new HashSet<>(getActualParticipatedRooms(gameView));
@@ -236,12 +289,21 @@ public class RoomPanelStage extends GameStage {
         return roomsToOpen;
     }
 
+    /**
+     * Gets IDs of rooms opened in UI.
+     * @return Set of rooms IDs.
+     */
     private Set<Integer> getUiOpenRooms() {
         return gameRoomPlays.values().stream()
                 .map(GameRoomPlay::getRoomId)
                 .collect(Collectors.toSet());
     }
 
+    /**
+     * Gets IDs of rooms which user joined.
+     * @param gameView Rooms.
+     * @return Set of rooms IDs.
+     */
     private Set<Integer> getActualParticipatedRooms(GameView gameView) {
         return gameView.getRooms().stream()
                 .filter(RoomView::isUserInRoom)
@@ -249,12 +311,20 @@ public class RoomPanelStage extends GameStage {
                 .collect(Collectors.toSet());
     }
 
+    /**
+     * Opens new game room window.
+     * @param roomId Room ID.
+     */
     private void openRoom(int roomId) {
         GameRoomPlay gameRoomPlay = new GameRoomPlay(roomId, serverConnector);
         Platform.runLater(gameRoomPlay::open);
         gameRoomPlays.put(roomId, gameRoomPlay);
     }
 
+    /**
+     * Closes room in UI.
+     * @param roomId Room ID.
+     */
     private void closeRoom(int roomId) {
         GameRoomPlay roomToClose = gameRoomPlays.get(roomId);
         Platform.runLater(roomToClose::close);

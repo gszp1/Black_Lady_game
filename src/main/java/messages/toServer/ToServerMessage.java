@@ -23,8 +23,14 @@ import java.util.function.Function;
  */
 public abstract class ToServerMessage implements Serializable {
 
+    /**
+     * Success result.
+     */
     public static String SUCCESS = "Success";
 
+    /**
+     * Failure result.
+     */
     public static String FAILURE = "Failure";
 
     /**
@@ -98,10 +104,20 @@ public abstract class ToServerMessage implements Serializable {
         this.connectionId = connectionId;
     }
 
+    /**
+     * Finds user with given userID.
+     * @param userList Users list.
+     * @return Optional with user.
+     */
     protected Optional<User> findUserByConnectionId(UserList userList) {
         return userList.getUserByConnectionId(connectionId);
     }
 
+    /**
+     * Send data about rooms to users.
+     * @param userList List of users.
+     * @param gameDetails Rooms data.
+     */
     public void broadcastGameDetails(UserList userList, GameDetails gameDetails) {
         try {
             Function<User, GameView> createGameView = (user) -> GameView.fromGameDetails(gameDetails, user.getUserID());
@@ -113,6 +129,11 @@ public abstract class ToServerMessage implements Serializable {
         }
     }
 
+    /**
+     * For each user send data about rooms he joined.
+     * @param userList List of users.
+     * @param gameDetails Rooms data.
+     */
     public void broadcastRoomDetails(UserList userList, GameDetails gameDetails) {
         try {
             for (Room room : gameDetails.getRooms()) {
@@ -123,7 +144,6 @@ public abstract class ToServerMessage implements Serializable {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
             System.out.println("S: Cannot Write Room Details");
         }
     }

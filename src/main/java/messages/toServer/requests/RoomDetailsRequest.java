@@ -14,15 +14,34 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Optional;
 
+/**
+ * Request for room details.
+ */
 public class RoomDetailsRequest extends ToServerMessage {
 
+    /**
+     * ID of room.
+     */
     private int roomId;
 
+    /**
+     * Constructor for message.
+     * @param roomId Room's ID.
+     */
     public RoomDetailsRequest(int roomId) {
         super(MessageType.RoomDetailsRequest, String.format("%s", roomId), null);
         this.roomId = roomId;
     }
 
+    /**
+     * Request Handling procedure.
+     * @param userList List of users.
+     * @param databaseConnector Connection to database.
+     * @param gameDetails Data about active game rooms.
+     * @return Boolean.
+     * @throws IOException Exception for connection errors.
+     * @throws SQLException Exception for database connection error.
+     */
     @Override
     public boolean handle(UserList userList, DatabaseConnector databaseConnector, GameDetails gameDetails) throws IOException, SQLException {
         Optional<User> user = userList.getUserByConnectionId(getConnectionId());
