@@ -100,6 +100,7 @@ public class GameServer {
      * @param args - command line arguments.
      * @throws IOException Connection exception.
      * @throws SAXException XML parser error.
+     * @throws ParserConfigurationException Parser configuration error.
      */
     public static void main(String [] args) throws ParserConfigurationException, IOException, SAXException {
         if (args.length < 1) {
