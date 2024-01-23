@@ -81,6 +81,7 @@ public class UserData {
 
     /**
      * Setter for user's username.
+     * @param username User's username.
      */
     public void setUsername(String username) {
         this.username = username;
