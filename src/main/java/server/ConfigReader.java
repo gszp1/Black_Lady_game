@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 public class ConfigReader {
     /**
      * Reads XML file and maps rule names with score computers.
-     * @return List of mapped
+     * @return List of mapped score computers.
      */
     public List<Function<Play, ScoreComputer>> readConfig() {
         try {

@@ -24,7 +24,7 @@ public class Room {
     public static int MAX_PLAYERS = 4;
 
     /**
-     *
+     * Score computers.
      */
     private final List<Function<Play, ScoreComputer>> scoreComputerGetters;
 
@@ -60,7 +60,7 @@ public class Room {
     private Optional<Play> play = Optional.empty();
 
     /**
-     * Chant entries.
+     * Chat entries.
      */
     private List<ChatEntry> chatEntries = new ArrayList<>();
 
